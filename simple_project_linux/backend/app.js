@@ -14,7 +14,7 @@ sequelize.sync({ alter: true })
 const app = express();
 app.use(cors());
 app.use(express.json());
-// app.use('/api', userRoutes);
+app.use('/api', userRoutes);
 
 // Route to fetch all messages
 app.get('/api/messages', async (req, res) => {

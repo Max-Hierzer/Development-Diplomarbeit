@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Register from './Register';
 
 function App() {
   const [message, setMessage] = useState('');
@@ -79,6 +80,10 @@ function App() {
       </ul>
       </div>
     )}
+    <div>
+    <h1>Welcome to the User Registration</h1>
+    <Register />
+    </div>
     </div>
   );
 }
