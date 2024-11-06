@@ -10,4 +10,18 @@ async function createMessage(text) {
     }
 }
 
-module.exports = { createMessage };
+async function fetchMessages(req, res) {
+    try {
+        const messages = await Message.fetchAll();
+        return messages;
+    } catch (error) {
+        console.error('Error creating message in service:', error);
+        throw error;
+    }
+
+}
+
+module.exports = {
+    createMessage: createMessage,
+    fetchMessages: fetchMessages
+};
