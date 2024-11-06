@@ -1,10 +1,9 @@
-// app.js
 const express = require('express');
 const cors = require('cors');
 const { sequelize, testConnection } = require('./models'); // Import sequelize and testConnection
-const userRoutes = require('./routes/userRoutes');
-const { postMessages } = require('./routes/messageRoutes');
-const { getMessages } = require('./routes/messageRoutes');
+const { postUser, getLoginData } = require('./routes/userRoutes');
+const { postMessages, getMessages } = require('./routes/messageRoutes');
+
 
 sequelize.sync({ alter: true })
 .then(() => {
@@ -14,10 +13,9 @@ sequelize.sync({ alter: true })
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use('/api', userRoutes);
-
+app.use('/api', postUser);
+app.use('/api', getLoginData);
 app.use('api', getMessages);
-// Route to add a new message
 app.use('/api', postMessages);
 
 const PORT = process.env.PORT || 3001;

@@ -1,8 +1,12 @@
 // routes/userRoutes.js
 const express = require('express');
-const { handleCreateUser } = require('../controllers/userController');
+const { handleCreateUser, handleFetchLoginData } = require('../controllers/userController');
+
 const router = express.Router();
 
-router.post('/user', handleCreateUser);
-
-module.exports = router;
+const postUser = router.post('/user', handleCreateUser);
+const getLoginData = router.get('/user', handleFetchLoginData);
+module.exports = {
+    postUser: postUser,
+    getLoginData: getLoginData
+};

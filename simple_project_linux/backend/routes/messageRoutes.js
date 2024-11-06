@@ -1,6 +1,5 @@
 const express = require('express');
-const { handleCreateMessage } = require('../controllers/messageController');
-const { handleFetchMessages } = require('../controllers/messageController');
+const { handleCreateMessage, handleFetchMessages } = require('../controllers/messageController');
 
 const router = express.Router();
 
