@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-function GetMessage() {
+function InputMessage() {
     const [message, setMessage] = useState('');
-    const [response, setResponse] = useState(null);
+    const [setResponse] = useState(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -43,4 +43,4 @@ function GetMessage() {
     )
 }
 
-export default GetMessage;
+export default InputMessage;

@@ -10,10 +10,10 @@ async function createUser(name, email, password) {
     }
 }
 
-async function fetchLoginData() {
+async function fetchLogin() {
     try {
         const users = await User.findAll({
-            attributes: ['name', 'password']
+            attributes: ['id', 'name', 'password']
         });
         return users;
     } catch (error) {
@@ -24,5 +24,5 @@ async function fetchLoginData() {
 
 module.exports = {
     createUser: createUser,
-    fetchLoginData: fetchLoginData
+    fetchLogin: fetchLogin
 };

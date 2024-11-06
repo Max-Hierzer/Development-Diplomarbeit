@@ -1,8 +1,8 @@
 import React, { useState} from 'react';
 import WriteMessages from './WriteMessage'
-import GetMessage from './GetMessage'
+import InputMessage from './InputMessage'
 import Register from './Register';
-
+import Login from './Login';
 
 
 function App() {
@@ -10,6 +10,11 @@ function App() {
 
   return (
     <div className="App">
+    <div>
+    <h1>Welcome to the User Registration</h1>
+    <Register />
+    <Login />
+    </div>
     <h1>{isInputMode ? 'Submit a Message' : 'Messages'}</h1>
 
     <button onClick={() => setIsInputMode(!isInputMode)}>
@@ -18,15 +23,12 @@ function App() {
 
     {isInputMode ? (
       // Input Form
-      <GetMessage />
+      <InputMessage />
     ) : (
       // Output View: List of Messages
       <WriteMessages />
     )}
-    <div>
-    <h1>Welcome to the User Registration</h1>
-    <Register />
-    </div>
+
     </div>
   );
 }

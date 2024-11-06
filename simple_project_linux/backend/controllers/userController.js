@@ -1,4 +1,4 @@
-const { createUser, fetchLoginData } = require('../services/userServices');
+const { createUser, fetchLogin } = require('../services/userServices');
 
 async function handleCreateUser(req, res) {
     try {
@@ -10,9 +10,9 @@ async function handleCreateUser(req, res) {
     }
 }
 
-async function handleFetchLoginData(req, res) {
+async function handleFetchLogin(req, res) {
     try {
-        const messages = await fetchLoginData();
+        const messages = await fetchLogin();
         res.status(200).json(messages);
     } catch (error) {
         console.error('Error fetching userData:', error);
@@ -22,5 +22,5 @@ async function handleFetchLoginData(req, res) {
 
 module.exports = {
     handleCreateUser: handleCreateUser,
-    handleFetchLoginData:handleFetchLoginData
+    handleFetchLogin: handleFetchLogin
 }
