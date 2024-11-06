@@ -15,7 +15,7 @@ async function fetchMessages(req, res) {
         const messages = await Message.fetchAll();
         return messages;
     } catch (error) {
-        console.error('Error creating message in service:', error);
+        console.error('Error fetching message in service:', error);
         throw error;
     }
 
