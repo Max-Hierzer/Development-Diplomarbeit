@@ -4,7 +4,7 @@ const cors = require('cors');
 const { sequelize, testConnection } = require('./models'); // Import sequelize and testConnection
 const Message = require('./models/message'); // Import the Message model
 const User = require('./models/user'); // Import the User model
-// const userRoutes = require('./routes/userRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 sequelize.sync({ alter: true })
 .then(() => {
