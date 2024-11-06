@@ -1,5 +1,4 @@
-const { createMessage } = require('../services/messageServices');
-const { fetchMessages } = require('../services/messageServices');
+const { createMessage, fetchMessages } = require('../services/messageServices');
 
 async function handleCreateMessage(req, res) {
     try {

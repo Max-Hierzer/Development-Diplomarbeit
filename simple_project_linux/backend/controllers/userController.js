@@ -1,4 +1,4 @@
-const { createUser } = require('../services/userServices');
+const { createUser, fetchLoginData } = require('../services/userServices');
 
 async function handleCreateUser(req, res) {
     try {
@@ -10,4 +10,17 @@ async function handleCreateUser(req, res) {
     }
 }
 
-module.exports = { handleCreateUser }
+async function handleFetchLoginData(req, res) {
+    try {
+        const messages = await fetchLoginData();
+        res.status(200).json(messages);
+    } catch (error) {
+        console.error('Error fetching userData:', error);
+        res.status(500).json({error: 'Error fetching userData in controller'});
+    }
+}
+
+module.exports = {
+    handleCreateUser: handleCreateUser,
+    handleFetchLoginData:handleFetchLoginData
+}
