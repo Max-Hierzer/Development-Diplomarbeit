@@ -14,6 +14,4 @@ async function handleCreateMessage(req, res) {
     }
 }
 
-module.exports = {
-    handleCreateMessage: handleCreateMessage
-}
+module.exports = { handleCreateMessage }

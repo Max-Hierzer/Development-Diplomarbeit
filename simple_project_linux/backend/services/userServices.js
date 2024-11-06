@@ -5,7 +5,7 @@ async function createUser(name, email, password) {
         const user = await User.create({ name, email, password });
         return user;
     } catch (error) {
-        console.error('Error creating user:', error);
+        console.error('Error creating user in service:', error);
         throw error;
     }
 }

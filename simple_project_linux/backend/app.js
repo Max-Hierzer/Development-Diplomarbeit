@@ -3,8 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const { sequelize, testConnection } = require('./models'); // Import sequelize and testConnection
 const Message = require('./models/message'); // Import the Message model
-const User = require('./models/user'); // Import the User model
 const userRoutes = require('./routes/userRoutes');
+const messageRoutes = require('./routes/messageRoutes');
 
 sequelize.sync({ alter: true })
 .then(() => {
@@ -28,19 +28,7 @@ app.get('/api/messages', async (req, res) => {
 });
 
 // Route to add a new message
-app.post('/api/message', async (req, res) => {
-    try {
-        const { text } = req.body;
-        if (!text) {
-            return res.status(400).json({ error: 'Message text is required' });
-        }
-        const newMessage = await Message.create({ text });
-        res.status(201).json(newMessage);
-    } catch (error) {
-        console.error('Error inserting message:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
+app.use('/api', messageRoutes)
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

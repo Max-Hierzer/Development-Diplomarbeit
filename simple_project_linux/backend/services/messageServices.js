@@ -1,6 +1,6 @@
 const Message = require('../models/message');
 
-async function createMessage(name, email, password) {
+async function createMessage(text) {
     try {
         const message = await Message.create({ text });
         return message;
