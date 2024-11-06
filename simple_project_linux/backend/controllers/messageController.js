@@ -19,10 +19,13 @@ async function handleFetchMessages(req, res) {
     try {
         const messages = await fetchMessages();
         res.status(200).json(messages); // Send the messages as a response
-    } catch (error)
+    } catch (error) {
         console.error('Error fetching messages:', error);
         res.status(500).json({ error: 'Error fetching messages in controller' });
-}
+    }
 }
 
-module.exports = { handleCreateMessage }
+module.exports = {
+    handleCreateMessage: handleCreateMessage,
+    handleFetchMessages: handleFetchMessages
+}

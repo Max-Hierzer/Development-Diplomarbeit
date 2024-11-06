@@ -10,9 +10,9 @@ async function createMessage(text) {
     }
 }
 
-async function fetchMessages(req, res) {
+async function fetchMessages() {
     try {
-        const messages = await Message.fetchAll();
+        const messages = await Message.findAll();
         return messages;
     } catch (error) {
         console.error('Error fetching message in service:', error);
