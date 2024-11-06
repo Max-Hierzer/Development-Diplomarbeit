@@ -3,22 +3,24 @@ import React, { useState, useEffect } from 'react';
 function App() {
   const [message, setMessage] = useState('');
   const [response, setResponse] = useState(null);
-  const [messages, setMessages] = useState([]); // State to hold the messages
+  const [messages, setMessages] = useState([]); // State to hold messages
+  const [isInputMode, setIsInputMode] = useState(true); // Toggle input/output mode
 
-  // Fetch all messages when the component mounts
+  // Fetch all messages when switching to output mode
   useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const res = await fetch('http://localhost:3001/api/messages');
-        const data = await res.json();
-        setMessages(data); // Update the state with fetched messages
-      } catch (error) {
-        console.error('Error fetching messages:', error);
-      }
-    };
-
-    fetchMessages();
-  }, []); // Empty dependency array to run only once on mount
+    if (!isInputMode) {
+      const fetchMessages = async () => {
+        try {
+          const res = await fetch('http://localhost:3001/api/messages');
+          const data = await res.json();
+          setMessages(data); // Update state with fetched messages
+        } catch (error) {
+          console.error('Error fetching messages:', error);
+        }
+      };
+      fetchMessages();
+    }
+  }, [isInputMode]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -36,13 +38,6 @@ function App() {
       if (res.ok) {
         setResponse(`Message saved with ID: ${data.id}`);
         setMessage('');
-        // Fetch messages again to update the list
-        const fetchMessages = async () => {
-          const res = await fetch('http://localhost:3001/api/messages');
-          const data = await res.json();
-          setMessages(data);
-        };
-        fetchMessages();
       } else {
         setResponse(`Error: ${data.error}`);
       }
@@ -54,26 +49,36 @@ function App() {
 
   return (
     <div className="App">
-    <h1>Submit a Message</h1>
-    <form onSubmit={handleSubmit}>
-    <label>
-    Message:
-    <input
-    type="text"
-    value={message}
-    onChange={(e) => setMessage(e.target.value)}
-    />
-    </label>
-    <button type="submit">Submit</button>
-    </form>
-    {response && <p>{response}</p>}
+    <h1>{isInputMode ? 'Submit a Message' : 'Messages'}</h1>
 
-    <h2>Messages</h2>
-    <ul>
-    {messages.map((msg) => (
-      <li key={msg.id}>{msg.text}</li> // Display each message
-    ))}
-    </ul>
+    <button onClick={() => setIsInputMode(!isInputMode)}>
+    Switch to {isInputMode ? 'View Messages' : 'Submit a Message'}
+    </button>
+
+    {isInputMode ? (
+      // Input Form
+      <form onSubmit={handleSubmit}>
+      <label>
+      Message:
+      <input
+      type="text"
+      value={message}
+      onChange={(e) => setMessage(e.target.value)}
+      />
+      </label>
+      <button type="submit">Submit</button>
+      </form>
+    ) : (
+      // Output View: List of Messages
+      <div>
+      {response && <p>{response}</p>}
+      <ul>
+      {messages.map((msg) => (
+        <li key={msg.id}>{msg.text}</li> // Display each message
+      ))}
+      </ul>
+      </div>
+    )}
     </div>
   );
 }
