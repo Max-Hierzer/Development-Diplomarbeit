@@ -5,7 +5,7 @@ const { handleCreateUser, handleFetchLoginData } = require('../controllers/userC
 const router = express.Router();
 
 const postUser = router.post('/user', handleCreateUser);
-const getLoginData = router.get('/user', handleFetchLoginData);
+const getLoginData = router.get('/users', handleFetchLoginData);
 module.exports = {
     postUser: postUser,
     getLoginData: getLoginData
