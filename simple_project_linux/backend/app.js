@@ -3,8 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const { sequelize, testConnection } = require('./models'); // Import sequelize and testConnection
 const Message = require('./models/message'); // Import the Message model
-const User = require('./models/User'); // Import the User model
-const userRoutes = require('./routes/userRoutes');
+const User = require('./models/user'); // Import the User model
+// const userRoutes = require('./routes/userRoutes');
 
 sequelize.sync({ alter: true })
 .then(() => {
@@ -14,7 +14,7 @@ sequelize.sync({ alter: true })
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use('/api', userRoutes);
+// app.use('/api', userRoutes);
 
 // Route to fetch all messages
 app.get('/api/messages', async (req, res) => {
