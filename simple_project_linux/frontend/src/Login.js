@@ -18,39 +18,40 @@ const Login = ({ loginChange }) => {
         fetchUsers();
     }, []);
 
-    const checkLogin = (e) => {
-        if (users.includes(inputUser)){
-            if (users.indexOf(inputUser) === users.indexOf(inputPassword)){
-                const loginMode = true;
-                loginChange(loginMode);
-            }
+    const checkLogin = (event) => {
+        event.preventDefault();
+        const user = users.find(u => u.username === inputUser && u.password === inputPassword);
+        if (user) {
+            const loginMode = true;
+            loginChange(loginMode);
+        } else {
+            (console.log('Wrong username or Password'));
         }
-        else (console.log('Wrong username or Password'));
     }
 
     return (
         <div>
-        <form onSubmit={checkLogin}>
-        <label>
-        Name:
-        <input
-        type="text"
-        value={inputUser}
-        onChange={(e) => setInputUser(e.target.value)}
-        />
-        </label>
-        <label>
-        Password:
-        <input
-        type="text"
-        value={inputPassword}
-        onChange={(e) => setInputPassword(e.target.value)}
-        />
-        </label>
-        <button type="submit">Login</button>
-        </form>
+            <form onSubmit={checkLogin}>
+                <label>
+                    Name:
+                    <input
+                        type="text"
+                        value={inputUser}
+                        onChange={(e) => setInputUser(e.target.value)}
+                    />
+                </label>
+                <label>
+                    Password:
+                    <input
+                        type="password"
+                        value={inputPassword}
+                        onChange={(e) => setInputPassword(e.target.value)}
+                    />
+                </label>
+                <button type="submit">Login</button>
+            </form>
         </div>
-    )
+    );
 }
 
 export default Login;

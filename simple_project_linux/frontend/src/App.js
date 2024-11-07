@@ -18,7 +18,7 @@ function App() {
     <div>
     <h1>Welcome to the User Registration</h1>
     <Register />
-    <Login loginChange={handleLoginChange}/>
+    <Login loginChange={handleLoginChange} />
     <h1>{isLoggedIn ? "You're logged in" : "Not logged in"}</h1>
     </div>
     <h1>{isInputMode ? 'Submit a Message' : 'Messages'}</h1>
