@@ -20,7 +20,7 @@ const Login = ({ loginChange }) => {
 
     const checkLogin = (event) => {
         event.preventDefault();
-        const user = users.find(u => u.username === inputUser && u.password === inputPassword);
+        const user = users.find(u => u.name === inputUser && u.password === inputPassword);
         if (user) {
             const loginMode = true;
             loginChange(loginMode);
