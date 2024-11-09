@@ -1,5 +1,5 @@
 // models/index.js
-const Sequelize = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const config = require('../config/config.json')['development'];
 
 const sequelize = new Sequelize(
@@ -9,4 +9,18 @@ const sequelize = new Sequelize(
   config
 );
 
-module.exports = { sequelize };
+
+
+
+const Users = require('./users')(sequelize, DataTypes);
+const UserAnswers = require('./userAnswers')(sequelize, DataTypes);
+const Answers = require('./answers')(sequelize, DataTypes);
+const Questions = require('./questions')(sequelize, DataTypes);
+// Set up associations
+Users.associate({ UserAnswers, Users });
+UserAnswers.associate({ Users, Answers, Questions });
+Answers.associate({ UserAnswers, Answers, Questions });
+Questions.associate({ UserAnswers, Questions, Answers });
+
+
+module.exports = { sequelize, Users, UserAnswers, Answers, Questions };
