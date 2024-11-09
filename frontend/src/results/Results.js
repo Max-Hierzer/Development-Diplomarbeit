@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'React';
+import React, { useState, useEffect } from 'react';
 
 const Results = () => {
     const [results, setResults] = useState([]);
@@ -19,8 +19,8 @@ const Results = () => {
     return (
         <div>
             <h1>Results</h1>
-            <p>{ results.filter(x => x == 1).length } voted for Ja</p>
-            <p>{ results.filter(x => x == 2).length } voted for Nein</p>
+            <p>{ results.filter(x => x.answerId === 1).length } voted for Ja</p>
+            <p>{ results.filter(x => x.answerId === 2).length } voted for Nein</p>
         </div>
     );
 }

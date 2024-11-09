@@ -3,7 +3,7 @@ const cors = require('cors');
 const { sequelize, testConnection } = require('./models'); // Import sequelize and testConnection
 const { postUser, getLogin } = require('./routes/userRoutes');
 const { postMessages, getMessages } = require('./routes/messageRoutes');
-const { getResults} = require('./routes/resultsRoutes');
+const getResults = require('./routes/resultsRoutes');
 
 sequelize.sync({ alter: true })
 .then(() => {

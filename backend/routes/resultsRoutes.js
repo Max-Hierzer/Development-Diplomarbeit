@@ -1,5 +1,5 @@
 const express = require('express');
-const { handleFetchResults } = require('../controllers/resultsController');
+const handleFetchResults = require('../controllers/resultsController');
 
 const router = express.Router();
 

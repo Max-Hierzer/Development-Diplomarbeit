@@ -1,6 +1,6 @@
 const { UserAnswers } = require('../models/index');
 
-asynch function fetchResults() {
+async function fetchResults() {
     try {
         const results = await UserAnswers.findAll({
             attributes: ['userId', 'answerId', 'questionId']
@@ -13,4 +13,4 @@ asynch function fetchResults() {
     }
 }
 
-module.exports = fetchResults
+module.exports = fetchResults;

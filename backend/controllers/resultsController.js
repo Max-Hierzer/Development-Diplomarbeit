@@ -1,6 +1,6 @@
-const { fetchResults } = require('../services/resultsService');
+const fetchResults = require('../services/resultsServices');
 
-asynch function handleFetchResults(req, res) {
+async function handleFetchResults(req, res) {
     try {
         const results = await fetchResults();
         res.status(200).json(results);

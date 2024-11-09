@@ -4,6 +4,7 @@ import WriteMessages from './WriteMessage';
 import InputMessage from './InputMessage';
 import Register from './Register';
 import Login from './Login';
+import Results from './results/Results';
 
 function App() {
   const [isInputMode, setIsInputMode] = useState(true);
@@ -34,7 +35,6 @@ function App() {
         <button onClick={() => setIsInputMode(!isInputMode)}>
         Switch to {isInputMode ? 'View Messages' : 'Submit a Message'}
         </button>
-
       {isInputMode ? (
         // Input Form
         <InputMessage />
@@ -42,6 +42,15 @@ function App() {
         // Output View: List of Messages
         <WriteMessages />
       )}
+        <button onClick={!showResultsMode ?
+          () => setShowResults(true) :
+          () => setShowResults(false)}>
+          {showResultsMode ?  'Show results' : 'Show poll'}
+        </button>
+        {!showResultsMode ?
+          <Results /> :
+          ''
+        }
       </div>
     )}
     </div>
