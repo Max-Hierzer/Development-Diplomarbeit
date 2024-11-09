@@ -12,8 +12,8 @@ async function handleCreateUser(req, res) {
 
 async function handleFetchLogin(req, res) {
     try {
-        const messages = await fetchLogin();
-        res.status(200).json(messages);
+        const login = await fetchLogin();
+        res.status(200).json(login);
     } catch (error) {
         console.error('Error fetching userData:', error);
         res.status(500).json({error: 'Error fetching userData in controller'});
