@@ -9,9 +9,6 @@ const sequelize = new Sequelize(
   config
 );
 
-
-
-
 const Users = require('./users')(sequelize, DataTypes);
 const UserAnswers = require('./userAnswers')(sequelize, DataTypes);
 const Answers = require('./answers')(sequelize, DataTypes);

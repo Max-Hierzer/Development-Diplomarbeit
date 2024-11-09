@@ -12,7 +12,9 @@ async function createUser(name, email, password) {
 
 async function fetchLogin() {
     try {
-        const users = await Users.findAll();
+        const users = await Users.findAll({
+                attributes: ['id', 'name', 'password']
+            });
         return users;
     } catch (error) {
         console.error('Error fetching users in service:', error);

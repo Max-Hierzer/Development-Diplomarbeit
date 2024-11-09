@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 function InputMessage() {
     const [message, setMessage] = useState('');
-    const [setResponse] = useState(null);
+    const [response, setResponse] = useState(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -29,6 +29,7 @@ function InputMessage() {
         }
     };
     return (
+        <div>
         <form onSubmit={handleSubmit}>
         <label>
         Message:
@@ -40,6 +41,8 @@ function InputMessage() {
         </label>
         <button type="submit">Submit</button>
         </form>
+        <p>{ response }</p>
+        </div>
     )
 }
 
