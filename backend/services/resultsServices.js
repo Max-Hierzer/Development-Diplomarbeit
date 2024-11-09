@@ -16,8 +16,19 @@ async function fetchResults() {
 async function fetchPolls() {
     try {
         const polls = await Polls.findAll({
-            attributes: ['name'],
-            include: [Questions]
+            attributes: ['id', 'name'],
+            include: [
+                {
+                    model: Questions,
+                    attributes: ['id', 'name'],
+                    include: [
+                    {
+                        model: Answers,
+                        attributes: ['id', 'name']
+                    }
+                    ]
+                }
+            ]
         });
         return polls;
     }

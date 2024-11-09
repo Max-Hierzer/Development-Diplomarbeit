@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 const Results = () => {
     const [results, setResults] = useState([]);
     const [polls, setPolls] = useState([]);
+    const [questions, setQuestions] = useState([]);
+    const [answers, setAnswers] = useState([]);
 
     useEffect(() => {
         const fetchResults = async () => {
@@ -23,8 +25,9 @@ const Results = () => {
             try {
                 const res = await fetch('http://localhost:3001/results/polls');
                 const data = await res.json();
-                console.log(data);
                 setPolls(data);
+                setQuestions(data[0]?.Questions);
+                setAnswers(data[0]?.Questions[0]?.Answers);
             } catch (error) {
                 console.error('Error fetching polls in frontend: ', error);
             }
@@ -32,10 +35,15 @@ const Results = () => {
         fetchPolls();
     }, []);
 
+
+    console.log(questions);
+    console.log(answers);
+
     return (
         <div>
         <h1> Results of { polls[0]?.name }</h1>
-        <h2> {polls[0]?.Questions[0]?.name }</h2>
+        <h2> { questions[0]?.name }</h2>
+        { answers.map((answer) => (<p>{ answer.name }</p>))}
         </div>
     );
 }
