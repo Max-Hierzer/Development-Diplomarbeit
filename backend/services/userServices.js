@@ -1,8 +1,8 @@
-const User = require('../models/users');
+const { Users } = require('../models/index');
 
 async function createUser(name, email, password) {
     try {
-        const user = await User.create({ name, email, password });
+        const user = await Users.create({ name, email, password });
         return user;
     } catch (error) {
         console.error('Error creating user in service:', error);
@@ -12,9 +12,7 @@ async function createUser(name, email, password) {
 
 async function fetchLogin() {
     try {
-        const users = await User.findAll({
-            attributes: ['id', 'name', 'password']
-        });
+        const users = await Users.findAll();
         return users;
     } catch (error) {
         console.error('Error fetching users in service:', error);
