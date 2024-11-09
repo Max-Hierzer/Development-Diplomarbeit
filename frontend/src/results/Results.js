@@ -10,6 +10,7 @@ const Results = () => {
                 const res = await fetch('http://localhost:3001/results/results');
                 const data = await res.json();
                 setResults(data);
+
             } catch (error) {
                 console.error('Error fetching results in frontend: ', error);
             }
@@ -22,6 +23,7 @@ const Results = () => {
             try {
                 const res = await fetch('http://localhost:3001/results/polls');
                 const data = await res.json();
+                console.log(data);
                 setPolls(data);
             } catch (error) {
                 console.error('Error fetching polls in frontend: ', error);
@@ -29,10 +31,11 @@ const Results = () => {
         }
         fetchPolls();
     }, []);
-    console.log(results, polls)
+
     return (
         <div>
-
+        <h1> Results of { polls[0]?.name }</h1>
+        <h2> {polls[0]?.Questions[0]?.name }</h2>
         </div>
     );
 }

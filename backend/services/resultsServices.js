@@ -3,13 +3,7 @@ const { UserAnswers, Polls, Questions, Answers } = require('../models/index');
 async function fetchResults() {
     try {
         const results = await UserAnswers.findAll({
-            attributes: ['userId', 'answerId', 'questionId'],
-            include: [
-            {
-                Answers,
-                Questions
-            }
-            ]
+            attributes: ['userId', 'answerId', 'questionId']
         });
         return results;
     }
