@@ -17,8 +17,8 @@ module.exports = (sequelize) => {
             questionId: { type: DataTypes.INTEGER, allowNull: false },
 
         },
-        { sequelize, modelName: 'UserAnswers' }
+        { sequelize, modelName: 'UserAnswers' },
     );
-
+    UserAnswers.removeAttribute("id");
     return UserAnswers;
 };
