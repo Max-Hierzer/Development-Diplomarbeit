@@ -47,7 +47,7 @@ function App() {
           () => setShowResults(false)}>
           {showResultsMode ?  'Show results' : 'Show poll'}
         </button>
-        {!showResultsMode ?
+        {showResultsMode ?
           <Results /> :
           ''
         }

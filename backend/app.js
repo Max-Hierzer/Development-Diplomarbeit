@@ -3,7 +3,7 @@ const cors = require('cors');
 const { sequelize, testConnection } = require('./models'); // Import sequelize and testConnection
 const { postUser, getLogin } = require('./routes/userRoutes');
 const { postMessages, getMessages } = require('./routes/messageRoutes');
-const getResults = require('./routes/resultsRoutes');
+const { getResults, getPolls } = require('./routes/resultsRoutes');
 
 sequelize.sync({ alter: true })
 .then(() => {
@@ -17,7 +17,8 @@ app.use('/api', postUser);
 app.use('/api', getLogin);
 app.use('/api', getMessages);
 app.use('/api', postMessages);
-app.use('/api', getResults);
+app.use('/results', getResults);
+app.use('/results', getPolls);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

@@ -1,8 +1,9 @@
 const express = require('express');
-const handleFetchResults = require('../controllers/resultsController');
+const { handleFetchResults, handleFetchPolls } = require('../controllers/resultsController');
 
 const router = express.Router();
 
 const getResults = router.get('/results', handleFetchResults);
+const getPolls = router.get('/polls', handleFetchPolls);
 
-module.exports = getResults;
+module.exports = { getResults, getPolls };

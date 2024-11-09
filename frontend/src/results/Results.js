@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 
 const Results = () => {
     const [results, setResults] = useState([]);
+    const [polls, setPolls] = useState([]);
 
     useEffect(() => {
         const fetchResults = async () => {
             try {
-                const res = await fetch('http://localhost:3001/api/results');
+                const res = await fetch('http://localhost:3001/results/results');
                 const data = await res.json();
                 setResults(data);
             } catch (error) {
@@ -16,11 +17,22 @@ const Results = () => {
         fetchResults();
     }, []);
 
+    useEffect(() => {
+        const fetchPolls = async () => {
+            try {
+                const res = await fetch('http://localhost:3001/results/polls');
+                const data = await res.json();
+                setPolls(data);
+            } catch (error) {
+                console.error('Error fetching polls in frontend: ', error);
+            }
+        }
+        fetchPolls();
+    }, []);
+    console.log(results, polls)
     return (
         <div>
-            <h1>Results</h1>
-            <p>{ results.filter(x => x.answerId === 1).length } voted for Ja</p>
-            <p>{ results.filter(x => x.answerId === 2).length } voted for Nein</p>
+
         </div>
     );
 }
