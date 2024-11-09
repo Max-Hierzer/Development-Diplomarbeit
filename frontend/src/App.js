@@ -8,6 +8,8 @@ import Login from './Login';
 function App() {
   const [isInputMode, setIsInputMode] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showResultsMode, setShowResults] = useState(false);
+
 
   const handleLoginChange = (loginMode) => {
     setIsLoggedIn(loginMode);
