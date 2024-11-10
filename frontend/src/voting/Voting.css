@@ -1,0 +1,52 @@
+.Voting {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #f9f9f9; /* Light background for the voting section */
+    border-radius: 8px; /* Rounded corners */
+    width: 300px; /* Limit the width of the voting box */
+    margin: 0 auto; /* Center the voting box horizontally */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+  }
+  
+  .Voting h1 {
+    font-size: 24px;
+    margin-bottom: 20px; /* Space between title and options */
+    color: #333;
+  }
+  
+  label {
+    font-size: 18px;
+    margin-bottom: 10px; /* Space between options */
+    display: block;
+  }
+  
+  input[type="radio"] {
+     /* Space between radio button and text */
+    align-self: self-start;
+  }
+  
+  button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%; /* Make the button fill the width */
+  }
+  
+  button:hover {
+    background-color: #45a049; /* Slightly darker green on hover */
+  }
+  
+  p {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #ff4d4d; /* Red color for error messages */
+  }
+  

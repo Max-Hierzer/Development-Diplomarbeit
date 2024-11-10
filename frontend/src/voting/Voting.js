@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './Voting.css';
 
 function Voting({ userId, userName, questionId }) {
     const [selectedAnswer, setSelectedAnswer] = useState(null);
