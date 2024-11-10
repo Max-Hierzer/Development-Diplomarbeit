@@ -1,9 +1,9 @@
 // App.js
 import React, { useState } from 'react';
-import WriteMessages from './WriteMessage';
-import InputMessage from './InputMessage';
-import Register from './Register';
-import Login from './Login';
+import WriteMessages from './messages/WriteMessage';
+import InputMessage from './messages/InputMessage';
+import Register from './usermanagment/Register';
+import Login from './usermanagment/Login';
 import Results from './results/Results';
 import Voting from './voting/Voting';
 
