@@ -4,6 +4,9 @@ const { sequelize, testConnection } = require('./models'); // Import sequelize a
 const { postUser, getLogin } = require('./routes/userRoutes');
 const { postMessages, getMessages } = require('./routes/messageRoutes');
 const { getResults, getPolls } = require('./routes/resultsRoutes');
+const votingRoutes = require('./routes/votingRoutes');
+
+
 
 sequelize.sync({ alter: true })
 .then(() => {
@@ -19,6 +22,7 @@ app.use('/api', getMessages);
 app.use('/api', postMessages);
 app.use('/results', getResults);
 app.use('/results', getPolls);
+app.use('/api', votingRoutes);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
