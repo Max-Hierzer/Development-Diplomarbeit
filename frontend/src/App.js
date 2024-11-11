@@ -39,10 +39,6 @@ function App() {
             () => setShowResults(false)}>
             {showResultsMode ? 'Show results' : 'Show poll'}
           </button>
-          {showResultsMode ?
-            <Results /> :
-            ''
-          }
           {/*This is to Show the voting function*/}
           {showResultsMode ? (
             <Voting />

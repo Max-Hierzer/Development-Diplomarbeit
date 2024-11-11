@@ -40,7 +40,7 @@ const Results = () => {
         return counter;
     }
 
-    console.log(results);
+    console.log(polls);
     return (
         <div>
         <h1>Polls and Questions</h1>
