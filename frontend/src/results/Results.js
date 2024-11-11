@@ -81,7 +81,7 @@ const Results = () => {
             </option>
         ))}
         </select>
-        {polls.map((poll) => poll.id == selectedPoll ? (
+        {polls.map((poll) => poll.id.toString() === selectedPoll ? (
             <div key={poll.id} className="poll">
             <h2>{poll.name}</h2>
             {poll.Questions && poll.Questions.map((question) => (

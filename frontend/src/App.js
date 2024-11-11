@@ -11,7 +11,7 @@ import Voting from './voting/Voting';
 function App() {
   const [isInputMode, setIsInputMode] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showResultsMode, setShowResults] = useState(false);
+  const [showResultsMode, setShowResults] = useState(true);
 
 
   const handleLoginChange = (loginMode) => {
@@ -34,9 +34,7 @@ function App() {
           <div className='Logout'>
             <button onClick={() => setIsLoggedIn(false)}>Logout</button>
           </div>
-          <button onClick={!showResultsMode ?
-            () => setShowResults(true) :
-            () => setShowResults(false)}>
+          <button onClick={() => setShowResults(!showResultsMode)}>
             {showResultsMode ? 'Show results' : 'Show poll'}
           </button>
           {/*This is to Show the voting function*/}

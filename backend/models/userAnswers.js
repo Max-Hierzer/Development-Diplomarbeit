@@ -17,7 +17,14 @@ module.exports = (sequelize) => {
             questionId: { type: DataTypes.INTEGER, allowNull: false },
 
         },
-        { sequelize, modelName: 'UserAnswers' },
+
+        { sequelize, modelName: 'UserAnswers', indexes: [
+            {
+                unique: true,
+                fields: ['userId', 'answerId', 'questionId']  // Composite unique constraint
+            }
+        ], },
+
     );
     UserAnswers.removeAttribute("id");
     return UserAnswers;
