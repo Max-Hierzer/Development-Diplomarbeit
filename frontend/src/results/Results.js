@@ -5,6 +5,7 @@ const Results = () => {
     const [polls, setPolls] = useState([]);
     const [users, setUsers] = useState([]);
     const [showVotersMode, setShowVoters] = useState(true);
+    const [selectedPoll, setSelectedPoll] = useState(null);
     useEffect(() => {
         const fetchResults = async () => {
             try {
@@ -66,12 +67,21 @@ const Results = () => {
         return voterNames;
     }
 
-    const showVoters = () => { setShowVoters(!showVotersMode)};
 
+    const showVoters = () => { setShowVoters(!showVotersMode)};
+    console.log(polls);
     return (
         <div>
-        <h1>Polls and Questions</h1>
+        <h2>Select a Poll</h2>
+        <select onChange={(e) => setSelectedPoll(e.target.value)}>
+        <option value="">Select a poll</option>
         {polls.map((poll) => (
+            <option key={poll.id} value={poll.id}>
+            {poll.name}
+            </option>
+        ))}
+        </select>
+        {polls.map((poll) => poll.id == selectedPoll ? (
             <div key={poll.id} className="poll">
             <h2>{poll.name}</h2>
             {poll.Questions && poll.Questions.map((question) => (
@@ -90,7 +100,7 @@ const Results = () => {
                 </div>
             ))}
             </div>
-        ))}
+        ) : '')}
         <button onClick={showVoters}>{ showVotersMode ? ('Show voters') : ('Show count')}</button>
         </div>
     );
