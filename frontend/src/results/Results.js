@@ -32,6 +32,15 @@ const Results = () => {
         fetchPolls();
     }, []);
 
+    const countResults = (results, question, answer) => {
+        let counter = 0;
+        results.map((r) => {
+            if (r.questionId === question.id && r.answerId === answer.id) counter++;
+        });
+        return counter;
+    }
+
+    console.log(results);
     return (
         <div>
         <h1>Polls and Questions</h1>
@@ -43,7 +52,7 @@ const Results = () => {
                 <h4>{question.name}</h4>
                 {question.Answers && question.Answers.map((answer) => (
                     <div key={answer.id} className="answer">
-                    <p>{answer.name}</p>
+                    <p>{answer.name} {countResults(results, question, answer)}</p>
                     </div>
                 ))}
                 </div>
