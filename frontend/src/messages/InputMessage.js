@@ -18,7 +18,6 @@ function InputMessage() {
 
             const data = await res.json();
             if (res.ok) {
-                setResponse(`Message saved with ID: ${data.id}`);
                 setMessage('');
             } else {
                 setResponse(`Error: ${data.error}`);
@@ -41,7 +40,6 @@ function InputMessage() {
         </label>
         <button type="submit">Submit</button>
         </form>
-        <p>{ response }</p>
         </div>
     )
 }

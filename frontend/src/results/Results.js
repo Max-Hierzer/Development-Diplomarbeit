@@ -59,6 +59,13 @@ const Results = () => {
         return { counter, voters };
     }
 
+    const discloseVoters = (results, questions, answer, users) => {
+        const voters = showResults(results, questions, answer).voters;
+        let voterNames = [];
+        users.filter(u => voters.includes(u.id)).map(u => voterNames.push(u.name));
+        return voterNames;
+    }
+
     const showVoters = () => { setShowVoters(!showVotersMode)};
 
     return (
@@ -69,14 +76,15 @@ const Results = () => {
             <h2>{poll.name}</h2>
             {poll.Questions && poll.Questions.map((question) => (
                 <div key={question.id} className="question">
-                <h4>{question.name}</h4>
+                <h3>{question.name}</h3>
                 {question.Answers && question.Answers.map((answer) => (
                     <div key={answer.id} className="answer">
-                    <p>{answer.name} {showVotersMode ?
+                    <h4>{answer.name}</h4>
+                    <h4>{showVotersMode ?
                         showResults(results, question, answer).counter :
-                        users.filter(u => showResults(results, question, answer).voters.includes(u.id)).map(u => u.name + ', ')
-                    }</p>
-
+                        discloseVoters(results, question, answer, users).join(', ')
+                    }</h4>
+                    <br />
                     </div>
                 ))}
                 </div>
