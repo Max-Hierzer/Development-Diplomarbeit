@@ -25,6 +25,6 @@ app.use('/results', getPolls);
 app.use('/api', votingRoutes);
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
+app.listen(PORT, () => {                            // listens for requests on port
     console.log(`Server running on port ${PORT}`);
 });

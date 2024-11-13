@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
-import './Voting.css';
+import React, { useState, useEffect } from 'react';
 
-function Voting({ userId, userName, polls, selectedPoll }) {
-    const [selectedAnswers, setSelectedAnswers] = useState({}); // Store answers for each question
-    const [response, setResponse] = useState(null); // To show success/error message
+function Voting({ question, answer, selectedAnswers, handleAnswerChange, userId, submitVote }) {
+    const [response, setResponse] = useState(null); // For showing the response message
 
     const handleVote = async (event) => {
         event.preventDefault(); // Prevent page refresh on form submit
@@ -26,9 +24,8 @@ function Voting({ userId, userName, polls, selectedPoll }) {
             });
 
             const data = await res.json();
-            console.log(data);
             if (res.ok) {
-                setResponse(`User ${userName} (ID: ${userId}) voted successfully.`);
+                setResponse(`User ID: ${userId} voted successfully.`);
             } else {
                 setResponse(`Error: ${data.error}`);
             }
@@ -38,49 +35,25 @@ function Voting({ userId, userName, polls, selectedPoll }) {
         }
     };
 
-    // Update the selected answer for a specific question
-    const handleAnswerChange = (questionId, answerId) => {
-        setSelectedAnswers((prevAnswers) => ({
-            ...prevAnswers,
-            [questionId]: answerId,
-        }));
-    };
-
-    console.log(selectedAnswers)
-
     return (
-        <div className="Voting">
-        <form onSubmit={handleVote}>
-        {polls
-            .filter((poll) => poll.id.toString() === selectedPoll)
-            .map((poll) => (
-                <div key={poll.id} className="poll">
-                <h1>Vote on {poll.name}</h1>
-                {poll.Questions && poll.Questions.map((question) => (
-                    <div key={question.id} className="question">
-                    <h3>{question.name}</h3>
-                    {question.Answers && question.Answers.map((answer) => (
-                        <div key={answer.id} className="answer">
-                        <label>
-                        <input
-                        type="radio"
-                        value={answer.id}
-                        checked={selectedAnswers[question.id] === answer.id}
-                        onChange={() => handleAnswerChange(question.id, answer.id)}
-                        />
-                        <span>{answer.name}</span>
-                        </label>
-                        </div>
-                    ))}
-                    </div>
-                ))}
-                </div>
-            ))}
-            <button type="submit">Submit Vote</button>
-            </form>
-
-            {response && <p>{response}</p>} {/* Show success/error message */}
-            </div>
+        <div className="answer">
+            {!submitVote ? (
+            <label>
+            <input
+                type="radio"
+                name={`question-${question.id}`} // Unique name for each question
+                value={answer.id}
+                checked={selectedAnswers[question.id] === answer.id}
+                onChange={() => handleAnswerChange(question.id, answer.id)} // Update selected answer for this question
+            />
+            <span>{answer.name}</span>
+            </label>
+            ) :
+            (
+            <button onClick={handleVote}>Submit Vote</button>
+            )}
+            {response && <p>{response}</p>}
+        </div>
     );
 }
 
