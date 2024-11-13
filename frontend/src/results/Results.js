@@ -1,37 +1,21 @@
 import React, { useState, useEffect } from 'react';
 
-const Results = () => {
+const Results = ({ polls, selectedPoll }) => {
     const [results, setResults] = useState([]);
-    const [polls, setPolls] = useState([]);
     const [users, setUsers] = useState([]);
     const [showVotersMode, setShowVoters] = useState(true);
-    const [selectedPoll, setSelectedPoll] = useState(null);
+
     useEffect(() => {
         const fetchResults = async () => {
             try {
                 const res = await fetch('http://localhost:3001/results/results');
                 const data = await res.json();
                 setResults(data);
-
             } catch (error) {
-                console.error('Error fetching results in frontend: ', error);
+                console.error('Error fetching results in frontend:', error);
             }
         };
         fetchResults();
-    }, []);
-
-    useEffect(() => {
-        const fetchPolls = async () => {
-            try {
-                const res = await fetch('http://localhost:3001/results/polls');
-                const data = await res.json();
-                setPolls(data);
-
-            } catch (error) {
-                console.error('Error fetching polls in frontend: ', error);
-            }
-        }
-        fetchPolls();
     }, []);
 
     useEffect(() => {
@@ -50,60 +34,52 @@ const Results = () => {
     const showResults = (results, question, answer) => {
         let counter = 0;
         let voters = [];
-        results.map((r) => {
+        results.forEach((r) => {
             if (r.questionId === question.id && r.answerId === answer.id) {
                 counter++;
                 voters.push(r.userId);
             }
-            return 0;
         });
         return { counter, voters };
-    }
+    };
 
-    const discloseVoters = (results, questions, answer, users) => {
-        const voters = showResults(results, questions, answer).voters;
-        let voterNames = [];
-        users.filter(u => voters.includes(u.id)).map(u => voterNames.push(u.name));
+    const discloseVoters = (results, question, answer, users) => {
+        const voters = showResults(results, question, answer).voters;
+        let voterNames = users.filter(u => voters.includes(u.id)).map(u => u.name);
         return voterNames;
-    }
+    };
 
+    const showVoters = () => setShowVoters(!showVotersMode);
 
-    const showVoters = () => { setShowVoters(!showVotersMode)};
-    console.log(polls);
     return (
         <div>
-        <h2>Select a Poll</h2>
-        <select onChange={(e) => setSelectedPoll(e.target.value)}>
-        <option value="">Select a poll</option>
-        {polls.map((poll) => (
-            <option key={poll.id} value={poll.id}>
-            {poll.name}
-            </option>
-        ))}
-        </select>
-        {polls.map((poll) => poll.id.toString() === selectedPoll ? (
-            <div key={poll.id} className="poll">
-            <h2>{poll.name}</h2>
-            {poll.Questions && poll.Questions.map((question) => (
-                <div key={question.id} className="question">
-                <h3>{question.name}</h3>
-                {question.Answers && question.Answers.map((answer) => (
-                    <div key={answer.id} className="answer">
-                    <h4>{answer.name}</h4>
-                    <h4>{showVotersMode ?
-                        showResults(results, question, answer).counter :
-                        discloseVoters(results, question, answer, users).join(', ')
-                    }</h4>
-                    <br />
+        {polls
+            .filter((poll) => poll.id.toString() === selectedPoll)
+            .map((poll) => (
+                <div key={poll.id} className="poll">
+                <h2>{poll.name}</h2>
+                {poll.Questions && poll.Questions.map((question) => (
+                    <div key={question.id} className="question">
+                    <h3>{question.name}</h3>
+                    {question.Answers && question.Answers.map((answer) => (
+                        <div key={answer.id} className="answer">
+                        <h4>{answer.name}</h4>
+                        <h4>{showVotersMode
+                            ? showResults(results, question, answer).counter
+                            : discloseVoters(results, question, answer, users).join(', ')
+                        }</h4>
+                        <br />
+                        </div>
+                    ))}
                     </div>
                 ))}
                 </div>
             ))}
+            <button onClick={showVoters}>
+            {showVotersMode ? 'Show voters' : 'Show count'}
+            </button>
             </div>
-        ) : '')}
-        <button onClick={showVoters}>{ showVotersMode ? ('Show voters') : ('Show count')}</button>
-        </div>
     );
-}
+};
 
 export default Results;

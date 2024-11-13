@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Voting.css';
 
-function Voting({ userId, userName, questionId }) {
+function Voting({ userId, userName, polls, selectedPoll }) {
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [response, setResponse] = useState(null); // To show success/error message
 
@@ -21,7 +21,6 @@ function Voting({ userId, userName, questionId }) {
                 },
                 body: JSON.stringify({
                     userId, // The ID of the user casting the vote
-                    questionId, // ID of the question being answered
                     answerId: selectedAnswer, // ID of the selected answer
                 }),
             });
@@ -41,28 +40,33 @@ function Voting({ userId, userName, questionId }) {
 
     return (
         <div className="Voting">
-            <h1>Vote on Question {questionId}</h1>
-
             <form onSubmit={handleVote}>
-                <label>
-                    <input
-                        type="radio"
-                        value="1" // Assuming 1 is the ID for "Yes" answer
-                        checked={selectedAnswer === 1}
-                        onChange={() => setSelectedAnswer(1)}
-                    />
-                    Yes
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        value="2" // Assuming 2 is the ID for "No" answer
-                        checked={selectedAnswer === 2}
-                        onChange={() => setSelectedAnswer(2)}
-                    />
-                    No
-                </label>
-
+            {polls
+                .filter((poll) => poll.id.toString() === selectedPoll)
+                .map((poll) => (
+                    <div key={poll.id} className="poll">
+                    <h1>Vote on {poll.name}</h1>
+                    {poll.Questions && poll.Questions.map((question) => (
+                        <div key={question.id} className="question">
+                        <h3>{question.name}</h3>
+                        {question.Answers && question.Answers.map((answer) => (
+                            <div key={answer.id} className="answer">
+                            <label>
+                            <input
+                            type="radio"
+                            value={answer.id} // Assuming 2 is the ID for "No" answer
+                            checked={selectedAnswer === answer.id}
+                            onChange={() => setSelectedAnswer(answer.id)}
+                            />
+                            {answer.name}
+                            </label>
+                            <br />
+                            </div>
+                        ))}
+                        </div>
+                    ))}
+                    </div>
+                ))}
                 <button type="submit">Submit Vote</button>
             </form>
 

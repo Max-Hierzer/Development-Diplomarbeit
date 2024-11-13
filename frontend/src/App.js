@@ -5,14 +5,12 @@ import WriteMessages from './messages/WriteMessage';
 import InputMessage from './messages/InputMessage';
 import Register from './usermanagment/Register';
 import Login from './usermanagment/Login';
-import Results from './results/Results';
-import Voting from './voting/Voting';
+import PollDashboard from './selectPolls/PollDashboard';
+
 
 function App() {
   const [isInputMode, setIsInputMode] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showResultsMode, setShowResults] = useState(true);
-
 
   const handleLoginChange = (loginMode) => {
     setIsLoggedIn(loginMode);
@@ -34,16 +32,7 @@ function App() {
           <div className='Logout'>
             <button onClick={() => setIsLoggedIn(false)}>Logout</button>
           </div>
-          <button onClick={() => setShowResults(!showResultsMode)}>
-            {showResultsMode ? 'Show results' : 'Show poll'}
-          </button>
-          {/*This is to Show the voting function*/}
-          {showResultsMode ? (
-            <Voting />
-          ) : (
-            <Results />
-          )}
-
+          <PollDashboard />
           <div className='Messenger'>
             <h1>{isInputMode ? 'Submit a Message' : 'Messages'}</h1>
 
