@@ -37,7 +37,6 @@ function Voting({ userId, userName, polls, selectedPoll }) {
             setResponse('Error submitting vote');
         }
     };
-
     return (
         <div className="Voting">
             <form onSubmit={handleVote}>

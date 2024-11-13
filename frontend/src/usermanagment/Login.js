@@ -23,7 +23,7 @@ const Login = ({ loginChange }) => {
         const user = users.find(u => u.name === inputUser && u.password === inputPassword);
         if (user) {
             const loginMode = true;
-            loginChange(loginMode);
+            loginChange(loginMode, user.id, user.name);
         } else {
             (console.log('Wrong username or Password'));
         }

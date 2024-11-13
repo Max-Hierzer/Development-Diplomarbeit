@@ -3,7 +3,7 @@ import SelectPolls from './SelectPolls';
 import Results from '../results/Results';
 import Voting from '../voting/Voting';
 
-const PollDashboard = () => {
+const PollDashboard = ({userId, userName}) => {
     const [polls, setPolls] = useState([]);
     const [selectedPoll, setSelectedPoll] = useState(null);
     const [showResultsMode, setShowResults] = useState(true);
@@ -27,7 +27,7 @@ const PollDashboard = () => {
         </button>
         <SelectPolls polls={polls} setSelectedPoll={setSelectedPoll} />
         {showResultsMode ? (
-            <Voting polls={polls} selectedPoll={selectedPoll} />
+            <Voting polls={polls} selectedPoll={selectedPoll} userId = {userId} userName = {userName}/>
         ) : (
             <Results polls={polls} selectedPoll={selectedPoll} />
         )}

@@ -11,9 +11,13 @@ import PollDashboard from './selectPolls/PollDashboard';
 function App() {
   const [isInputMode, setIsInputMode] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userId, setUserId] = useState(0);
+  const [userName, setUserName] = useState('');
 
-  const handleLoginChange = (loginMode) => {
+  const handleLoginChange = (loginMode, userId, userName) => {
     setIsLoggedIn(loginMode);
+    setUserId(userId);
+    setUserName(userName);
   };
 
   return (
@@ -32,7 +36,7 @@ function App() {
           <div className='Logout'>
             <button onClick={() => setIsLoggedIn(false)}>Logout</button>
           </div>
-          <PollDashboard />
+          <PollDashboard userId = {userId} userName = {userName}/>
           <div className='Messenger'>
             <h1>{isInputMode ? 'Submit a Message' : 'Messages'}</h1>
 
