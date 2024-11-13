@@ -1,14 +1,13 @@
-// services/votingService.js
-const { UserAnswers } = require('../models');
+// services/voteService.js
+const { UserAnswers, Users, Answers, Questions } = require('../models/index');
 
-async function registerVote(userId, questionId, answerId) {
-    try {
-        const vote = await UserAnswers.create({ userId, questionId, answerId });
-        return vote;
-    } catch (error) {
-        console.error('Error registering vote in service:', error);
-        throw error;
-    }
+async function submitVote(userId, answers) {
+    // Insert answers into the `UserAnswers` table
+    const userAnswersPromises = Object.entries(answers).map(([questionId, answerId]) =>
+    UserAnswers.create({ userId, answerId, questionId })
+    );
+
+    await Promise.all(userAnswersPromises);
 }
 
-module.exports = { registerVote };
+module.exports = { submitVote };

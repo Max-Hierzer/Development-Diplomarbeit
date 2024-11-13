@@ -1,14 +1,17 @@
-// controllers/votingController.js
-const { registerVote } = require('../services/votingServices');
+// controllers/voteController.js
+const { submitVote } = require('../services/votingServices');
 
 async function handleVote(req, res) {
-    const { userId, questionId, answerId } = req.body;
+    const { userId, answers } = req.body; // `answers` should be an object of questionId: answerId pairs
 
     try {
-        const vote = await registerVote(userId, questionId, answerId);
-        res.status(201).json({ message: 'Vote registered successfully', vote });
+        console.log(userId, answers)
+        // Call the service to submit the vote
+        await submitVote(userId, answers);
+        return res.status(200).json({ message: 'Vote(s) successfully recorded' });
     } catch (error) {
-        res.status(500).json({ error: 'Error registering vote' });
+        console.error('Error submitting vote:', error);
+        return res.status(400).json({ error: error.message });
     }
 }
 
