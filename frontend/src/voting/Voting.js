@@ -64,14 +64,12 @@ function Voting({ userId, userName, polls, selectedPoll }) {
                         <label>
                         <input
                         type="radio"
-                        name={`question-${question.id}`} // Unique name per question
                         value={answer.id}
                         checked={selectedAnswers[question.id] === answer.id}
                         onChange={() => handleAnswerChange(question.id, answer.id)}
                         />
-                        {answer.name}
+                        <span>{answer.name}</span>
                         </label>
-                        <br />
                         </div>
                     ))}
                     </div>

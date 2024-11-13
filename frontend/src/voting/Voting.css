@@ -16,18 +16,21 @@
     margin-bottom: 20px; /* Space between title and options */
     color: #333;
   }
-  
-  label {
-    font-size: 18px;
-    margin-bottom: 10px; /* Space between options */
-    display: block;
+
+  .answer label {
+    width : 100%;
+    text-align: left;
   }
-  
-  input[type="radio"] {
-     /* Space between radio button and text */
-    align-self: self-start;
+  .answer {
+    display: flex;                /* Use flexbox for horizontal alignment */
+    margin-bottom: 10px;          /* Optional: adds some space between each answer option */
   }
-  
+
+  .answer input[type="radio"] {
+    margin-right: 10px; /* Adds some space between the radio button and the text */
+    width: 15%;         /* lets answer be nearer input */
+  }
+
   button {
     margin-top: 20px;
     padding: 10px 20px;
