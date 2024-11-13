@@ -8,7 +8,6 @@ async function submitVote(userId, answers) {
                 where: {
                     userId: userId,
                     questionId: questionId,
-                    answerId: answerId,
                 },
             });
 
