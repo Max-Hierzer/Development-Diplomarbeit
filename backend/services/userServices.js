@@ -1,8 +1,9 @@
 const { Users } = require('../models/index');
 
+// writing new user data in database
 async function createUser(name, email, password) {
     try {
-        const user = await Users.create({ name, email, password });
+        const user = await Users.create({ name, email, password }); // creates new user with attributes name, email, password
         return user;
     } catch (error) {
         console.error('Error creating user in service:', error);
@@ -10,10 +11,11 @@ async function createUser(name, email, password) {
     }
 }
 
+// getting login data from database
 async function fetchLogin() {
     try {
-        const users = await Users.findAll({
-                attributes: ['id', 'name', 'password']
+        const users = await Users.findAll({                 // getting data from Users
+                attributes: ['id', 'name', 'password']      // getting attributes id, name, password
             });
         return users;
     } catch (error) {

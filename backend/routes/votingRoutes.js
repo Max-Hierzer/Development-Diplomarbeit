@@ -1,9 +1,10 @@
 // routes/votingRoutes.js
 const express = require('express');
-const router = express.Router();
-const { handleVote } = require('../controllers/votingController'); // Ensure `handleVote` matches exactly
+const { handleVote } = require('../controllers/votingController');
 
-// Use the correct function name for the route
+const router = express.Router();
+
+// give api names
 router.post('/vote', handleVote);
 
 module.exports = router;

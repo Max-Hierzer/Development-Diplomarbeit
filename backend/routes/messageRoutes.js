@@ -3,7 +3,7 @@ const { handleCreateMessage, handleFetchMessages } = require('../controllers/mes
 
 const router = express.Router();
 
-
+// give api names
 const postMessages = router.post('/message', handleCreateMessage);
 const getMessages = router.get('/messages', handleFetchMessages);
 module.exports = {

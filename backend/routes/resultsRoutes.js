@@ -3,6 +3,7 @@ const { handleFetchResults, handleFetchPolls } = require('../controllers/results
 
 const router = express.Router();
 
+// give api names
 const getResults = router.get('/results', handleFetchResults);
 const getPolls = router.get('/polls', handleFetchPolls);
 
