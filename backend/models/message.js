@@ -1,6 +1,6 @@
 // models/message.js
 const { Model, DataTypes } = require('sequelize');
-
+const sequelize = require('./index').sequelize;
 // define message
 class Message extends Model {}
 
