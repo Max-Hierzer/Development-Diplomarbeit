@@ -6,13 +6,14 @@ module.exports = (sequelize) => {
         static associate(models) { // define relations
             Questions.hasMany(models.UserAnswers, { foreignKey: 'answerId' });          // 1 Question has many UserAnswers
             Questions.belongsToMany(models.Answers, { through: 'QuestionAnswers' });    // Many Questions have many Answers
-            Questions.belongsTo(models.Polls, { foreignKey: 'pollId' });                // Many Questions belong to 1 Poll
+            //Questions.belongsTo(models.Polls, { foreignKey: 'pollId' });                // Many Questions belong to 1 Poll
         }
     }
     // define attributes
     Questions.init(
         {
-            name: { type: DataTypes.STRING, allowNull: false }
+            name: { type: DataTypes.STRING, allowNull: false },
+            pollId: { type: DataTypes.INTEGER, allowNull: false, references: { model: 'Polls' , key: 'id' } }
         },
         { sequelize, modelName: 'Questions' }
     );
