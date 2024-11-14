@@ -6,9 +6,11 @@ import InputMessage from './messages/InputMessage';
 import Register from './usermanagment/Register';
 import Login from './usermanagment/Login';
 import PollDashboard from './selectPolls/PollDashboard';
+import CreatePoll from './createPolls/CreatePolls';
 
 
 function App() {
+  const [isPollMode, setIsPollMode] = useState(false);
   const [isInputMode, setIsInputMode] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userId, setUserId] = useState(0);
@@ -36,6 +38,14 @@ function App() {
           <div className='Logout'>
             <button onClick={() => setIsLoggedIn(false)}>Logout</button>
           </div>
+          <button onClick={() => setIsPollMode(!isPollMode)}>
+          {isPollMode ? 'Back' : 'Create Poll'}
+          </button>
+            {!isPollMode ? (
+              <p />
+            ) : (
+              <CreatePoll />
+            )}
           <PollDashboard userId = {userId} userName = {userName}/>
           <div className='Messenger'>
             <h1>{isInputMode ? 'Submit a Message' : 'Messages'}</h1>
