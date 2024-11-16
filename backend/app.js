@@ -8,6 +8,7 @@ const { postQuestion, getQuestions } = require('./routes/questionRoutes');
 const { postAnswer, getAnswers } = require('./routes/answerRoutes');
 const { getResults, getPolls } = require('./routes/resultsRoutes');
 const votingRoutes = require('./routes/votingRoutes');
+const deletionRoutes = require('./routes/deletionRoutes');
 
 
 
@@ -32,6 +33,7 @@ app.use('/api', getAnswers);
 app.use('/results', getResults);
 app.use('/results', getPolls);
 app.use('/api', votingRoutes);
+app.use('/api', deletionRoutes);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {                            // listens for requests on port
