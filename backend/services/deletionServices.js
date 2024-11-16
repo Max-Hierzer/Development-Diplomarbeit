@@ -1,5 +1,8 @@
+// services/deletionServices.js
+const { sequelize, Polls, Questions, Answers } = require('../models'); // Adjust path if necessary
+
 const deletePoll = async (pollId) => {
-    const transaction = await sequelize.transaction();
+    const transaction = await sequelize.transaction();  // Use the sequelize instance
     try {
         // Ensure the poll exists
         const poll = await Polls.findByPk(pollId);
@@ -21,8 +24,8 @@ const deletePoll = async (pollId) => {
             // Fetch answer IDs associated with these questions (via QuestionAnswers)
             const answerIds = await sequelize.models.QuestionAnswers.findAll({
                 where: { QuestionId: questionIds },
-                attributes: ['AnswerId'], // Get only the AnswerId field
-                raw: true, // Return plain objects
+                attributes: ['AnswerId'],
+                raw: true,
                 transaction,
             }).then((records) => records.map((record) => record.AnswerId));
 
@@ -57,3 +60,5 @@ const deletePoll = async (pollId) => {
         throw error;
     }
 };
+
+module.exports = { deletePoll };
