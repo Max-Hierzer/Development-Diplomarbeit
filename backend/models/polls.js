@@ -1,3 +1,4 @@
+// models/polls.js
 const { Model, DataTypes } = require('sequelize');
 
 // defines polls

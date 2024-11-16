@@ -1,3 +1,4 @@
+// models/users.js
 const { Model, DataTypes } = require('sequelize');
 
 // define users

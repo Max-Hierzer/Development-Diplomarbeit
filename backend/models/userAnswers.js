@@ -1,3 +1,4 @@
+// models/userAnswers.js
 const { Model, DataTypes } = require('sequelize');
 
 // define UserAnswers

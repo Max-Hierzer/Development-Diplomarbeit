@@ -1,3 +1,4 @@
+// models/questions.js
 const { Model, DataTypes } = require('sequelize');
 
 // define questions

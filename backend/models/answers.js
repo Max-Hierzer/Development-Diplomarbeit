@@ -1,3 +1,4 @@
+// models/answers.js
 const { Model, DataTypes } = require('sequelize');
 
 // creates table Answers
