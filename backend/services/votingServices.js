@@ -11,7 +11,7 @@ async function submitVote(userId, answers) {
                     questionId: questionId,
                 },
             });
-
+        console.log(answers)
             if (existingVote) {                                         // if he has already voted for this question throw error to not violate unique constraint
                 throw new Error(`User has already voted for question ${questionId} with answer ${answerId}`);
             }

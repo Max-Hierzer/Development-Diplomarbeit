@@ -29,6 +29,7 @@ function Register() {
             console.error('Error creating user:', error);
             setResponse('Error submitting user data');
         }
+
     };
 
     return (

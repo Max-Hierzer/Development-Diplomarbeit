@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-function Voting({ question, answer, selectedAnswers, handleAnswerChange, userId, submitVote }) {
+function Voting({ question, answer, selectedAnswers, handleAnswerChange, userId, submitVote, resetAnswers }) {
     const [response, setResponse] = useState(null); // For showing the response message
 
     const handleVote = async (event) => {
@@ -26,8 +26,10 @@ function Voting({ question, answer, selectedAnswers, handleAnswerChange, userId,
             const data = await res.json();
             if (res.ok) {
                 setResponse(`User ID: ${userId} voted successfully.`);
+                resetAnswers();
             } else {
                 setResponse(`Error: ${data.error}`);
+                resetAnswers();
             }
         } catch (error) {
             console.error('Error submitting vote:', error);
@@ -39,6 +41,7 @@ function Voting({ question, answer, selectedAnswers, handleAnswerChange, userId,
         <div className="answer">
             {!submitVote ? (
             <label>
+            <div key={answer.id}>
             <input
                 type="radio"
                 name={`question-${question.id}`} // Unique name for each question
@@ -46,6 +49,7 @@ function Voting({ question, answer, selectedAnswers, handleAnswerChange, userId,
                 checked={selectedAnswers[question.id] === answer.id}
                 onChange={() => handleAnswerChange(question.id, answer.id)} // Update selected answer for this question
             />
+            </div>
             <span>{answer.name}</span>
             </label>
             ) :

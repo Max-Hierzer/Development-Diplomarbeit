@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SelectPolls from './SelectPolls';
 import Results from '../results/Results';
 import Voting from '../voting/Voting';
-import DeletePoll from '../deletePolls/DeletePoll';
+import DeletePoll from '../DeletePolls/DeletePoll';
 
 const PollDashboard = ({ userId, userName }) => {
     const [polls, setPolls] = useState([]);
@@ -31,6 +31,10 @@ const PollDashboard = ({ userId, userName }) => {
         }));
     };
 
+    const resetAnswers = () => {
+        setSelectedAnswers({});
+    };
+
     return (
         <div>
             <DeletePoll pollId={selectedPoll} refreshPolls={fetchPolls} />
@@ -56,6 +60,7 @@ const PollDashboard = ({ userId, userName }) => {
                                             answer={answer}
                                             selectedAnswers={selectedAnswers}
                                             handleAnswerChange={handleAnswerChange}
+
                                         />
                                     )
                                 ))}
@@ -69,6 +74,7 @@ const PollDashboard = ({ userId, userName }) => {
                     selectedAnswers={selectedAnswers}
                     userId={userId}
                     submitVote={true}
+                    resetAnswers = {resetAnswers}
                 />
             )}
         </div>
