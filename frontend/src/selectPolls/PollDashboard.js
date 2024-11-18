@@ -56,6 +56,7 @@ const PollDashboard = ({ userId, userName }) => {
                                         <Results answer={answer} question={question} />
                                     ) : (
                                         <Voting
+
                                             question={question}
                                             answer={answer}
                                             selectedAnswers={selectedAnswers}
@@ -71,6 +72,7 @@ const PollDashboard = ({ userId, userName }) => {
 
             {!showResultsMode && (
                 <Voting
+                poll={polls.filter((poll) => poll.id.toString() === selectedPoll)}
                     selectedAnswers={selectedAnswers}
                     userId={userId}
                     submitVote={true}

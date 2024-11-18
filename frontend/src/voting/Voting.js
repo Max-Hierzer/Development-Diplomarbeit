@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 
-function Voting({ question, answer, selectedAnswers, handleAnswerChange, userId, submitVote, resetAnswers }) {
+function Voting({ poll, question, answer, selectedAnswers, handleAnswerChange, userId, submitVote, resetAnswers }) {
     const [response, setResponse] = useState(null); // For showing the response message
 
     const handleVote = async (event) => {
         event.preventDefault(); // Prevent page refresh on form submit
-
-        if (Object.keys(selectedAnswers).length === 0) {
-            setResponse('Please select an answer for each question before voting');
+        if (!(Object.keys(selectedAnswers).length === poll[0].Questions.length)) {
+            setResponse('Please select all questions');
             return;
         }
 
@@ -41,7 +40,6 @@ function Voting({ question, answer, selectedAnswers, handleAnswerChange, userId,
         <div className="answer">
             {!submitVote ? (
             <label>
-            <div key={answer.id}>
             <input
                 type="radio"
                 name={`question-${question.id}`} // Unique name for each question
@@ -49,7 +47,6 @@ function Voting({ question, answer, selectedAnswers, handleAnswerChange, userId,
                 checked={selectedAnswers[question.id] === answer.id}
                 onChange={() => handleAnswerChange(question.id, answer.id)} // Update selected answer for this question
             />
-            </div>
             <span>{answer.name}</span>
             </label>
             ) :
