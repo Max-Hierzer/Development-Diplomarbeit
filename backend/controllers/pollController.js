@@ -2,27 +2,40 @@ const { createPoll } = require('../services/pollServices');
 
 async function handleCreatePoll(req, res) {
     try {
-        const { name } = req.body;
-        if (!name) {
-            return res.status(400).json({ error: 'Poll text is required' });
+        const { poll, questions } = req.body;
+
+        if (!poll.name) {
+            return res.status(400).json({ error: 'Poll name is required' });
         }
-        const newPoll = await createPoll(name);
+
+        if (!questions[0].name) {
+            return res.status(400).json({ error: 'At least one question is required' });
+        }
+
+        for (const question of questions) {
+            if (!question.name) {
+                return res.status(400).json({ error: 'Each question must have a valid name' });
+            }
+
+            if (!question.answers[0].name) {
+                return res.status(400).json({ error: `Question "${question.name}" must have at least one answer` });
+            }
+
+            for (const answer of question.answers) {
+                if (!answer.name) {
+                    return res.status(400).json({ error: `All answers for question "${question.name}" must have a valid name` });
+                }
+            }
+        }
+
+        const newPoll = await createPoll(poll, questions);
         res.status(201).json(newPoll);
     } catch (error) {
-        console.error('Error inserting poll:', error);
-        res.status(500).json({error: 'Error creating poll in controller' });
+        console.error('Error creating poll:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 }
 
-/*async function handleFetchPolls(req, res) {
-    try {
-        const polls = await fetchPolls();
-        res.status(200).json(polls); // Send the polls as a response
-    } catch (error) {
-        console.error('Error fetching polls:', error);
-        res.status(500).json({ error: 'Error fetching polls in controller' });
-    }
-}*/
 
 module.exports = {
     handleCreatePoll: handleCreatePoll

@@ -2,92 +2,119 @@ import React, { useState } from 'react';
 
 function CreatePoll() {
     const [poll, setPoll] = useState('');
-    const [question, setQuestion] = useState('');
-    const [answer, setAnswer] = useState('');
+    const [questions, setQuestions] = useState([{ name: '', answers: [{ name: '' }, { name: '' }] }]);
     const [response, setResponse] = useState(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        const payload = {
+            poll: { name: poll },
+            questions,
+        };
+
+        console.log("Payload to be sent:", JSON.stringify(payload, null, 2));
+
         try {
-            const resP = await fetch('http://localhost:3001/api/poll', {
+            const res = await fetch('http://localhost:3001/api/poll', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: poll }),
+                body: JSON.stringify(payload),
             });
-            const dataP = await resP.json();
 
-            const resQ = await fetch('http://localhost:3001/api/question', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name: question, pollId: dataP.id }),
-            });
-            const dataQ = await resQ.json();
+            const data = await res.json();
 
-            const resA = await fetch('http://localhost:3001/api/answer', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name: answer }),
-            });
-            const dataA = await resA.json();
-
-            if (resP.ok && resQ.ok && resA.ok) {
-                setResponse(`Poll saved with ID: ${dataP.id} and question saved with ID: ${dataQ.id} and answer saved with ID: ${dataA.id}`);
+            if (res.ok) {
+                setResponse(`Poll created successfully`);
                 setPoll('');
-                setQuestion('');
-                setAnswer('');
-            } else if (resP.ok && resQ.ok) {
-                setResponse(`Error: ${dataA.error}`);
-            } else if (resP.ok && resA.ok) {
-                setResponse(`Error: ${dataQ.error}`);
-            } else if (resQ.ok && resA.ok) {
-                setResponse(`Error: ${dataP.error}`);
+                setQuestions([{ name: '', answers: [{ name: '' }, { name: '' }] }]);
+            } else {
+                setResponse(`Error: ${data.error || 'Something went wrong'}`);
             }
         } catch (error) {
             console.error('Error submitting poll:', error);
             setResponse('Error submitting poll');
         }
     };
+
+    const addQuestion = () => {
+        const newQuestions = [...questions];
+        newQuestions.push({ name: '', answers: [{ name: '' }, { name: '' }] });
+        setQuestions(newQuestions);
+    };
+
+    const addAnswer = (questionIndex) => {
+        const newQuestions = [...questions];
+        newQuestions[questionIndex].answers.push({ name: '' });
+        setQuestions(newQuestions);
+    };
+
+    const handleQuestionChange = (index, value) => {
+        const newQuestions = [...questions];
+        newQuestions[index].name = value;
+        setQuestions(newQuestions);
+    };
+
+    const handleAnswerChange = (questionIndex, answerIndex, value) => {
+        const newQuestions = [...questions];
+        newQuestions[questionIndex].answers[answerIndex].name = value;
+        setQuestions(newQuestions);
+    };
+
+
     return (
         <div>
         <form onSubmit={handleSubmit}>
-        <label>
-        Poll:
+        <h1>Poll</h1>
         <input
         type="text"
+        placeholder={`Pollname`}
         value={poll}
         onChange={(e) => setPoll(e.target.value)}
         />
-        </label>
         <br />
-        <label>
-        Question:
-        <input
-        type="text"
-        value={question}
-        onChange={(e) => setQuestion(e.target.value)}
-        />
-        </label>
+
+        <h3>Questions</h3>
+        {questions.map((question, questionIndex) => (
+            <div key={questionIndex}>
+            <input
+            type="text"
+            placeholder={`Question ${questionIndex + 1}`}
+            value={question.name}
+            onChange={(e) =>
+                handleQuestionChange(questionIndex, e.target.value)
+            }
+            />
+            <h4>Answers</h4>
+            {question.answers.map((answer, answerIndex) => (
+                <div key={answerIndex}>
+                <input
+                type="text"
+                placeholder={`Answer ${answerIndex + 1}`}
+                value={answer.name}
+                onChange={(e) =>
+                    handleAnswerChange(questionIndex, answerIndex, e.target.value)
+                }
+                />
+                </div>
+            ))}
+            <button type="button" onClick={() => addAnswer(questionIndex)}>
+            Add Answer
+            </button>
+            </div>
+        ))}
+        <button type="button" onClick={addQuestion}>
+        Add Question
+        </button>
+
         <br />
-        <label>
-        Answer:
-        <input
-        type="text"
-        value={answer}
-        onChange={(e) => setAnswer(e.target.value)}
-        />
-        </label>
-        <br /><button type="submit">Submit</button>
+        <button type="submit">Submit</button>
         </form>
-        <p>{ response }</p>
+        <p>{response}</p>
         </div>
-    )
+    );
 }
 
 export default CreatePoll;

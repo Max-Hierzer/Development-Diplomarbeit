@@ -42,25 +42,28 @@ function App() {
           {isPollMode ? 'Back' : 'Create Poll'}
           </button>
             {!isPollMode ? (
-              <p />
+              <div>
+                <div>
+                  <PollDashboard userId = {userId} userName = {userName}/>
+                </div>
+                <div className='Messenger'>
+                  <h1>{isInputMode ? 'Submit a Message' : 'Messages'}</h1>
+
+                  <button onClick={() => setIsInputMode(!isInputMode)}>
+                    Switch to {isInputMode ? 'View Messages' : 'Submit a Message'}
+                  </button>
+                  {isInputMode ? (
+                  // Input Form
+                  <InputMessage />
+                  ) : (
+                  // Output View: List of Messages
+                  <WriteMessages />
+                  )}
+                </div>
+              </div>
             ) : (
               <CreatePoll />
             )}
-          <PollDashboard userId = {userId} userName = {userName}/>
-          <div className='Messenger'>
-            <h1>{isInputMode ? 'Submit a Message' : 'Messages'}</h1>
-
-            <button onClick={() => setIsInputMode(!isInputMode)}>
-              Switch to {isInputMode ? 'View Messages' : 'Submit a Message'}
-            </button>
-            {isInputMode ? (
-              // Input Form
-              <InputMessage />
-            ) : (
-              // Output View: List of Messages
-              <WriteMessages />
-            )}
-          </div>
         </div>
       )}
     </div>
