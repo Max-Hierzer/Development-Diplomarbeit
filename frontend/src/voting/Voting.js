@@ -40,20 +40,26 @@ function Voting({ poll, question, answer, selectedAnswers, handleAnswerChange, u
     return (
         <div className="answer">
             {!submitVote ? (
-            <label>
-            <input
-                type="radio"
-                name={`question-${question.id}`} // Unique name for each question
-                value={answer.id}
-                checked={selectedAnswers[question.id] === answer.id}
-                onChange={() => handleAnswerChange(question.id, answer.id)} // Update selected answer for this question
-            />
-            <span>{answer.name}</span>
-            </label>
+                <label>
+                    <input
+                        type="radio"
+                        name={`question-${question.id}`} // Unique name for each question
+                        value={answer.id}
+                        checked={selectedAnswers[question.id] === answer.id}
+                        onChange={() => handleAnswerChange(question.id, answer.id)} // Update selected answer for this question
+                    />
+                    <span>{answer.name}</span>
+                </label>
             ) :
-            (
-            <button onClick={handleVote} className='Submit_Vote'>Submit Vote</button>
-            )}
+                (
+                    <button
+                        onClick={handleVote} 
+                        className='Submit_Vote'
+                        title="Klicken um Abstimmung abzuschließen."
+                    >
+                        Submit Vote
+                    </button>
+                )}
             {response && <p>{response}</p>}
         </div>
     );
