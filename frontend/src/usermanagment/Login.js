@@ -32,22 +32,18 @@ const Login = ({ loginChange }) => {
     return (
         <div>
             <form onSubmit={checkLogin}>
-                <label>
-                    Name:
                     <input
                         type="text"
+                        placeholder={`Name`}
                         value={inputUser}
                         onChange={(e) => setInputUser(e.target.value)}
                     />
-                </label>
-                <label>
-                    Password:
                     <input
                         type="password"
+                        placeholder={`Password`}
                         value={inputPassword}
                         onChange={(e) => setInputPassword(e.target.value)}
                     />
-                </label>
                 <button type="submit">Login</button>
             </form>
         </div>

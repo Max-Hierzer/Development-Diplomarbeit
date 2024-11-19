@@ -36,27 +36,24 @@ function Register() {
         <div className="Register">
             <h1>Create a New User</h1>
             <form onSubmit={handleSubmit}>
-                <label>Name:
                 <input
                     type="text"
+                    placeholder={`Name`}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required/>
-                </label>
-                <label>Email:
                 <input
                     type="email"
+                    placeholder={`example@mail.at`}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required/>
-                </label>
-                <label>Password:
                 <input
                     type="password"
+                    placeholder={`Password`}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required/>
-                </label>
                 <button type="submit">Register</button>
             </form>
 
