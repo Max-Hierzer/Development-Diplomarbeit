@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../styles/results.css';
 
 const Results = ({ answer, question }) => {
     const [results, setResults] = useState([]);

@@ -1,0 +1,11 @@
+.poll h2{
+    width: 100%;
+    text-align: center;
+    background-color: lightblue;
+}
+
+.question h3{
+    width: 100%;
+    text-align: left;
+    background-color: #ccc;
+}

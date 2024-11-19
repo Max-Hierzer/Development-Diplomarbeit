@@ -1,21 +1,3 @@
-.Voting {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    background-color: #f9f9f9; /* Light background for the voting section */
-    border-radius: 8px; /* Rounded corners */
-    width: 300px; /* Limit the width of the voting box */
-    margin: 0 auto; /* Center the voting box horizontally */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
-  }
-  
-  .Voting h1 {
-    font-size: 24px;
-    margin-bottom: 20px; /* Space between title and options */
-    color: #333;
-  }
 
   .answer label {
     width : 100%;
@@ -40,9 +22,12 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    width: 100%; /* Make the button fill the width */
   }
   
+  .Submit_Vote {
+    margin: auto; /* align Submit_Vote button Center */
+  }
+
   button:hover {
     background-color: #45a049; /* Slightly darker green on hover */
   }

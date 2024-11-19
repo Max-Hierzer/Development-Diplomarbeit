@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../styles/voting.css';
 
 function Voting({ poll, question, answer, selectedAnswers, handleAnswerChange, userId, submitVote, resetAnswers }) {
     const [response, setResponse] = useState(null); // For showing the response message
@@ -51,7 +52,7 @@ function Voting({ poll, question, answer, selectedAnswers, handleAnswerChange, u
             </label>
             ) :
             (
-            <button onClick={handleVote}>Submit Vote</button>
+            <button onClick={handleVote} className='Submit_Vote'>Submit Vote</button>
             )}
             {response && <p>{response}</p>}
         </div>

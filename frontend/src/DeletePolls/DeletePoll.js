@@ -35,9 +35,13 @@ const DeletePoll = ({ pollId, refreshPolls }) => {
         }
     };
     
-
     return (
-        <button onClick={handleDelete} disabled={!pollId}>
+        <button 
+            onClick={handleDelete} 
+            disabled={!pollId} 
+            className='Delete_Button'
+            title="Nur Polls löschen, welche noch nicht begonnen wurden"  // Tooltip-Nachricht hier
+        >
             Delete Poll
         </button>
     );

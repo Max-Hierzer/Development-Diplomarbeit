@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../styles/dashboard.css';
 import SelectPolls from './SelectPolls';
 import Results from '../results/Results';
 import Voting from '../voting/Voting';

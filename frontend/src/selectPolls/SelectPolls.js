@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/dashboard.css';
 
 const SelectPolls = ({ polls, setSelectedPoll }) => {
     return (
