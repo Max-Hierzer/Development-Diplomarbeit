@@ -10,6 +10,7 @@ import CreatePoll from './createPolls/CreatePolls';
 
 
 function App() {
+  const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [isPollMode, setIsPollMode] = useState(false);
   const [isInputMode, setIsInputMode] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -27,10 +28,20 @@ function App() {
       {!isLoggedIn ? (
         // Render the login component if the user is not logged in
         <div className='Usermanagement'>
-          <h1>Welcome to the User Registration</h1>
-          <Register />
-          <Login loginChange={handleLoginChange} />
-          <h2>Please log in to continue</h2>
+        <button onClick={() => setIsRegisterMode(!isRegisterMode)}>
+        {isRegisterMode ? 'Back' : 'Register'}
+        </button>
+        {!isRegisterMode ? (
+          <div>
+            <Login loginChange={handleLoginChange} />
+            <h2>Please log in to continue</h2>
+          </div>
+        ) : (
+          <div>
+            <h1>Welcome to the User Registration</h1>
+            <Register />
+          </div>
+        )}
         </div>
       ) : (
         // Render the main content if the user is logged in
