@@ -72,13 +72,10 @@ const PollDashboard = ({ userId, userName }) => {
 
                             </div>
                         ))}
-                        <button onClick={showVoters}>
-                        {showVotersMode ? 'Show voters' : 'Show count'}
-                        </button>
                     </div>
                 ))}
 
-            {!showResultsMode && (
+            {!showResultsMode ? (
                 <Voting
                 poll={polls.filter((poll) => poll.id.toString() === selectedPoll)}
                     selectedAnswers={selectedAnswers}
@@ -86,7 +83,9 @@ const PollDashboard = ({ userId, userName }) => {
                     submitVote={true}
                     resetAnswers = {resetAnswers}
                 />
-            )}
+            ) : <button onClick={showVoters}>
+            {showVotersMode ? 'Show voters' : 'Show count'}
+            </button>}
         </div>
     );
 };
