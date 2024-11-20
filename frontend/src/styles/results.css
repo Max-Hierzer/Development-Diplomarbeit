@@ -1,4 +1,10 @@
-.answerResult {
+.answer {
+    width: 100%;
+}
+
+.showResults {
     width: 10%;
+    margin-left: auto;
+    margin-right: 5%;
     text-align: right;
 }

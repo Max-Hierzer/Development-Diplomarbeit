@@ -60,7 +60,7 @@ const Results = ({ answer, question, showVotersMode }) => {
         <div>
             <div key={answer.id} className="answer">
                 <h4>{answer.name}</h4>
-                <h4>{showVotersMode
+                <h4 className='showResults'>{showVotersMode
                     ? showResults(results, question, answer).counter
                     : discloseVoters(results, question, answer, users).join(', ')
                 }</h4>
