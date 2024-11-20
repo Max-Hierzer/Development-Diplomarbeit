@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/results.css';
 
-const Results = ({ answer, question }) => {
+const Results = ({ answer, question, showVotersMode }) => {
     const [results, setResults] = useState([]);
     const [users, setUsers] = useState([]);
-    const [showVotersMode, setShowVoters] = useState(true);
+
 
     // gets the data from UserData
     useEffect(() => {
@@ -54,7 +54,7 @@ const Results = ({ answer, question }) => {
         return voterNames;
     };
 
-    const showVoters = () => setShowVoters(!showVotersMode);    // toggle how the results should be displayed
+
 
     return (
         <div>
@@ -65,9 +65,6 @@ const Results = ({ answer, question }) => {
                     : discloseVoters(results, question, answer, users).join(', ')
                 }</h4>
             </div>
-            <button onClick={showVoters}>
-            {showVotersMode ? 'Show voters' : 'Show count'}
-            </button>
             </div>
     );
 };

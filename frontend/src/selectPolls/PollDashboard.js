@@ -10,6 +10,7 @@ const PollDashboard = ({ userId, userName }) => {
     const [selectedPoll, setSelectedPoll] = useState(null);
     const [selectedAnswers, setSelectedAnswers] = useState({});
     const [showResultsMode, setShowResults] = useState(false);
+    const [showVotersMode, setShowVoters] = useState(true);
 
     const fetchPolls = async () => {
         try {
@@ -36,6 +37,8 @@ const PollDashboard = ({ userId, userName }) => {
         setSelectedAnswers({});
     };
 
+    const showVoters = () => setShowVoters(!showVotersMode);        // toggle how the results should be displayed
+
     return (
         <div>
             <DeletePoll pollId={selectedPoll} refreshPolls={fetchPolls} />
@@ -54,7 +57,7 @@ const PollDashboard = ({ userId, userName }) => {
                                 <h3>{question.name}</h3>
                                 {question.Answers && question.Answers.map((answer) => (
                                     showResultsMode ? (
-                                        <Results answer={answer} question={question} />
+                                        <Results answer={answer} question={question} showVotersMode={showVotersMode}/>
                                     ) : (
                                         <Voting
 
@@ -66,8 +69,12 @@ const PollDashboard = ({ userId, userName }) => {
                                         />
                                     )
                                 ))}
+
                             </div>
                         ))}
+                        <button onClick={showVoters}>
+                        {showVotersMode ? 'Show voters' : 'Show count'}
+                        </button>
                     </div>
                 ))}
 
