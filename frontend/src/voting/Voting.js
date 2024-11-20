@@ -56,6 +56,7 @@ function Voting({ poll, question, answer, selectedAnswers, handleAnswerChange, u
                         onClick={handleVote} 
                         className='Submit_Vote'
                         title="Klicken um Abstimmung abzuschließen."
+                        disabled={!poll.id}
                     >
                         Submit Vote
                     </button>
