@@ -6,6 +6,7 @@
   .answer {
     display: flex;                /* Use flexbox for horizontal alignment */
     margin-bottom: 10px;          /* Optional: adds some space between each answer option */
+    margin-top: 10px; 
   }
 
   .answer input[type="radio"] {
@@ -38,3 +39,6 @@
     color: #ff4d4d; /* Red color for error messages */
   }
   
+  .Submit_Vote {
+    margin-bottom: 1rem; /* Adds space below the button */
+}

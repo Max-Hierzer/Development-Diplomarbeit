@@ -28,7 +28,7 @@ function Voting({ poll, question, answer, selectedAnswers, handleAnswerChange, u
                 setResponse(`User ID: ${userId} voted successfully.`);
                 resetAnswers();
             } else {
-                setResponse(`Error: ${data.error}`);
+                alert(`User has already voted.`);
                 resetAnswers();
             }
         } catch (error) {
@@ -38,9 +38,9 @@ function Voting({ poll, question, answer, selectedAnswers, handleAnswerChange, u
     };
 
     return (
-        <div className="answer">
+        <div >
             {!submitVote ? (
-                <label>
+                <label className="answer">
                     <input
                         type="radio"
                         name={`question-${question.id}`} // Unique name for each question
@@ -53,7 +53,7 @@ function Voting({ poll, question, answer, selectedAnswers, handleAnswerChange, u
             ) :
                 (
                     <button
-                        onClick={handleVote} 
+                        onClick={handleVote}
                         className='Submit_Vote'
                         title="Klicken um Abstimmung abzuschließen."
                         disabled={!poll.id}
@@ -61,7 +61,7 @@ function Voting({ poll, question, answer, selectedAnswers, handleAnswerChange, u
                         Submit Vote
                     </button>
                 )}
-            {response && <p>{response}</p>}
+                {response && <p>{response}</p>}
         </div>
     );
 }
