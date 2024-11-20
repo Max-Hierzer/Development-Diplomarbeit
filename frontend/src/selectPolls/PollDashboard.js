@@ -83,9 +83,12 @@ const PollDashboard = ({ userId, userName }) => {
                     submitVote={true}
                     resetAnswers = {resetAnswers}
                 />
-            ) : <button onClick={showVoters}>
-            {showVotersMode ? 'Show voters' : 'Show count'}
-            </button>}
+            ) : (
+                <button onClick={showVoters}>
+                {showVotersMode ? 'Show voters' : 'Show count'}
+                </button>
+                )
+            }
         </div>
     );
 };
