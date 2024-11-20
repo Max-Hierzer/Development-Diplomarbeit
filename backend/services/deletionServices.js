@@ -1,5 +1,5 @@
 // services/deletionServices.js
-const { sequelize, Polls, Questions, Answers } = require('../models'); // Adjust path if necessary
+const { sequelize, Polls, Questions, Answers, UserAnswers } = require('../models'); // Adjust path if necessary
 
 const deletePoll = async (pollId) => {
     const transaction = await sequelize.transaction();  // Use the sequelize instance
@@ -13,6 +13,15 @@ const deletePoll = async (pollId) => {
         // Fetch all questions for the poll
         const questions = await Questions.findAll({ where: { pollId } });
         const questionIds = questions.map((q) => q.id);
+
+        const userAnswersExist = await UserAnswers.findOne({
+            where: { questionId: questionIds },
+            transaction,
+        });
+
+        if (userAnswersExist) {
+            throw new Error('Diese Umfrage kann nicht gelöscht werden, da für sie bereits abgestimmt wurde.');
+        }
 
         if (questionIds.length > 0) {
             // Delete associations in the intermediate table 'QuestionAnswers' for these questions
