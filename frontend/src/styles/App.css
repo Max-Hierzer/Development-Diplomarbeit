@@ -13,7 +13,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: 100%;
 }
 
 /* Usermanagement Section (Login/Register) */
@@ -23,7 +23,7 @@ body {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px;
+  max-width: 100%;
   text-align: center;
 }
 
@@ -73,6 +73,7 @@ body {
 /* Ensure that the body and html take up the full height of the page */
 html, body {
   height: 100%;
+  width: 100%;
   margin: 0;  /* Remove default margin */
   font-family: Arial, sans-serif;
   display: flex;
@@ -99,7 +100,7 @@ html, body {
 
 /* Center the main content and allow it to expand */
 .MainContent {
-  flex: 1;  /* This allows MainContent to expand and take up remaining space */
+  flex: auto;  /* This allows MainContent to expand and take up remaining space */
   display: flex;
   flex-direction: column;
   justify-content: center;  /* Vertically center content */
@@ -117,7 +118,9 @@ html, body {
 
 /* Messenger styling */
 .Messenger {
-  margin-top: 20px;
+  border-color: #ccc;
+  border-style:solid;
+  margin-top: 35%;
 }
 
 button {
