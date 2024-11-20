@@ -27,7 +27,7 @@ const DeletePoll = ({ pollId, refreshPolls }) => {
                 refreshPolls(); // Refresh the poll list
             } else {
                 console.error('Delete failed:', data || res.statusText);
-                alert(`Error: ${data?.error || res.statusText}`);
+                alert(`${data?.error || res.statusText}`);
             }
         } catch (error) {
             console.error('Error deleting poll:', error);
