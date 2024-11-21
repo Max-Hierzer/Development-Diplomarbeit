@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../styles/register.css';
 
 const Login = ({ loginChange }) => {
     const [users, setUsers] = useState([]);
@@ -31,7 +32,7 @@ const Login = ({ loginChange }) => {
 
     return (
         <div>
-            <form onSubmit={checkLogin}>
+            <form onSubmit={checkLogin} className='registerForm'>
                     <input
                         type="text"
                         placeholder={`Name`}
