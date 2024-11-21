@@ -33,6 +33,7 @@ function App() {
         </button>
         {!isRegisterMode ? (
           <div>
+            <h1>Welcome to  the login</h1>
             <Login loginChange={handleLoginChange} />
             <h2>Please log in to continue</h2>
           </div>
