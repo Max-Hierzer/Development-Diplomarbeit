@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/voting.css';
 
-function Voting({ poll, question, answer, selectedAnswers, handleAnswerChange, userId, submitVote, resetAnswers }) {
+function Voting({ poll, question, answer, selectedAnswers, handleAnswerChange, userId, submitVote, resetAnswers, pollId }) {
     const [response, setResponse] = useState(null); // For showing the response message
 
     const handleVote = async (event) => {
@@ -23,7 +23,6 @@ function Voting({ poll, question, answer, selectedAnswers, handleAnswerChange, u
                 }),
             });
 
-            const data = await res.json();
             if (res.ok) {
                 setResponse(`User ID: ${userId} voted successfully.`);
                 resetAnswers();
@@ -56,7 +55,7 @@ function Voting({ poll, question, answer, selectedAnswers, handleAnswerChange, u
                         onClick={handleVote}
                         className='Submit_Vote'
                         title="Klicken um Abstimmung abzuschließen."
-                        disabled={!poll.id}
+                        disabled={!pollId}
                     >
                         Submit Vote
                     </button>
