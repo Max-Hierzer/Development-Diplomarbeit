@@ -1,11 +1,12 @@
 .answer {
     width: 100%;
+    margin-left: 5%;
 }
 
 .showResults {
     width: 30%;
     margin-left: auto;
-    margin-right: 5%;
+    margin-right: 10%;
     text-align: right;
 }
 
