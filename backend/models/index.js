@@ -12,13 +12,15 @@ const sequelize = new Sequelize(
 
 // import models
 const Users = require('./users')(sequelize, DataTypes);
+const UserRoles = require('./userRoles')(sequelize, DataTypes);
 const UserAnswers = require('./userAnswers')(sequelize, DataTypes);
 const Answers = require('./answers')(sequelize, DataTypes);
 const Questions = require('./questions')(sequelize, DataTypes);
 const Polls = require('./polls')(sequelize, DataTypes);
 
 // set up relations
-Users.associate({ UserAnswers, Users });
+Users.associate({ UserAnswers, UserRoles });
+UserRoles.associate({ Users });
 UserAnswers.associate({ Users, Answers, Questions });
 Answers.associate({ UserAnswers, Answers, Questions });
 Questions.associate({ UserAnswers, Questions, Answers, Polls });
