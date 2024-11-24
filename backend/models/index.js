@@ -1,3 +1,4 @@
+index.js
 // models/index.js
 const { Sequelize, DataTypes } = require('sequelize');
 const config = require('../config/config.json')['development'];
