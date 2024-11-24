@@ -8,7 +8,7 @@ This is the development repository for our diplomarbeit.
 
 ### 2. Installieren der Dependencies vom Project
 * In der Konsole zu Development-Diplomarbeit\frontend\ navigieren.
-* Befehl npm install in der Konsole ausführen.
+* Befehl "npm install" in der Konsole ausführen.
 * Starten von pgAdmin Programm zum erstellen der Datenbank.
     * Anmelden
         * Benutzername: postgres
@@ -18,7 +18,8 @@ This is the development repository for our diplomarbeit.
         * Datenbankname: database_development
 * In einer Konsole zu Development-Diplomarbeit\frontend\ navigieren
   und in einer anderen Konsole zu Development-Diplomarbeit\backend\ navigieren
-* Im backend Befehl "node app.js" ausführen
+* Datenbank erstellen im backend mit dem Befehl "node app.js"
+ - *NOTIZ=npx sequelize-cli db:seed --seed [20241124111110]-seed-user-roles.js um Rollen zu erstellen.*
 * Im frontend Befehl "npm start" ausführen
 
 ### 3. Austesten

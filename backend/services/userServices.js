@@ -3,7 +3,12 @@ const { Users } = require('../models/index');
 // writing new user data in database
 async function createUser(name, email, password) {
     try {
-        const user = await Users.create({ name, email, password }); // creates new user with attributes name, email, password
+        const user = await Users.create({ 
+            name, 
+            email, 
+            password, 
+            roleId: 3 // Explicitly set roleId to "Normal" by default
+        });
         return user;
     } catch (error) {
         console.error('Error creating user in service:', error);
