@@ -3,8 +3,8 @@ This is the development repository for our diplomarbeit.
 
 ## Installations-Guide
 ### 1. Installation der Angeforderten Programme
-node.js Version 22.11.0
-Postgresql: Folge den Schritten in diesen Guide([https://www.w3schools.com/postgresql/postgresql_install.php])
+* node.js Version 22.11.0
+* Postgresql: Folge den Schritten in diesen Guide[w3schools](https://www.w3schools.com/postgresql/postgresql_install.php) 
 
 ### 2. Installieren der Dependencies vom Project
 * In der Konsole zu Development-Diplomarbeit\frontend\ navigieren.
@@ -25,4 +25,5 @@ Postgresql: Folge den Schritten in diesen Guide([https://www.w3schools.com/postg
 * Im Browser zu [localhost](http://localhost:3000/) gehen.
 * Nutzer erstellen(registrieren)
 * Umfragen erstellen und ausprobieren.
+
 
