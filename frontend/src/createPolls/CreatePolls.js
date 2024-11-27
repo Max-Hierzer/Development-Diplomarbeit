@@ -51,6 +51,18 @@ function CreatePoll() {
         setQuestions(newQuestions);
     };
 
+    const deleteQuestion = (questionIndex) => {
+        const newQuestions = [...questions];
+        newQuestions.splice(questionIndex, 1);
+        setQuestions(newQuestions);
+    };
+
+    const deleteAnswer = (questionIndex, answerIndex) => {
+        const newQuestions = [...questions];
+        newQuestions[questionIndex].answers.splice(answerIndex, 1);
+        setQuestions(newQuestions);
+    };
+
     const handleQuestionChange = (index, value) => {
         const newQuestions = [...questions];
         newQuestions[index].name = value;
@@ -86,7 +98,9 @@ function CreatePoll() {
             onChange={(e) =>
                 handleQuestionChange(questionIndex, e.target.value)
             }
-            />
+            /><button type="button" onClick={() => deleteQuestion(questionIndex)}>
+            Delete
+            </button>
             <h4>Answers</h4>
             {question.answers.map((answer, answerIndex) => (
                 <div key={answerIndex}>
@@ -97,7 +111,9 @@ function CreatePoll() {
                 onChange={(e) =>
                     handleAnswerChange(questionIndex, answerIndex, e.target.value)
                 }
-                />
+                /><button type="button" onClick={() => deleteAnswer(questionIndex, answerIndex)}>
+                Delete
+                </button>
                 </div>
             ))}
             <button type="button" onClick={() => addAnswer(questionIndex)}>
