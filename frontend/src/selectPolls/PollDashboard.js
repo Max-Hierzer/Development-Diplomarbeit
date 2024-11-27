@@ -8,13 +8,47 @@ import EditPolls from '../editPolls/editPolls';
 
 const PollDashboard = ({ userId, userName }) => {
     const [polls, setPolls] = useState([]);
-    const [selectedPoll, setSelectedPoll] = useState(null);
     const [selectedAnswers, setSelectedAnswers] = useState({});
-    const [showResultsMode, setShowResults] = useState(false);
+    const [displayMode, setDisplayMode] = useState(0)
     const [showVotersMode, setShowVoters] = useState(true);
-    const [isEditMode, setEditMode] = useState(false);
+    const [response, setResponse] = useState(null); // For showing the response message
+    const [selectedPoll, setSelectedPoll] = useState({});
 
-    console.log(selectedPoll);
+    const resetAnswers = () => {
+        setSelectedAnswers({});
+    };
+
+    const handleVote = async () => {
+        if (!(Object.keys(selectedAnswers).length === selectedPoll.Questions.length)) {
+            setResponse('Please select all questions');
+            return;
+        }
+
+        try {
+            const res = await fetch('http://localhost:3001/api/vote', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId,          // The ID of the user casting the vote
+                    answers: selectedAnswers, // Object containing questionId and answerId pairs
+                }),
+            });
+
+            if (res.ok) {
+                setResponse(`User ID: ${userId} voted successfully.`);
+                resetAnswers();
+            } else {
+                alert(`User has already voted.`);
+                resetAnswers();
+            }
+        } catch (error) {
+            console.error('Error submitting vote:', error);
+            setResponse('Error submitting vote');
+        }
+    };
+
     const fetchPolls = async () => {
         try {
             const response = await fetch('http://localhost:3001/results/polls');
@@ -24,6 +58,10 @@ const PollDashboard = ({ userId, userName }) => {
             console.error('Error fetching polls:', error);
         }
     };
+
+    const handleSetSelectedPoll = (e) => {
+        setSelectedPoll(polls.find((poll) => poll.id.toString() === e));
+    }
 
     useEffect(() => {
         fetchPolls();
@@ -36,70 +74,98 @@ const PollDashboard = ({ userId, userName }) => {
         }));
     };
 
-    const resetAnswers = () => {
-        setSelectedAnswers({});
-    };
+
 
     const showVoters = () => setShowVoters(!showVotersMode);        // toggle how the results should be displayed
 
+    const showButton = () => {
+        switch (displayMode) {
+            case 1:
+                break;
+            case 2: // Voting Mode
+                return (
+                    <div>
+                    <button onClick={handleVote}>
+                    Submit Vote
+                    </button>
+                    </div>
+                );
+            case 3: // Results Mode
+                return (
+                    <div>
+                    <button onClick={showVoters}>
+                    Show Voters
+                    </button>
+                    </div>
+                );
+            default: // Default Case
+                return <p>Select an action to proceed.</p>;
+        }
+    }
+
     return (
         <div>
-            <button onClick={()=> setEditMode(!isEditMode)}>
-            Edit Poll
-            </button>
-            <DeletePoll pollId={selectedPoll} refreshPolls={fetchPolls} />
-            <button onClick={() => setShowResults(!showResultsMode)}>
-                {!showResultsMode ? 'Show results' : 'Show poll'}
-            </button>
+        {/* Poll Selection */}
+        <SelectPolls polls={polls} handleSetSelectedPoll={handleSetSelectedPoll} selectedPoll={selectedPoll}/>
 
-            <SelectPolls polls={polls} setSelectedPoll={setSelectedPoll} />
-            {!isEditMode ?
-                polls
-                .filter((poll) => poll.id.toString() === selectedPoll)
-                .map((poll) => (
-                    <div key={poll.id} className="poll">
-                        <h2>{poll.name}</h2>
-                        {poll.Questions && poll.Questions.map((question) => (
-                            <div key={question.id} className="question">
-                                <h3>{question.name}</h3>
-                                {question.Answers && question.Answers.map((answer) => (
-                                    showResultsMode ? (
-                                        <Results answer={answer} question={question} showVotersMode={showVotersMode}/>
-                                    ) : (
-                                        <Voting
-                                            question={question}
-                                            answer={answer}
-                                            selectedAnswers={selectedAnswers}
-                                            handleAnswerChange={handleAnswerChange}
-                                        />
-                                    )
-                                ))}
+        {/* Control Buttons */}
+        <button onClick={() => setDisplayMode(1)}>Edit</button>
+        <button onClick={() => setDisplayMode(2)}>Vote</button>
+        <button onClick={() => setDisplayMode(3)}>Results</button>
+        <DeletePoll selectedPoll={selectedPoll} refreshPolls={fetchPolls} />
 
-                            </div>
-                        ))}
-                    </div>
-                )) : (
-                <EditPolls selectedPoll={selectedPoll} polls={polls}/>
-                )
-            }
-            { !isEditMode ?
-                !showResultsMode ? (
-                <Voting
-                poll={polls.filter((poll) => poll.id.toString() === selectedPoll)}
-                    selectedAnswers={selectedAnswers}
-                    userId={userId}
-                    submitVote={true}
-                    resetAnswers = {resetAnswers}
-                    pollId = {selectedPoll}
-                />
-            ) : (
-                <button onClick={showVoters}>
-                {showVotersMode ? 'Show voters' : 'Show count'}
-                </button>
-                )
-            : ''
-            }
+        {/* Render Poll Content */}
+        {displayMode !== 1 && (
+        <div key={selectedPoll.id} className="poll">
+        <h2>{selectedPoll.name}</h2>
+        {selectedPoll && selectedPoll.Questions &&
+            selectedPoll.Questions.map((question) => (
+                <div key={question.id} className="question">
+                <h3>{question.name}</h3>
+                    {question.Answers &&
+                        question.Answers.map((answer) => {
+                        // Render based on displayMode
+                        switch (displayMode) {
+                            case 2: // Voting mode
+                                return (
+                                    <Voting
+                                    key={answer.id}
+                                    question={question}
+                                    answer={answer}
+                                    selectedAnswers={selectedAnswers}
+                                    handleAnswerChange={handleAnswerChange}
+                                    />
+                                );
+                            case 3: // Results mode
+                                return (
+                                    <Results
+                                    key={answer.id}
+                                    answer={answer}
+                                    question={question}
+                                    showVotersMode={showVotersMode}
+                                    />
+                                );
+                            default:
+                                return (
+                                <div className="Answer">
+                                    <h4>{answer.name}</h4>
+                                </div>
+                                )
+                        }}
+                        )}
+                </div>
+            ))}
+            </div>
+            )}
+            {selectedPoll.id && displayMode === 1 && <EditPolls selectedPoll={selectedPoll} />}
+
+
+        {/* Bottom Section Controlled by Switch */}
+        <div className="button-section">
+        {selectedPoll.id ? showButton() : (<p>Please select a poll</p>)}
+        <p>{response}</p>
         </div>
+    </div>
     );
 };
 

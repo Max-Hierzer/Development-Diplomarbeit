@@ -1,8 +1,8 @@
 import React from 'react';
 
-const DeletePoll = ({ pollId, refreshPolls }) => {
+const DeletePoll = ({ selectedPoll, refreshPolls }) => {
     const handleDelete = async () => {
-        if (!pollId) {
+        if (!selectedPoll.id) {
             alert('Please select a poll to delete.');
             return;
         }
@@ -11,8 +11,8 @@ const DeletePoll = ({ pollId, refreshPolls }) => {
         if (!confirmDelete) return;
     
         try {
-            console.log(`Deleting poll with ID: ${pollId}`);  // Log Poll-ID
-            const res = await fetch(`http://localhost:3001/api/polls/${pollId}`, {
+            console.log(`Deleting poll with ID: ${selectedPoll.id}`);  // Log Poll-ID
+            const res = await fetch(`http://localhost:3001/api/polls/${selectedPoll.id}`, {
                 method: 'DELETE',
             });
     
@@ -38,11 +38,11 @@ const DeletePoll = ({ pollId, refreshPolls }) => {
     return (
         <button 
             onClick={handleDelete} 
-            disabled={!pollId} 
+            disabled={!selectedPoll}
             className='Delete_Button'
             title="Nur Polls löschen, welche noch nicht begonnen wurden"  // Tooltip-Nachricht hier
         >
-            Delete Poll
+            Delete
         </button>
     );
 };
