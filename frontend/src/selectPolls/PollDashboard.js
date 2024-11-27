@@ -54,14 +54,18 @@ const PollDashboard = ({ userId, userName }) => {
             const response = await fetch('http://localhost:3001/results/polls');
             const data = await response.json();
             setPolls(data);
+            if (selectedPoll?.id && !data.find((poll) => poll.id === selectedPoll.id)) {
+            setSelectedPoll(null); // Clear selectedPoll if it no longer exists
+        }
         } catch (error) {
             console.error('Error fetching polls:', error);
         }
     };
 
-    const handleSetSelectedPoll = (e) => {
-        setSelectedPoll(polls.find((poll) => poll.id.toString() === e));
-    }
+    const handleSetSelectedPoll = (pollId) => {
+            const selected = polls.find((poll) => poll.id.toString() === pollId);
+            setSelectedPoll(selected || null);
+    };
 
     useEffect(() => {
         fetchPolls();
@@ -79,6 +83,7 @@ const PollDashboard = ({ userId, userName }) => {
     const showVoters = () => setShowVoters(!showVotersMode);        // toggle how the results should be displayed
 
     const showButton = () => {
+        if (!selectedPoll) return null;
         switch (displayMode) {
             case 1:
                 break;
@@ -102,7 +107,7 @@ const PollDashboard = ({ userId, userName }) => {
                 return <p>Select an action to proceed.</p>;
         }
     }
-
+    console.log(selectedPoll,  displayMode)
     return (
         <div>
         {/* Poll Selection */}
@@ -112,13 +117,16 @@ const PollDashboard = ({ userId, userName }) => {
         <button onClick={() => setDisplayMode(1)}>Edit</button>
         <button onClick={() => setDisplayMode(2)}>Vote</button>
         <button onClick={() => setDisplayMode(3)}>Results</button>
-        <DeletePoll selectedPoll={selectedPoll} refreshPolls={fetchPolls} />
+        <DeletePoll selectedPoll={selectedPoll} refreshPolls={fetchPolls} setSelectedPoll={setSelectedPoll}/>
 
         {/* Render Poll Content */}
-        {displayMode !== 1 && (
         <div key={selectedPoll.id} className="poll">
+        {displayMode !== 1 &&
+
+        selectedPoll ? (
+            <>
         <h2>{selectedPoll.name}</h2>
-        {selectedPoll && selectedPoll.Questions &&
+        {selectedPoll.Questions &&
             selectedPoll.Questions.map((question) => (
                 <div key={question.id} className="question">
                 <h3>{question.name}</h3>
@@ -155,15 +163,17 @@ const PollDashboard = ({ userId, userName }) => {
                         )}
                 </div>
             ))}
+            {(selectedPoll.id && displayMode === 1) && <EditPolls selectedPoll={selectedPoll} />}
+            </>
+            ) : null}
             </div>
-            )}
-            {selectedPoll.id && displayMode === 1 && <EditPolls selectedPoll={selectedPoll} />}
-
-
-        {/* Bottom Section Controlled by Switch */}
-        <div className="button-section">
+            <div className="button-section">
+        {selectedPoll ? (
+            <>
         {selectedPoll.id ? showButton() : (<p>Please select a poll</p>)}
         <p>{response}</p>
+            </>
+        ) : null}
         </div>
     </div>
     );

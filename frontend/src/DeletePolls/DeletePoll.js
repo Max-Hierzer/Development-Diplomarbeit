@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DeletePoll = ({ selectedPoll, refreshPolls }) => {
+const DeletePoll = ({ selectedPoll, refreshPolls, setSelectedPoll }) => {
     const handleDelete = async () => {
         if (!selectedPoll.id) {
             alert('Please select a poll to delete.');
@@ -25,6 +25,7 @@ const DeletePoll = ({ selectedPoll, refreshPolls }) => {
             if (res.ok) {
                 alert(data?.message || 'Poll deleted successfully.');
                 refreshPolls(); // Refresh the poll list
+                setSelectedPoll(null);
             } else {
                 console.error('Delete failed:', data || res.statusText);
                 alert(`${data?.error || res.statusText}`);
