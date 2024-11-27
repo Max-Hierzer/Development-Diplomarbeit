@@ -1,13 +1,14 @@
+// models/users.js
 const { Model, DataTypes } = require('sequelize');
 
+// define users
 module.exports = (sequelize, DataTypes) => {
     class Users extends Model {
-        static associate(models) {
-            // Define associations
-            Users.hasMany(models.UserAnswers, { foreignKey: 'userId' });
+        static associate(models) {  // define relations
+            Users.hasMany(models.UserAnswers, { foreignKey: 'userId' });    // 1 user has many UserAnswers
         }
     }
-
+    // define attributes
     Users.init(
         {
             name: { type: DataTypes.STRING, allowNull: false },

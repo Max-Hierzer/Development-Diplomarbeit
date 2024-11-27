@@ -1,0 +1,44 @@
+
+  .answer label {
+    width : 100%;
+    text-align: left;
+  }
+  .answer {
+    display: flex;                /* Use flexbox for horizontal alignment */
+    margin-bottom: 10px;          /* Optional: adds some space between each answer option */
+    margin-top: 10px; 
+  }
+
+  .answer input[type="radio"] {
+    margin-right: 10px; /* Adds some space between the radio button and the text */
+    width: 15%;         /* lets answer be nearer input */
+  }
+
+  button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .Submit_Vote {
+    margin: auto; /* align Submit_Vote button Center */
+  }
+
+  button:hover {
+    background-color: #45a049; /* Slightly darker green on hover */
+  }
+  
+  p {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #ff4d4d; /* Red color for error messages */
+  }
+  
+  .Submit_Vote {
+    margin-bottom: 1rem; /* Adds space below the button */
+}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../styles/register.css';
 
 const Login = ({ loginChange }) => {
     const [users, setUsers] = useState([]);
@@ -23,7 +24,7 @@ const Login = ({ loginChange }) => {
         const user = users.find(u => u.name === inputUser && u.password === inputPassword);
         if (user) {
             const loginMode = true;
-            loginChange(loginMode);
+            loginChange(loginMode, user.id, user.name);
         } else {
             (console.log('Wrong username or Password'));
         }
@@ -31,23 +32,19 @@ const Login = ({ loginChange }) => {
 
     return (
         <div>
-            <form onSubmit={checkLogin}>
-                <label>
-                    Name:
+            <form onSubmit={checkLogin} className='registerForm'>
                     <input
                         type="text"
+                        placeholder={`Name`}
                         value={inputUser}
                         onChange={(e) => setInputUser(e.target.value)}
                     />
-                </label>
-                <label>
-                    Password:
                     <input
                         type="password"
+                        placeholder={`Password`}
                         value={inputPassword}
                         onChange={(e) => setInputPassword(e.target.value)}
                     />
-                </label>
                 <button type="submit">Login</button>
             </form>
         </div>

@@ -1,18 +1,20 @@
+// models/questions.js
 const { Model, DataTypes } = require('sequelize');
 
+// define questions
 module.exports = (sequelize) => {
     class Questions extends Model {
-        static associate(models) {
-            // Define associations
-            Questions.hasMany(models.UserAnswers, { foreignKey: 'answerId' });
-            Questions.belongsToMany(models.Answers, { through: 'QuestionAnswers' });
-            Questions.belongsTo(models.Polls, { foreignKey: 'pollId' });
+        static associate(models) { // define relations
+            Questions.hasMany(models.UserAnswers, { foreignKey: 'answerId' });          // 1 Question has many UserAnswers
+            Questions.belongsToMany(models.Answers, { through: 'QuestionAnswers' });    // Many Questions have many Answers
+            //Questions.belongsTo(models.Polls, { foreignKey: 'pollId' });                // Many Questions belong to 1 Poll
         }
     }
-
+    // define attributes
     Questions.init(
         {
-            name: { type: DataTypes.STRING, allowNull: false }
+            name: { type: DataTypes.STRING, allowNull: false },
+            pollId: { type: DataTypes.INTEGER, allowNull: false, references: { model: 'Polls' , key: 'id' } }
         },
         { sequelize, modelName: 'Questions' }
     );

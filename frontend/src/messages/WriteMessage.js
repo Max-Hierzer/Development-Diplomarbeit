@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 function WriteMessages() {
     const [messages, setMessages] = useState([]);
 
+    // connects to backend
     useEffect(() => {
         const fetchMessages = async () => {
             try {
