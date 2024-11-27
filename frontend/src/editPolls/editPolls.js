@@ -2,9 +2,14 @@
 
 function EditPolls({selectedPoll, polls}) {
     const poll = polls.filter((poll) => poll.id.toString() === selectedPoll)[0];
-    console.log(poll)
+    function Hallo(event){
+        event.preventDefault();
+        console.log("Hallo")
+    }
     return (
         <div>
+        { selectedPoll ? (
+        <form onSubmit={(event) => Hallo(event)}>
         <h1>Pollname</h1>
         <input value={poll.name}/>
         {poll.Questions && poll.Questions.map((question) => (
@@ -21,6 +26,9 @@ function EditPolls({selectedPoll, polls}) {
             }
             </div>
         ))}
+        <button type="submit">Submit Change</button>
+        </form>
+        ) : ''}
         </div>
     )
 }
