@@ -163,7 +163,7 @@ const PollDashboard = ({ userId, userName }) => {
                         )}
                 </div>
             ))}
-            {(selectedPoll.id && displayMode === 1) && <EditPolls selectedPoll={selectedPoll} />}
+            {displayMode === 1 && <EditPolls selectedPoll={selectedPoll} />}
             </>
             ) : null}
             </div>

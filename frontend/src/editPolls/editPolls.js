@@ -30,4 +30,5 @@ function EditPolls({selectedPoll}) {
     );
 }
 
+
 export default EditPolls;
