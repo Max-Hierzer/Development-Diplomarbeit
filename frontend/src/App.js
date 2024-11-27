@@ -8,7 +8,6 @@ import Login from './usermanagment/Login';
 import PollDashboard from './selectPolls/PollDashboard';
 import CreatePoll from './createPolls/CreatePolls';
 
-
 function App() {
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [isPollMode, setIsPollMode] = useState(false);
@@ -45,6 +44,7 @@ function App() {
         )}
         </div>
       ) : (
+
         // Render the main content if the user is logged in
         <div className='MainContent'>
           <div className='Logout'>

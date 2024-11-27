@@ -4,6 +4,7 @@ import SelectPolls from './SelectPolls';
 import Results from '../results/Results';
 import Voting from '../voting/Voting';
 import DeletePoll from '../DeletePolls/DeletePoll';
+import EditPolls from '../editPolls/editPolls';
 
 const PollDashboard = ({ userId, userName }) => {
     const [polls, setPolls] = useState([]);
@@ -11,7 +12,9 @@ const PollDashboard = ({ userId, userName }) => {
     const [selectedAnswers, setSelectedAnswers] = useState({});
     const [showResultsMode, setShowResults] = useState(false);
     const [showVotersMode, setShowVoters] = useState(true);
+    const [isEditMode, setEditMode] = useState(false);
 
+    console.log(selectedPoll);
     const fetchPolls = async () => {
         try {
             const response = await fetch('http://localhost:3001/results/polls');
@@ -41,13 +44,17 @@ const PollDashboard = ({ userId, userName }) => {
 
     return (
         <div>
+            <button onClick={()=> setEditMode(!isEditMode)}>
+            Edit Poll
+            </button>
             <DeletePoll pollId={selectedPoll} refreshPolls={fetchPolls} />
             <button onClick={() => setShowResults(!showResultsMode)}>
                 {!showResultsMode ? 'Show results' : 'Show poll'}
             </button>
 
             <SelectPolls polls={polls} setSelectedPoll={setSelectedPoll} />
-            {polls
+            {!isEditMode ?
+                polls
                 .filter((poll) => poll.id.toString() === selectedPoll)
                 .map((poll) => (
                     <div key={poll.id} className="poll">
@@ -60,12 +67,10 @@ const PollDashboard = ({ userId, userName }) => {
                                         <Results answer={answer} question={question} showVotersMode={showVotersMode}/>
                                     ) : (
                                         <Voting
-
                                             question={question}
                                             answer={answer}
                                             selectedAnswers={selectedAnswers}
                                             handleAnswerChange={handleAnswerChange}
-
                                         />
                                     )
                                 ))}
@@ -73,9 +78,12 @@ const PollDashboard = ({ userId, userName }) => {
                             </div>
                         ))}
                     </div>
-                ))}
-
-            {!showResultsMode ? (
+                )) : (
+                <EditPolls selectedPoll={selectedPoll} polls={polls}/>
+                )
+            }
+            { !isEditMode ?
+                !showResultsMode ? (
                 <Voting
                 poll={polls.filter((poll) => poll.id.toString() === selectedPoll)}
                     selectedAnswers={selectedAnswers}
@@ -89,6 +97,7 @@ const PollDashboard = ({ userId, userName }) => {
                 {showVotersMode ? 'Show voters' : 'Show count'}
                 </button>
                 )
+            : ''
             }
         </div>
     );

@@ -39,13 +39,14 @@ function Voting({ poll, question, answer, selectedAnswers, handleAnswerChange, u
     return (
         <div >
             {!submitVote ? (
-                <label className="answer">
+                <label className="answer" key={answer.id}>
                     <input
                         type="radio"
                         name={`question-${question.id}`} // Unique name for each question
                         value={answer.id}
                         checked={selectedAnswers[question.id] === answer.id}
                         onChange={() => handleAnswerChange(question.id, answer.id)} // Update selected answer for this question
+                        key={answer.id}
                     />
                     <span>{answer.name}</span>
                 </label>
