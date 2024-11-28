@@ -1,4 +1,3 @@
-index.js
 // models/index.js
 const { Sequelize, DataTypes } = require('sequelize');
 const config = require('../config/config.json')['development'];
@@ -13,7 +12,7 @@ const sequelize = new Sequelize(
 
 // import models
 const Users = require('./users')(sequelize, DataTypes);
-const UserRoles = require('./userRoles')(sequelize, DataTypes);
+const UserRoles = require('./UserRoles')(sequelize, DataTypes);
 const UserAnswers = require('./userAnswers')(sequelize, DataTypes);
 const Answers = require('./answers')(sequelize, DataTypes);
 const Questions = require('./questions')(sequelize, DataTypes);
