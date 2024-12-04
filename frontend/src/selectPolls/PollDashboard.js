@@ -121,7 +121,7 @@ const PollDashboard = ({ userId, userName }) => {
 
         {/* Render Poll Content */}
         <div className="poll">
-        {displayMode !== 1 &&
+        {displayMode !== 1 ?
 
         selectedPoll ? (
             <>
@@ -165,7 +165,7 @@ const PollDashboard = ({ userId, userName }) => {
             ))}
 
             </>
-            ) : (<p>Please select a poll</p>)}
+            ) : (<p>Please select a poll</p>) : null}
             {displayMode === 1 && <EditPolls selectedPoll={selectedPoll} />}
             </div>
             <div className="button-section">
