@@ -168,6 +168,7 @@ function EditPolls({ selectedPoll }) {
             <button type="button" onClick={addQuestion}>
             Add Question
             </button>
+            <br />
             <button type="submit">Submit Changes</button>
             </form>
         ) : (
