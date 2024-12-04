@@ -1,24 +1,20 @@
-// services/pollService.js
-const { sequelize, Polls, Questions, Answers } = require('../models');
+const { Polls, Questions, Answers } = require('../models');
 
 const editService = {
     async updatePoll(data) {
-        console.log(data)
         const poll = await Polls.findByPk(data.pollId);
         if (!poll) throw new Error('Poll not found');
 
-        if (poll) {
-            // Modify the instance's property
-            poll.name = data.pollName;
-            console.log(poll);
-            // Save the changes to the database
-            await poll.save();
-            console.log('Poll updated successfully');
-        } else {
-            console.log('Poll not found');
-        }
+        // Update poll name
+        await Polls.update({ name: data.pollName }, { where: { id: data.pollId } });
+        console.log('Poll updated successfully');
 
-        // Handle questions and answers
+        // Get all existing questions for this poll
+        const existingQuestions = await Questions.findAll({
+            where: { pollId: data.pollId },
+        });
+
+        // Process incoming questions
         for (const question of data.Questions) {
             if (question.id) {
                 // Update existing question
@@ -26,43 +22,37 @@ const editService = {
                 if (existingQuestion) {
                     await existingQuestion.update({ name: question.name });
 
-                    // Handle answers (many-to-many relation)
-                    const existingAnswers = await existingQuestion.getAnswers();
+                    // Clear all answers for the question
+                    await existingQuestion.setAnswers([]);
 
-                    const answerIds = question.Answers.map((a) => a.id).filter((id) => id);
-                    const answersToDelete = existingAnswers.filter(
-                        (a) => !answerIds.includes(a.id)
-                    );
-
-                    // Add or update answers in the join table
+                    // Add new answers
                     for (const answer of question.Answers) {
-                        if (answer.id) {
-                            // If answer exists, just add it to the question
-                            await existingQuestion.addAnswer(answer.id);
-                        } else {
-                            // Add new answer and associate it with the question
-                            const newAnswer = await Answers.create({ name: answer.name });
-                            await existingQuestion.addAnswer(newAnswer.id);
-                        }
-                    }
-
-                    // Delete answers that are no longer associated with this question
-                    for (const answer of answersToDelete) {
-                        await existingQuestion.removeAnswer(answer.id);
+                        const newAnswer = await Answers.create({ name: answer.name });
+                        await existingQuestion.addAnswer(newAnswer);
                     }
                 }
             } else {
                 // Create new question and associate answers
                 const newQuestion = await Questions.create({
                     name: question.name,
-                    pollId: poll.id,
+                    pollId: data.pollId,
                 });
 
                 for (const answer of question.Answers) {
                     const newAnswer = await Answers.create({ name: answer.name });
-                    await newQuestion.addAnswer(newAnswer.id);
+                    await newQuestion.addAnswer(newAnswer);
                 }
             }
+        }
+
+        // Delete questions that are in the database but not in the incoming data
+        const incomingQuestionIds = data.Questions.map(q => q.id).filter(id => id);
+        const questionsToDelete = existingQuestions.filter(q => !incomingQuestionIds.includes(q.id));
+
+        for (const question of questionsToDelete) {
+            await question.removeAnswers(); // Remove all associations
+            await question.destroy(); // Delete the question
+            console.log(`Deleted question with id ${question.id}`);
         }
 
         // Fetch the updated poll with associated questions and answers
@@ -70,7 +60,7 @@ const editService = {
             include: [
                 {
                     model: Questions,
-                    include: [{ model: Answers}],
+                    include: [{ model: Answers }],
                 },
             ],
         });
