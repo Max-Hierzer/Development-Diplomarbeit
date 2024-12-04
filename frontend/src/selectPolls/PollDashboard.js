@@ -69,7 +69,7 @@ const PollDashboard = ({ userId, userName }) => {
 
     useEffect(() => {
         fetchPolls();
-    }, []);
+    });
 
     const handleAnswerChange = (questionId, answerId) => {
         setSelectedAnswers((prevAnswers) => ({
@@ -78,7 +78,14 @@ const PollDashboard = ({ userId, userName }) => {
         }));
     };
 
-
+    const handleDisplayMode = async (displayM) => {
+        setDisplayMode(displayM);
+        await fetchPolls();
+        if (selectedPoll?.id) {
+            const updatedPoll = polls.find((poll) => poll.id === selectedPoll.id);
+            setSelectedPoll(updatedPoll || null);
+        }
+    }
 
     const showVoters = () => setShowVoters(!showVotersMode);        // toggle how the results should be displayed
 
@@ -107,16 +114,15 @@ const PollDashboard = ({ userId, userName }) => {
                 return <p>Select an action to proceed.</p>;
         }
     }
-    console.log(selectedPoll,  displayMode)
     return (
         <div>
         {/* Poll Selection */}
         <SelectPolls polls={polls} handleSetSelectedPoll={handleSetSelectedPoll} selectedPoll={selectedPoll}/>
 
         {/* Control Buttons */}
-        <button onClick={() => setDisplayMode(1)}>Edit</button>
-        <button onClick={() => setDisplayMode(2)}>Vote</button>
-        <button onClick={() => setDisplayMode(3)}>Results</button>
+        <button onClick={() => handleDisplayMode(1)}>Edit</button>
+        <button onClick={() => handleDisplayMode(2)}>Vote</button>
+        <button onClick={() => handleDisplayMode(3)}>Results</button>
         <DeletePoll selectedPoll={selectedPoll} refreshPolls={fetchPolls} setSelectedPoll={setSelectedPoll}/>
 
         {/* Render Poll Content */}
