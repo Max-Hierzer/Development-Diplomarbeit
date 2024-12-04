@@ -18,8 +18,6 @@ const editService = {
             console.log('Poll not found');
         }
 
-
-
         // Handle questions and answers
         for (const question of data.Questions) {
             if (question.id) {
