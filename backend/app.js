@@ -9,7 +9,7 @@ const { postAnswer, getAnswers } = require('./routes/answerRoutes');
 const { getResults, getPolls } = require('./routes/resultsRoutes');
 const votingRoutes = require('./routes/votingRoutes');
 const deletionRoutes = require('./routes/deletionRoutes');
-
+const editRoutes = require('./routes/editRoutes');
 
 
 sequelize.sync({ alter: true })
@@ -34,6 +34,7 @@ app.use('/results', getResults);
 app.use('/results', getPolls);
 app.use('/api', votingRoutes);
 app.use('/api', deletionRoutes);
+app.use('/api', editRoutes);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {                            // listens for requests on port
