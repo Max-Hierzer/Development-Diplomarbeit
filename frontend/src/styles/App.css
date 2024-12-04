@@ -72,8 +72,6 @@ body {
 
 /* Ensure that the body and html take up the full height of the page */
 html, body {
-  height: 100%;
-  width: 100%;
   margin: 0;  /* Remove default margin */
   font-family: Arial, sans-serif;
   display: flex;
@@ -85,7 +83,7 @@ html, body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%;
+  height: 20vh;
 }
 
 /* Ensure that the Usermanagement section takes only necessary space */
