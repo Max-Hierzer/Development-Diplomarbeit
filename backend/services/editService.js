@@ -1,14 +1,24 @@
 // services/pollService.js
 const { sequelize, Polls, Questions, Answers } = require('../models');
 
-const pollService = {
-    async updatePoll(pollId, data) {
-        const poll = await Polls.findByPk(pollId);
+const editService = {
+    async updatePoll(data) {
+        console.log(data)
+        const poll = await Polls.findByPk(data.pollId);
         if (!poll) throw new Error('Poll not found');
 
-        // Update poll name
-        await poll.update({ name: data.name });
-        console.log('Poll updated');
+        if (poll) {
+            // Modify the instance's property
+            poll.name = data.pollName;
+            console.log(poll);
+            // Save the changes to the database
+            await poll.save();
+            console.log('Poll updated successfully');
+        } else {
+            console.log('Poll not found');
+        }
+
+
 
         // Handle questions and answers
         for (const question of data.Questions) {
@@ -58,7 +68,7 @@ const pollService = {
         }
 
         // Fetch the updated poll with associated questions and answers
-        return Polls.findByPk(pollId, {
+        return Polls.findByPk(data.pollId, {
             include: [
                 {
                     model: Questions,
@@ -69,4 +79,4 @@ const pollService = {
     },
 };
 
-module.exports = pollService;
+module.exports = editService;

@@ -72,7 +72,8 @@ function EditPolls({ selectedPoll }) {
         event.preventDefault();
 
         const payload = {
-            pollName: poll.name,
+            pollId: selectedPoll.id,
+            pollName: poll,
             Questions: questions.map((q) => ({
                 id: q.id || null, // Include the ID if it exists; null for new questions
                 name: q.name,
@@ -91,7 +92,6 @@ function EditPolls({ selectedPoll }) {
                 },
                 body: JSON.stringify(payload),
             });
-
             const data = await res.json();
 
             if (res.ok) {
@@ -112,7 +112,7 @@ function EditPolls({ selectedPoll }) {
             <h1>Edit Poll</h1>
             <input
             type="text"
-            value={poll}
+            defaultValue={poll}
             onChange={(e) => setPoll(e.target.value)}
             placeholder="Poll Name"
             />
@@ -121,7 +121,7 @@ function EditPolls({ selectedPoll }) {
                 <input
                 type="text"
                 placeholder={`Question ${questionIndex + 1}`}
-                value={question.name}
+                defaultValue={question.name}
                 onChange={(e) =>
                     handleQuestionChange(questionIndex, e.target.value)
                 }
@@ -138,7 +138,7 @@ function EditPolls({ selectedPoll }) {
                     <input
                     type="text"
                     placeholder={`Answer ${answerIndex + 1}`}
-                    value={answer.name}
+                    defaultValue={answer.name}
                     onChange={(e) =>
                         handleAnswerChange(
                             questionIndex,
