@@ -7,6 +7,7 @@ function EditPolls({selectedPoll}) {
     }
     return (
         <div>
+        { selectedPoll.id ? (
         <form onSubmit={(event) => handleSubmit(event)}>
         <h1>Pollname</h1>
         <input defaultValue={selectedPoll.name}/>
@@ -26,9 +27,9 @@ function EditPolls({selectedPoll}) {
         ))}
         <button type="submit">Submit Change</button>
         </form>
+        ) : null}
         </div>
     );
 }
-
 
 export default EditPolls;

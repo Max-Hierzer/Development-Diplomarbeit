@@ -120,7 +120,7 @@ const PollDashboard = ({ userId, userName }) => {
         <DeletePoll selectedPoll={selectedPoll} refreshPolls={fetchPolls} setSelectedPoll={setSelectedPoll}/>
 
         {/* Render Poll Content */}
-        <div key={selectedPoll.id} className="poll">
+        <div className="poll">
         {displayMode !== 1 &&
 
         selectedPoll ? (
@@ -163,9 +163,10 @@ const PollDashboard = ({ userId, userName }) => {
                         )}
                 </div>
             ))}
-            {displayMode === 1 && <EditPolls selectedPoll={selectedPoll} />}
+
             </>
-            ) : null}
+            ) : (<p>Please select a poll</p>)}
+            {displayMode === 1 && <EditPolls selectedPoll={selectedPoll} />}
             </div>
             <div className="button-section">
         {selectedPoll ? (
