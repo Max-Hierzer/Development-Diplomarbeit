@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 function EditPolls({ selectedPoll }) {
     const [poll, setPoll] = useState('');
     const [questions, setQuestions] = useState([]);
-
+    const [response, setResponse] = useState([]);
     // Initialize state with `selectedPoll`
     useEffect(() => {
         if (selectedPoll) {
@@ -68,12 +68,42 @@ function EditPolls({ selectedPoll }) {
         );
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        const updatedPoll = { name: poll, Questions: questions };
-        console.log("Updated Poll:", updatedPoll);
-        // Optionally pass updatedPoll to a parent or API
-    };
+
+        const payload = {
+            pollName: poll.name,
+            Questions: questions.map((q) => ({
+                id: q.id || null, // Include the ID if it exists; null for new questions
+                name: q.name,
+                Answers: q.Answers.map((a) => ({
+                    id: a.id || null, // Include the ID if it exists; null for new answers
+                    name: a.name,
+                })),
+            })),
+        };
+
+        try {
+            const res = await fetch(`http://localhost:3001/api/polls/${selectedPoll.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                setResponse(`Poll updated successfully`);
+            } else {
+                setResponse(`Error: ${data.error || 'Something went wrong'}`);
+            }
+        } catch (error) {
+            console.error('Error updating poll:', error);
+            setResponse('Error updating poll');
+        }
+    }
 
     return (
         <div>
@@ -143,6 +173,7 @@ function EditPolls({ selectedPoll }) {
         ) : (
             <p>Please select a poll</p>
         )}
+        <p>{response}</p>
         </div>
     );
 }

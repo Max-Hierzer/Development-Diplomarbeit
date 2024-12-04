@@ -1,69 +1,72 @@
 // services/pollService.js
-const { Poll, Question, Answer } = require('../models');
+const { sequelize, Polls, Questions, Answers } = require('../models');
 
-const editService = {
+const pollService = {
     async updatePoll(pollId, data) {
-        const poll = await Poll.findByPk(pollId);
+        const poll = await Polls.findByPk(pollId);
         if (!poll) throw new Error('Poll not found');
 
         // Update poll name
         await poll.update({ name: data.name });
+        console.log('Poll updated');
 
         // Handle questions and answers
         for (const question of data.Questions) {
             if (question.id) {
                 // Update existing question
-                const existingQuestion = await Question.findByPk(question.id);
+                const existingQuestion = await Questions.findByPk(question.id);
                 if (existingQuestion) {
                     await existingQuestion.update({ name: question.name });
 
-                    // Update or delete answers
-                    const existingAnswers = await Answer.findAll({ where: { questionId: question.id } });
-                    const answerIds = question.answers.map((a) => a.id).filter((id) => id);
-                    const answersToDelete = existingAnswers.filter((a) => !answerIds.includes(a.id));
+                    // Handle answers (many-to-many relation)
+                    const existingAnswers = await existingQuestion.getAnswers();
 
-                    for (const answer of question.answers) {
+                    const answerIds = question.Answers.map((a) => a.id).filter((id) => id);
+                    const answersToDelete = existingAnswers.filter(
+                        (a) => !answerIds.includes(a.id)
+                    );
+
+                    // Add or update answers in the join table
+                    for (const answer of question.Answers) {
                         if (answer.id) {
-                            const existingAnswer = existingAnswers.find((a) => a.id === answer.id);
-                            if (existingAnswer) await existingAnswer.update({ name: answer.name });
+                            // If answer exists, just add it to the question
+                            await existingQuestion.addAnswer(answer.id);
                         } else {
-                            // Add new answer
-                            await Answer.create({ name: answer.name, questionId: question.id });
+                            // Add new answer and associate it with the question
+                            const newAnswer = await Answers.create({ name: answer.name });
+                            await existingQuestion.addAnswer(newAnswer.id);
                         }
                     }
 
-                    // Delete removed answers
+                    // Delete answers that are no longer associated with this question
                     for (const answer of answersToDelete) {
-                        await answer.destroy();
+                        await existingQuestion.removeAnswer(answer.id);
                     }
                 }
             } else {
-                // Create new question and its answers
-                const newQuestion = await Question.create({
+                // Create new question and associate answers
+                const newQuestion = await Questions.create({
                     name: question.name,
                     pollId: poll.id,
                 });
 
-                for (const answer of question.answers) {
-                    await Answer.create({
-                        name: answer.name,
-                        questionId: newQuestion.id,
-                    });
+                for (const answer of question.Answers) {
+                    const newAnswer = await Answers.create({ name: answer.name });
+                    await newQuestion.addAnswer(newAnswer.id);
                 }
             }
         }
 
-        // Return the updated poll structure
-        return Poll.findByPk(pollId, {
+        // Fetch the updated poll with associated questions and answers
+        return Polls.findByPk(pollId, {
             include: [
                 {
-                    model: Question,
-                    as: 'Questions',
-                    include: [{ model: Answer, as: 'Answers' }],
+                    model: Questions,
+                    include: [{ model: Answers}],
                 },
             ],
         });
     },
 };
 
-module.exports = editService;
+module.exports = pollService;
