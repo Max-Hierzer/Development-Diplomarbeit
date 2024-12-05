@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 function EditPolls({ selectedPoll }) {
     const [poll, setPoll] = useState('');
     const [questions, setQuestions] = useState([]);
-    const [response, setResponse] = useState([]);
+    const [response, setResponse] = useState('');
+
     // Initialize state with `selectedPoll`
     useEffect(() => {
         if (selectedPoll) {
@@ -11,14 +12,14 @@ function EditPolls({ selectedPoll }) {
             setQuestions(
                 (selectedPoll.Questions || []).map((q) => ({
                     ...q,
-                    Answers: q.Answers || [{ name: '' }, { name: '' }], // Map `Answers` to `answers` for consistency
+                    Answers: q.Answers || [{ name: '' }, { name: '' }],
                 }))
             );
         }
     }, [selectedPoll]);
 
     const addQuestion = () => {
-        setQuestions([...questions, { name: '', Answers: [{ name: '' }, { name: '' }] }]);
+        setQuestions([...questions, { id: null, name: '', Answers: [{ name: '' }, { name: '' }] }]);
     };
 
     const addAnswer = (questionIndex) => {
@@ -32,16 +33,21 @@ function EditPolls({ selectedPoll }) {
     };
 
     const deleteQuestion = (questionIndex) => {
-        setQuestions(questions.filter((_, index) => index !== questionIndex));
+        setQuestions((prevQuestions) =>
+        prevQuestions.filter((_, index) => index !== questionIndex)
+        );
     };
 
     const deleteAnswer = (questionIndex, answerIndex) => {
-        setQuestions(
-            questions.map((q, qIndex) =>
-            qIndex === questionIndex
-            ? { ...q, Answers: q.Answers.filter((_, aIndex) => aIndex !== answerIndex) }
-            : q
-            )
+        setQuestions((prevQuestions) =>
+        prevQuestions.map((q, qIndex) =>
+        qIndex === questionIndex
+        ? {
+            ...q,
+            Answers: q.Answers.filter((_, aIndex) => aIndex !== answerIndex),
+        }
+        : q
+        )
         );
     };
 
@@ -75,10 +81,10 @@ function EditPolls({ selectedPoll }) {
             pollId: selectedPoll.id,
             pollName: poll,
             Questions: questions.map((q) => ({
-                id: q.id || null, // Include the ID if it exists; null for new questions
+                id: q.id || null,
                 name: q.name,
                 Answers: q.Answers.map((a) => ({
-                    id: a.id || null, // Include the ID if it exists; null for new answers
+                    id: a.id || null,
                     name: a.name,
                 })),
             })),
@@ -103,7 +109,7 @@ function EditPolls({ selectedPoll }) {
             console.error('Error updating poll:', error);
             setResponse('Error updating poll');
         }
-    }
+    };
 
     return (
         <div>
@@ -112,55 +118,41 @@ function EditPolls({ selectedPoll }) {
             <h1>Edit Poll</h1>
             <input
             type="text"
-            defaultValue={poll}
+            value={poll}
             onChange={(e) => setPoll(e.target.value)}
             placeholder="Poll Name"
             />
             {questions.map((question, questionIndex) => (
-                <div key={questionIndex}>
+                <div key={question.id || questionIndex}>
                 <input
                 type="text"
                 placeholder={`Question ${questionIndex + 1}`}
-                defaultValue={question.name}
-                onChange={(e) =>
-                    handleQuestionChange(questionIndex, e.target.value)
-                }
+                value={question.name}
+                onChange={(e) => handleQuestionChange(questionIndex, e.target.value)}
                 />
-                <button
-                type="button"
-                onClick={() => deleteQuestion(questionIndex)}
-                >
+                <button type="button" onClick={() => deleteQuestion(questionIndex)}>
                 Delete Question
                 </button>
                 <h4>Answers</h4>
-                {question.Answers?.map((answer, answerIndex) => (
-                    <div key={answerIndex}>
+                {question.Answers.map((answer, answerIndex) => (
+                    <div key={answer.id || answerIndex}>
                     <input
                     type="text"
                     placeholder={`Answer ${answerIndex + 1}`}
-                    defaultValue={answer.name}
+                    value={answer.name}
                     onChange={(e) =>
-                        handleAnswerChange(
-                            questionIndex,
-                            answerIndex,
-                            e.target.value
-                        )
+                        handleAnswerChange(questionIndex, answerIndex, e.target.value)
                     }
                     />
                     <button
                     type="button"
-                    onClick={() =>
-                        deleteAnswer(questionIndex, answerIndex)
-                    }
+                    onClick={() => deleteAnswer(questionIndex, answerIndex)}
                     >
                     Delete Answer
                     </button>
                     </div>
                 ))}
-                <button
-                type="button"
-                onClick={() => addAnswer(questionIndex)}
-                >
+                <button type="button" onClick={() => addAnswer(questionIndex)}>
                 Add Answer
                 </button>
                 </div>
