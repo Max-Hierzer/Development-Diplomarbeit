@@ -170,6 +170,7 @@ const PollDashboard = ({ userId, userName }) => {
                             })}
                             </div>
                     ))}
+                    { showButton() }
                     </>
             ) : (
                 <p>Please select a poll</p>
