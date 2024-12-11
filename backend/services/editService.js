@@ -1,9 +1,20 @@
-const { Polls, Questions, Answers } = require('../models');
+const { Polls, Questions, Answers, UserAnswers } = require('../models');
 
 const editService = {
     async updatePoll(data) {
         const poll = await Polls.findByPk(data.pollId);
         if (!poll) throw new Error('Poll not found');
+
+        const hasVotes = await UserAnswers.findOne({
+            include: {
+                model: Questions,
+                where: { pollId: data.pollId },
+            },
+        });
+
+        if (hasVotes) {
+            throw new Error('Poll cannot be edited as it has already been voted on');
+        }
 
         // Update poll name
         await Polls.update({ name: data.pollName }, { where: { id: data.pollId } });

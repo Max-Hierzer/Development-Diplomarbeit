@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import '../styles/dashboard.css';
 import SelectPolls from './SelectPolls';
 import Results from '../results/Results';
@@ -49,7 +49,7 @@ const PollDashboard = ({ userId, userName }) => {
         }
     };
 
-    const fetchPolls = async () => {
+    const fetchPolls = useCallback(async () => {
         try {
             const response = await fetch('http://localhost:3001/results/polls');
             const data = await response.json();
@@ -60,7 +60,11 @@ const PollDashboard = ({ userId, userName }) => {
         } catch (error) {
             console.error('Error fetching polls:', error);
         }
-    };
+    }, [])
+
+    useEffect(() => {
+        fetchPolls(); // Triggered once when the component mounts
+    }, [fetchPolls]);
 
     const handleSetSelectedPoll = (pollId) => {
             const selected = polls.find((poll) => poll.id.toString() === pollId);
