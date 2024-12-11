@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../styles/dashboard.css';
 import SelectPolls from './SelectPolls';
 import Results from '../results/Results';
@@ -66,10 +66,6 @@ const PollDashboard = ({ userId, userName }) => {
             const selected = polls.find((poll) => poll.id.toString() === pollId);
             setSelectedPoll(selected || null);
     };
-
-    useEffect(() => {
-        fetchPolls();
-    });
 
     const handleAnswerChange = (questionId, answerId) => {
         setSelectedAnswers((prevAnswers) => ({
