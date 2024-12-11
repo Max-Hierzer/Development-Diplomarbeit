@@ -23,23 +23,47 @@ const editService = {
         // Get all existing questions for this poll
         const existingQuestions = await Questions.findAll({
             where: { pollId: data.pollId },
+            include: [{ model: Answers }],
         });
 
         // Process incoming questions
         for (const question of data.Questions) {
             if (question.id) {
                 // Update existing question
-                const existingQuestion = await Questions.findByPk(question.id);
+                const existingQuestion = await Questions.findByPk(question.id, {
+                    include: [{ model: Answers }]
+                });
                 if (existingQuestion) {
                     await existingQuestion.update({ name: question.name });
 
-                    // Clear all answers for the question
-                    await existingQuestion.setAnswers([]);
+                    // Update or add answers
+                    const existingAnswers = existingQuestion.Answers;
+                    const incomingAnswers = question.Answers;
+                    console.log(existingQuestion);
+                    // Create a map of existing answers for quick lookup
+                    const existingAnswersMap = new Map(
+                        existingAnswers.map((answer) => [answer.id, answer])
+                    );
 
-                    // Add new answers
-                    for (const answer of question.Answers) {
-                        const newAnswer = await Answers.create({ name: answer.name });
-                        await existingQuestion.addAnswer(newAnswer);
+                    // Process incoming answers
+                    for (const incomingAnswer of incomingAnswers) {
+                        if (incomingAnswer.id && existingAnswersMap.has(incomingAnswer.id)) {
+                            // Update existing answer
+                            const answerToUpdate = existingAnswersMap.get(incomingAnswer.id);
+                            await answerToUpdate.update({ name: incomingAnswer.name });
+                        } else {
+                            // Create new answer and associate
+                            const newAnswer = await Answers.create({ name: incomingAnswer.name });
+                            await existingQuestion.addAnswer(newAnswer);
+                        }
+                    }
+
+                    // Remove answers that are not in the incoming data
+                    const incomingAnswerIds = incomingAnswers.map((a) => a.id).filter(Boolean);
+                    for (const existingAnswer of existingAnswers) {
+                        if (!incomingAnswerIds.includes(existingAnswer.id)) {
+                            await existingAnswer.destroy();
+                        }
                     }
                 }
             } else {
@@ -57,12 +81,13 @@ const editService = {
         }
 
         // Delete questions that are in the database but not in the incoming data
-        const incomingQuestionIds = data.Questions.map(q => q.id).filter(id => id);
-        const questionsToDelete = existingQuestions.filter(q => !incomingQuestionIds.includes(q.id));
+        const incomingQuestionIds = data.Questions.map((q) => q.id).filter(Boolean);
+        const questionsToDelete = existingQuestions.filter(
+            (q) => !incomingQuestionIds.includes(q.id)
+        );
 
         for (const question of questionsToDelete) {
-            await question.removeAnswers(); // Remove all associations
-            await question.destroy(); // Delete the question
+            await question.destroy(); // Delete the question and associated answers (cascade)
             console.log(`Deleted question with id ${question.id}`);
         }
 
