@@ -12,7 +12,9 @@ module.exports = (sequelize) => {
     // gives poll atributes
     Polls.init(
         {
-            name: { type: DataTypes.STRING, allowNull: false }
+            name: { type: DataTypes.STRING, allowNull: false },
+            publish_date: { type: DataTypes.DATE, allowNull: false },
+            end_date: { type: DataTypes.DATE, allowNull: false }
         },
         { sequelize, modelName: 'Polls' }
     );
