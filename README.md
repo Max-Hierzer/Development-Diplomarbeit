@@ -16,6 +16,9 @@ This is the development repository for our diplomarbeit.
     * Links Server und PostgreSQL ausklappen.
     * Databases rechtklicken und auf Create klicken.
         * Datenbankname: database_development
+**Aktuell wichtig:**
+* Im backend/models/polls.js die allowNull werte von publish_date und end_date auf true setzten.
+
 * In einer Konsole zu Development-Diplomarbeit\frontend\ navigieren
   und in einer anderen Konsole zu Development-Diplomarbeit\backend\ navigieren
 * Im backend Befehl "node app.js" ausführen
