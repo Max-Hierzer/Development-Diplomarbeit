@@ -1,5 +1,5 @@
 // App.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles/App.css';
 import WriteMessages from './messages/WriteMessage';
 import InputMessage from './messages/InputMessage';
@@ -12,14 +12,31 @@ function App() {
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [isPollMode, setIsPollMode] = useState(false);
   const [isInputMode, setIsInputMode] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userId, setUserId] = useState(0);
-  const [userName, setUserName] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    return storedLoginStatus ? JSON.parse(storedLoginStatus) : false;
+  });
+  const [userId, setUserId] = useState(sessionStorage.getItem('userId') || 0);
+  const [userName, setUserName] = useState(sessionStorage.getItem('userName') || '');
+
+  useEffect(() => {
+    // Save login state to sessionStorage whenever it changes
+    sessionStorage.setItem('isLoggedIn', isLoggedIn);
+    sessionStorage.setItem('userId', userId);
+    sessionStorage.setItem('userName', userName);
+  }, [isLoggedIn, userId, userName]);
 
   const handleLoginChange = (loginMode, userId, userName) => {
     setIsLoggedIn(loginMode);
     setUserId(userId);
     setUserName(userName);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUserId(0);
+    setUserName('');
+    sessionStorage.clear(); // Clear session storage on logout
   };
 
   return (
@@ -48,7 +65,7 @@ function App() {
         // Render the main content if the user is logged in
         <div className='MainContent'>
           <div className='Logout'>
-            <button onClick={() => setIsLoggedIn(false)}>Logout</button>
+            <button onClick={handleLogout}>Logout</button>
           </div>
           <button onClick={() => setIsPollMode(!isPollMode)}>
           {isPollMode ? 'Back' : 'Create Poll'}
