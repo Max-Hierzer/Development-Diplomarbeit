@@ -33,6 +33,9 @@ function CreatePoll() {
                 setResponse(`Poll created successfully`);
                 setPoll('');
                 setQuestions([{ name: '', answers: [{ name: '' }, { name: '' }] }]);
+                setDescription('');
+                setPublishDate('');
+                setEndDate('');
             } else {
                 setResponse(`Error: ${data.error || 'Something went wrong'}`);
             }
