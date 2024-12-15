@@ -60,7 +60,7 @@ const PollDashboard = ({ userId, userName }) => {
             if (selectedPoll?.id && !data.find((poll) => poll.id === selectedPoll.id)) {
             setSelectedPoll(null); // Clear selectedPoll if it no longer exists
             }
-            const current_datetime = new Date().toLocaleString();
+            const current_datetime = new Date().toISOString();
             const edit = [];
             const vote = [];
             const results = [];
@@ -93,11 +93,11 @@ const PollDashboard = ({ userId, userName }) => {
         }));
     };
 
-    const handleDisplayMode = async (displayM) => {
+    const handleDisplayMode = async (displayM, polla) => {
         setDisplayMode(displayM);
         await fetchPolls();
         if (selectedPoll?.id) {
-            const updatedPoll = polls.find((poll) => poll.id === selectedPoll.id);
+            const updatedPoll = polla.find((poll) => poll.id === selectedPoll.id);
             setSelectedPoll(updatedPoll || null);
         }
     }
@@ -150,9 +150,9 @@ const PollDashboard = ({ userId, userName }) => {
 
         {/* Control Buttons */}
         <div className="button-section">
-        <button onClick={() => handleDisplayMode(1)}>Edit</button>
-        <button onClick={() => handleDisplayMode(2)}>Vote</button>
-        <button onClick={() => handleDisplayMode(3)}>Results</button>
+        <button onClick={() => handleDisplayMode(1, editPolls)}>Edit</button>
+        <button onClick={() => handleDisplayMode(2, votePolls)}>Vote</button>
+        <button onClick={() => handleDisplayMode(3, resultsPolls)}>Results</button>
         <DeletePoll selectedPoll={selectedPoll} refreshPolls={fetchPolls} setSelectedPoll={setSelectedPoll} />
         </div>
 
