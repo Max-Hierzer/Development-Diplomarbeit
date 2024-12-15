@@ -61,11 +61,17 @@ const PollDashboard = ({ userId, userName }) => {
             setSelectedPoll(null); // Clear selectedPoll if it no longer exists
             }
             const current_datetime = new Date().toLocaleString();
+            const edit = [];
+            const vote = [];
+            const results = [];
             data.forEach((poll) => {
-                 if (poll.publish_date > current_datetime) editPolls.push(poll);
-                 else if (poll.publish_date <= current_datetime && poll.end_date >= current_datetime) votePolls.push(poll);
-                 else resultsPolls.push(poll);
+                 if (poll.publish_date > current_datetime) edit.push(poll);
+                 else if (poll.publish_date <= current_datetime && poll.end_date >= current_datetime) vote.push(poll);
+                 else results.push(poll);
             })
+            setEditPolls(edit);
+            setVotePolls(vote);
+            setResultsPolls(results);
         } catch (error) {
             console.error('Error fetching polls:', error);
         }
