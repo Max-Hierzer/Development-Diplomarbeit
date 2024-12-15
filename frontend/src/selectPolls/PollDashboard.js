@@ -123,10 +123,24 @@ const PollDashboard = ({ userId, userName }) => {
                 return <p>Select an action to proceed.</p>;
         }
     }
+
+    const  showSelect = (displayMode) => {
+        switch (displayMode) {
+            case 1:
+                return (<SelectPolls polls={editPolls} handleSetSelectedPoll={handleSetSelectedPoll} selectedPoll={selectedPoll} />)
+            case 2:
+                return (<SelectPolls polls={votePolls} handleSetSelectedPoll={handleSetSelectedPoll} selectedPoll={selectedPoll} />)
+            case 3:
+                return (<SelectPolls polls={resultsPolls} handleSetSelectedPoll={handleSetSelectedPoll} selectedPoll={selectedPoll} />)
+            default:
+                return ('')
+        }
+    }
     return (
         <div className="dashboard-container">
         {/* Poll Selection */}
-        <SelectPolls polls={polls} handleSetSelectedPoll={handleSetSelectedPoll} selectedPoll={selectedPoll} />
+        {showSelect(displayMode)}
+
 
         {/* Control Buttons */}
         <div className="button-section">
