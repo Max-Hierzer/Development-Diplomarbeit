@@ -142,6 +142,7 @@ const PollDashboard = ({ userId, userName }) => {
                 return ('')
         }
     }
+
     return (
         <div className="dashboard-container">
         {/* Poll Selection */}
@@ -163,6 +164,7 @@ const PollDashboard = ({ userId, userName }) => {
             selectedPoll ? (
                 <>
                 <h2>{selectedPoll.name}</h2>
+                <h4>Beschreibung: {selectedPoll.description}</h4>
                 {selectedPoll.Questions &&
                     selectedPoll.Questions.map((question) => (
                         <div key={question.id} className="question">

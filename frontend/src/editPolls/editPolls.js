@@ -4,11 +4,13 @@ function EditPolls({ selectedPoll }) {
     const [poll, setPoll] = useState('');
     const [questions, setQuestions] = useState([]);
     const [response, setResponse] = useState('');
+    const [description, setDescription] = useState('');
 
     // Initialize state with `selectedPoll`
     useEffect(() => {
         if (selectedPoll) {
             setPoll(selectedPoll.name || '');
+            setDescription(selectedPoll.description || '');
             setQuestions(
                 (selectedPoll.Questions || []).map((q) => ({
                     ...q,
@@ -80,6 +82,7 @@ function EditPolls({ selectedPoll }) {
         const payload = {
             pollId: selectedPoll.id,
             pollName: poll,
+            pollDescription: description,
             Questions: questions.map((q) => ({
                 id: q.id || null,
                 name: q.name,
@@ -121,6 +124,12 @@ function EditPolls({ selectedPoll }) {
             value={poll}
             onChange={(e) => setPoll(e.target.value)}
             placeholder="Poll Name"
+            />
+            <input
+            type="text"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Description"
             />
             {questions.map((question, questionIndex) => (
                 <div key={question.id || questionIndex}>

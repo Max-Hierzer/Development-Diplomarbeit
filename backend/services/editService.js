@@ -17,9 +17,8 @@ const editService = {
         }
 
         // Update poll name
-        await Polls.update({ name: data.pollName }, { where: { id: data.pollId } });
+        await Polls.update({ name: data.pollName, description: data.pollDescription }, { where: { id: data.pollId } });
         console.log('Poll updated successfully');
-
         // Get all existing questions for this poll
         const existingQuestions = await Questions.findAll({
             where: { pollId: data.pollId },
