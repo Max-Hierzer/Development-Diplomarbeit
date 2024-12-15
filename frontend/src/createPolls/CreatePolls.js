@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 
 function CreatePoll() {
     const [poll, setPoll] = useState('');
+    const [description, setDescription] = useState('');
+    const [publishDate, setPublishDate] = useState('');
+    const [endDate, setEndDate] = useState('');
     const [questions, setQuestions] = useState([{ name: '', answers: [{ name: '' }, { name: '' }] }]);
     const [response, setResponse] = useState(null);
 
@@ -9,7 +12,7 @@ function CreatePoll() {
         event.preventDefault();
 
         const payload = {
-            poll: { name: poll },
+            poll: { name: poll, description: description, publishDate: publishDate, endDate: endDate },
             questions,
         };
 
@@ -85,6 +88,26 @@ function CreatePoll() {
         placeholder={`Pollname`}
         value={poll}
         onChange={(e) => setPoll(e.target.value)}
+        />
+        <br />
+        <input
+        type="text"
+        placeholder={`Poll Description`}
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        />
+        <br />
+        <input
+        type="datetime-local"
+        placeholder={`Publish Date`}
+        value={publishDate}
+        onChange={(e) => setPublishDate(e.target.value)}
+        />
+        <input
+        type="datetime-local"
+        placeholder={`End Date`}
+        value={endDate}
+        onChange={(e) => setEndDate(e.target.value)}
         />
         <br />
 

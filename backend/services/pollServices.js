@@ -4,7 +4,9 @@ const { Answers: Answer } = require('../models');
 
 async function createPoll(poll, questions) {
     try {
-        const createdPoll = await Poll.create({ name: poll.name });
+        const pollPublishDate = new Date(poll.publishDate).toISOString();
+        const pollEndDate = new Date(poll.endDate).toISOString();
+        const createdPoll = await Poll.create({ name: poll.name, description: poll.description, publish_date: pollPublishDate, end_date: pollEndDate });
 
         const createdQuestions = [];
         for (const question of questions) {
