@@ -13,6 +13,9 @@ const PollDashboard = ({ userId, userName }) => {
     const [showVotersMode, setShowVoters] = useState(true);
     const [response, setResponse] = useState(null); // For showing the response message
     const [selectedPoll, setSelectedPoll] = useState({});
+    const [editPolls, setEditPolls] = useState([]);
+    const [votePolls, setVotePolls] = useState([]);
+    const [resultsPolls, setResultsPolls] = useState([]);
 
     const resetAnswers = () => {
         setSelectedAnswers({});
@@ -56,7 +59,13 @@ const PollDashboard = ({ userId, userName }) => {
             setPolls(data);
             if (selectedPoll?.id && !data.find((poll) => poll.id === selectedPoll.id)) {
             setSelectedPoll(null); // Clear selectedPoll if it no longer exists
-        }
+            }
+            const current_datetime = new Date().toLocaleString();
+            data.forEach((poll) => {
+                 if (poll.publish_date > current_datetime) editPolls.push(poll);
+                 else if (poll.publish_date <= current_datetime && poll.end_date >= current_datetime) votePolls.push(poll);
+                 else resultsPolls.push(poll);
+            })
         } catch (error) {
             console.error('Error fetching polls:', error);
         }
