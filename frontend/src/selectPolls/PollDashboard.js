@@ -12,7 +12,7 @@ const PollDashboard = ({ userId, userName }) => {
     const [displayMode, setDisplayMode] = useState(0)
     const [showVotersMode, setShowVoters] = useState(true);
     const [response, setResponse] = useState(null); // For showing the response message
-    const [selectedPoll, setSelectedPoll] = useState({});
+    const [selectedPoll, setSelectedPoll] = useState(null);
     const [editPolls, setEditPolls] = useState([]);
     const [votePolls, setVotePolls] = useState([]);
     const [resultsPolls, setResultsPolls] = useState([]);
