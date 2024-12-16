@@ -12,40 +12,49 @@ const PollDashboard = ({ userId, userName }) => {
     const [displayMode, setDisplayMode] = useState(0)
     const [showVotersMode, setShowVoters] = useState(true);
     const [response, setResponse] = useState(null); // For showing the response message
-    const [selectedPoll, setSelectedPoll] = useState({});
+    const [selectedPoll, setSelectedPoll] = useState(null);
+    const [editPolls, setEditPolls] = useState([]);
+    const [votePolls, setVotePolls] = useState([]);
+    const [resultsPolls, setResultsPolls] = useState([]);
 
     const resetAnswers = () => {
         setSelectedAnswers({});
     };
 
     const handleVote = async () => {
-        if (!(Object.keys(selectedAnswers).length === selectedPoll.Questions.length)) {
-            setResponse('Please select all questions');
-            return;
-        }
-
-        try {
-            const res = await fetch('http://localhost:3001/api/vote', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userId,          // The ID of the user casting the vote
-                    answers: selectedAnswers, // Object containing questionId and answerId pairs
-                }),
-            });
-
-            if (res.ok) {
-                setResponse(`User ID: ${userId} voted successfully.`);
-                resetAnswers();
-            } else {
-                alert(`User has already voted.`);
-                resetAnswers();
+        const current_datetime = new Date().toISOString();
+        if (selectedPoll.end_date > current_datetime){
+            if (!(Object.keys(selectedAnswers).length === selectedPoll.Questions.length)) {
+                setResponse('Please select all questions');
+                return;
             }
-        } catch (error) {
-            console.error('Error submitting vote:', error);
-            setResponse('Error submitting vote');
+
+            try {
+                const res = await fetch('http://localhost:3001/api/vote', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId,          // The ID of the user casting the vote
+                        answers: selectedAnswers, // Object containing questionId and answerId pairs
+                    }),
+                });
+
+                if (res.ok) {
+                    setResponse(`User ID: ${userId} voted successfully.`);
+                    resetAnswers();
+                } else {
+                    alert(`User has already voted.`);
+                    resetAnswers();
+                }
+            } catch (error) {
+                console.error('Error submitting vote:', error);
+                setResponse('Error submitting vote');
+            }
+        }
+        else {
+            setResponse('Poll has already ended')
         }
     };
 
@@ -56,7 +65,19 @@ const PollDashboard = ({ userId, userName }) => {
             setPolls(data);
             if (selectedPoll?.id && !data.find((poll) => poll.id === selectedPoll.id)) {
             setSelectedPoll(null); // Clear selectedPoll if it no longer exists
-        }
+            }
+            const current_datetime = new Date().toISOString();
+            const edit = [];
+            const vote = [];
+            const results = [];
+            data.forEach((poll) => {
+                 if (poll.publish_date > current_datetime) edit.push(poll);
+                 else if (poll.publish_date <= current_datetime && poll.end_date >= current_datetime) vote.push(poll);
+                 else results.push(poll);
+            })
+            setEditPolls(edit);
+            setVotePolls(vote);
+            setResultsPolls(results);
         } catch (error) {
             console.error('Error fetching polls:', error);
         }
@@ -78,11 +99,11 @@ const PollDashboard = ({ userId, userName }) => {
         }));
     };
 
-    const handleDisplayMode = async (displayM) => {
+    const handleDisplayMode = async (displayM, polla) => {
         setDisplayMode(displayM);
         await fetchPolls();
         if (selectedPoll?.id) {
-            const updatedPoll = polls.find((poll) => poll.id === selectedPoll.id);
+            const updatedPoll = polla.find((poll) => poll.id === selectedPoll.id);
             setSelectedPoll(updatedPoll || null);
         }
     }
@@ -114,16 +135,31 @@ const PollDashboard = ({ userId, userName }) => {
                 return <p>Select an action to proceed.</p>;
         }
     }
+
+    const  showSelect = (displayMode) => {
+        switch (displayMode) {
+            case 1:
+                return (<SelectPolls polls={editPolls} handleSetSelectedPoll={handleSetSelectedPoll} selectedPoll={selectedPoll} />)
+            case 2:
+                return (<SelectPolls polls={votePolls} handleSetSelectedPoll={handleSetSelectedPoll} selectedPoll={selectedPoll} />)
+            case 3:
+                return (<SelectPolls polls={resultsPolls} handleSetSelectedPoll={handleSetSelectedPoll} selectedPoll={selectedPoll} />)
+            default:
+                return ('')
+        }
+    }
+
     return (
         <div className="dashboard-container">
         {/* Poll Selection */}
-        <SelectPolls polls={polls} handleSetSelectedPoll={handleSetSelectedPoll} selectedPoll={selectedPoll} />
+        {showSelect(displayMode)}
+
 
         {/* Control Buttons */}
         <div className="button-section">
-        <button onClick={() => handleDisplayMode(1)}>Edit</button>
-        <button onClick={() => handleDisplayMode(2)}>Vote</button>
-        <button onClick={() => handleDisplayMode(3)}>Results</button>
+        <button onClick={() => handleDisplayMode(1, editPolls)}>Edit</button>
+        <button onClick={() => handleDisplayMode(2, votePolls)}>Vote</button>
+        <button onClick={() => handleDisplayMode(3, resultsPolls)}>Results</button>
         <DeletePoll selectedPoll={selectedPoll} refreshPolls={fetchPolls} setSelectedPoll={setSelectedPoll} />
         </div>
 
@@ -134,6 +170,7 @@ const PollDashboard = ({ userId, userName }) => {
             selectedPoll ? (
                 <>
                 <h2>{selectedPoll.name}</h2>
+                <h4>Beschreibung: {selectedPoll.description}</h4>
                 {selectedPoll.Questions &&
                     selectedPoll.Questions.map((question) => (
                         <div key={question.id} className="question">

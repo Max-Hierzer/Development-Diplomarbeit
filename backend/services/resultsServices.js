@@ -19,7 +19,7 @@ async function fetchResults() {
 async function fetchPolls() {
     try {
         const polls = await Polls.findAll({                     // get data from Polls
-            attributes: ['id', 'name'],                         // get attributes id and name from Polls
+            attributes: ['id', 'name', 'publish_date', 'end_date', 'description'],                         // get attributes id and name from Polls
             include: [                                          // include questions related to poll
                 {
                     model: Questions,

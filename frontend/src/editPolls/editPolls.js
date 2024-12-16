@@ -4,11 +4,13 @@ function EditPolls({ selectedPoll }) {
     const [poll, setPoll] = useState('');
     const [questions, setQuestions] = useState([]);
     const [response, setResponse] = useState('');
+    const [description, setDescription] = useState('');
 
     // Initialize state with `selectedPoll`
     useEffect(() => {
         if (selectedPoll) {
             setPoll(selectedPoll.name || '');
+            setDescription(selectedPoll.description || '');
             setQuestions(
                 (selectedPoll.Questions || []).map((q) => ({
                     ...q,
@@ -76,38 +78,44 @@ function EditPolls({ selectedPoll }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
-        const payload = {
-            pollId: selectedPoll.id,
-            pollName: poll,
-            Questions: questions.map((q) => ({
-                id: q.id || null,
-                name: q.name,
-                Answers: q.Answers.map((a) => ({
-                    id: a.id || null,
-                    name: a.name,
+        const current_datetime = new Date().toISOString();
+        if (selectedPoll.publish_date > current_datetime){
+            const payload = {
+                pollId: selectedPoll.id,
+                pollName: poll,
+                pollDescription: description,
+                Questions: questions.map((q) => ({
+                    id: q.id || null,
+                    name: q.name,
+                    Answers: q.Answers.map((a) => ({
+                        id: a.id || null,
+                        name: a.name,
+                    })),
                 })),
-            })),
-        };
+            };
 
-        try {
-            const res = await fetch(`http://localhost:3001/api/polls/${selectedPoll.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),
-            });
-            const data = await res.json();
+            try {
+                const res = await fetch(`http://localhost:3001/api/polls/${selectedPoll.id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+                const data = await res.json();
 
-            if (res.ok) {
-                setResponse(`Poll updated successfully`);
-            } else {
-                setResponse(`Error: ${data.error || 'Something went wrong'}`);
+                if (res.ok) {
+                    setResponse(`Poll updated successfully`);
+                } else {
+                    setResponse(`Error: ${data.error || 'Something went wrong'}`);
+                }
+            } catch (error) {
+                console.error('Error updating poll:', error);
+                setResponse('Error updating poll');
             }
-        } catch (error) {
-            console.error('Error updating poll:', error);
-            setResponse('Error updating poll');
+        }
+        else{
+            setResponse('Poll has already started.')
         }
     };
 
@@ -121,6 +129,12 @@ function EditPolls({ selectedPoll }) {
             value={poll}
             onChange={(e) => setPoll(e.target.value)}
             placeholder="Poll Name"
+            />
+            <input
+            type="text"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Description"
             />
             {questions.map((question, questionIndex) => (
                 <div key={question.id || questionIndex}>

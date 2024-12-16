@@ -7,6 +7,12 @@ async function handleCreatePoll(req, res) {
         if (!poll.name) {
             return res.status(400).json({ error: 'Poll name is required' });
         }
+        if (!poll.publishDate) {
+            return res.status(400).json({ error: 'Poll publish date is required' });
+        }
+        if (!poll.endDate) {
+            return res.status(400).json({ error: 'Poll end Date is required' });
+        }
 
         if (!questions[0].name) {
             return res.status(400).json({ error: 'At least one question is required' });
