@@ -22,33 +22,39 @@ const PollDashboard = ({ userId, userName }) => {
     };
 
     const handleVote = async () => {
-        if (!(Object.keys(selectedAnswers).length === selectedPoll.Questions.length)) {
-            setResponse('Please select all questions');
-            return;
-        }
-
-        try {
-            const res = await fetch('http://localhost:3001/api/vote', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userId,          // The ID of the user casting the vote
-                    answers: selectedAnswers, // Object containing questionId and answerId pairs
-                }),
-            });
-
-            if (res.ok) {
-                setResponse(`User ID: ${userId} voted successfully.`);
-                resetAnswers();
-            } else {
-                alert(`User has already voted.`);
-                resetAnswers();
+        const current_datetime = new Date().toISOString();
+        if (selectedPoll.end_date > current_datetime){
+            if (!(Object.keys(selectedAnswers).length === selectedPoll.Questions.length)) {
+                setResponse('Please select all questions');
+                return;
             }
-        } catch (error) {
-            console.error('Error submitting vote:', error);
-            setResponse('Error submitting vote');
+
+            try {
+                const res = await fetch('http://localhost:3001/api/vote', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId,          // The ID of the user casting the vote
+                        answers: selectedAnswers, // Object containing questionId and answerId pairs
+                    }),
+                });
+
+                if (res.ok) {
+                    setResponse(`User ID: ${userId} voted successfully.`);
+                    resetAnswers();
+                } else {
+                    alert(`User has already voted.`);
+                    resetAnswers();
+                }
+            } catch (error) {
+                console.error('Error submitting vote:', error);
+                setResponse('Error submitting vote');
+            }
+        }
+        else {
+            setResponse('Poll has already ended')
         }
     };
 
