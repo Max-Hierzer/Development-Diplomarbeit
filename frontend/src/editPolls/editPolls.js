@@ -130,6 +130,7 @@ function EditPolls({ selectedPoll }) {
             onChange={(e) => setPoll(e.target.value)}
             placeholder="Poll Name"
             />
+            <h4>Description</h4>
             <input
             type="text"
             value={description}
