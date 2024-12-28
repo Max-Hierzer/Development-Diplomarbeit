@@ -3,8 +3,8 @@ const { createUser, fetchLogin } = require('../services/userServices');
 // resolves api connection with frontend for the registration of user
 async function handleCreateUser(req, res) {
     try {
-        const { name, email, password } = req.body;                 // gives the data names
-        const newUser = await createUser(name, email, password);    // passes new users data to service
+        const { name, email, password, roleId } = req.body;                 // gives the data names
+        const newUser = await createUser(name, email, password, roleId);    // passes new users data to service
         res.status(201).json(newUser);                              // response
     } catch (error) {
         res.status(500).json({error: 'Error creating user in controller' });
