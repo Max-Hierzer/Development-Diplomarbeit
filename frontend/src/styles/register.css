@@ -1,3 +1,12 @@
 .registerForm {
     align-items: center;
 }
+.roleDescription {
+    margin-top: 5px; /* Add some spacing */
+    font-style: italic; /* Customize the style as needed */
+}
+.roleDescription .vortitel {
+    text-decoration: underline; /*  Adds an underline */
+    text-decoration-style: solid; /*  Makes the underline dotted */
+    text-underline-offset: 2px; /*  Adds a small offset to the underline */
+  }
