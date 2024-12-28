@@ -1,4 +1,4 @@
-const { Users } = require('../models/index');
+const { Users, Roles } = require('../models/index');
 
 // writing new user data in database
 async function createUser(name, email, password, roleId) {
