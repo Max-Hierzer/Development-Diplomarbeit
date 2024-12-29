@@ -63,46 +63,63 @@ function Register() {
         <div className="Register">
             <h1>Create a New User</h1>
             <form onSubmit={handleSubmit} className='registerForm'>
-                <input
-                    type="text"
-                    placeholder={`Name`}
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required />
-                <input
-                    type="email"
-                    placeholder={`example@mail.at`}
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required />
-                <input
-                    type="password"
-                    placeholder={`Password`}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required />
-                <h3>Select the Role of the user</h3>
-                <select 
-                    className="RoleSelect" 
-                    value={roleId} 
-                    onChange={handleRoleChange} 
-                    required
-                >
-                    <option value="">Select a Role</option>
-                    {roles.map((role) => (
-                        <option key={role.id} value={role.id}>
-                            {role.name}
-                        </option>
-                    ))}
-                </select>
+                <div className="form-group"> 
+                    <label htmlFor="name">Name:</label>
+                    <input
+                        type="text"
+                        id="name" 
+                        placeholder={`Name`}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="email">Email:</label>
+                    <input
+                        type="email"
+                        id="email" 
+                        placeholder={`example@mail.at`}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="password">Password:</label>
+                    <input
+                        type="password"
+                        id="password" 
+                        placeholder={`Password`}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="role">Role:</label>
+                    <select 
+                        id="role"
+                        className="RoleSelect" 
+                        value={roleId} 
+                        onChange={handleRoleChange} 
+                        required>
+                        <option value="">Select a Role</option>
+                        {roles.map((role) => (
+                            <option key={role.id} value={role.id}>
+                                {role.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
                 <div className="roleDescription">
                     <div className="vortitel">Description of role</div>
                     {selectedRoleDescription}
                 </div>
+
                 <button type="submit">Register</button>
             </form>
 
-            {response && <p>{response}</p>} {/* Show success/error message */}
+            {response && <p>{response}</p>} 
         </div>
     );
 }

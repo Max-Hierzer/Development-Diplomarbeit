@@ -1,12 +1,59 @@
+.Register {
+    padding: 20px;
+}
+
 .registerForm {
+    display: flex;
+    flex-direction: column; 
     align-items: center;
+
 }
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; 
+}
+
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
 .roleDescription {
-    margin-top: 5px; /* Add some spacing */
-    font-style: italic; /* Customize the style as needed */
+    margin-top: 10px; 
+    font-style: italic; 
 }
+
 .roleDescription .vortitel {
-    text-decoration: underline; /*  Adds an underline */
-    text-decoration-style: solid; /*  Makes the underline dotted */
-    text-underline-offset: 2px; /*  Adds a small offset to the underline */
-  }
+    text-decoration: underline; 
+    text-decoration-style: solid; 
+    text-underline-offset: 2px; 
+}
+
+.registerForm button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
