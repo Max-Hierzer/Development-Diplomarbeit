@@ -10,14 +10,13 @@ import Register from '../usermanagment/Register';
 const PollDashboard = ({ userId, userName }) => {
     const [polls, setPolls] = useState([]);
     const [selectedAnswers, setSelectedAnswers] = useState({});
-    const [displayMode, setDisplayMode] = useState(0)
+    const [displayMode, setDisplayMode] = useState(0); // 0: initial, 1: Edit, 2: Vote, 3: Results, 4: Registration
     const [showVotersMode, setShowVoters] = useState(true);
-    const [response, setResponse] = useState(null); // For showing the response message
+    const [response, setResponse] = useState(null);
     const [selectedPoll, setSelectedPoll] = useState(null);
     const [editPolls, setEditPolls] = useState([]);
     const [votePolls, setVotePolls] = useState([]);
     const [resultsPolls, setResultsPolls] = useState([]);
-    const [showRegistration, setShowRegistration] = useState(false);
 
     const resetAnswers = () => {
         setSelectedAnswers({});
@@ -38,8 +37,8 @@ const PollDashboard = ({ userId, userName }) => {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        userId,          // The ID of the user casting the vote
-                        answers: selectedAnswers, // Object containing questionId and answerId pairs
+                        userId,
+                        answers: selectedAnswers,
                     }),
                 });
 
@@ -66,7 +65,7 @@ const PollDashboard = ({ userId, userName }) => {
             const data = await response.json();
             setPolls(data);
             if (selectedPoll?.id && !data.find((poll) => poll.id === selectedPoll.id)) {
-                setSelectedPoll(null); // Clear selectedPoll if it no longer exists
+                setSelectedPoll(null);
             }
             const current_datetime = new Date().toISOString();
             const edit = [];
@@ -86,7 +85,7 @@ const PollDashboard = ({ userId, userName }) => {
     }, [])
 
     useEffect(() => {
-        fetchPolls(); // Triggered once when the component mounts
+        fetchPolls();
     }, [fetchPolls]);
 
     const handleSetSelectedPoll = (pollId) => {
@@ -110,14 +109,14 @@ const PollDashboard = ({ userId, userName }) => {
         }
     }
 
-    const showVoters = () => setShowVoters(!showVotersMode);        // toggle how the results should be displayed
+    const showVoters = () => setShowVoters(!showVotersMode);
 
     const showButton = () => {
         if (!selectedPoll) return null;
         switch (displayMode) {
             case 1:
                 break;
-            case 2: // Voting Mode
+            case 2:
                 return (
                     <div>
                         <button onClick={handleVote}>
@@ -125,7 +124,7 @@ const PollDashboard = ({ userId, userName }) => {
                         </button>
                     </div>
                 );
-            case 3: // Results Mode
+            case 3:
                 return (
                     <div>
                         <button onClick={showVoters}>
@@ -133,7 +132,7 @@ const PollDashboard = ({ userId, userName }) => {
                         </button>
                     </div>
                 );
-            default: // Default Case
+            default:
                 return <p>Select an action to proceed.</p>;
         }
     }
@@ -153,80 +152,78 @@ const PollDashboard = ({ userId, userName }) => {
 
     return (
         <div className="dashboard-container">
-            {/* Poll Selection */}
             {showSelect(displayMode)}
 
-
-            {/* Control Buttons */}
             <div className="button-section">
                 <button onClick={() => handleDisplayMode(1, editPolls)}>Edit</button>
                 <button onClick={() => handleDisplayMode(2, votePolls)}>Vote</button>
                 <button onClick={() => handleDisplayMode(3, resultsPolls)}>Results</button>
-                <button onClick={() => setShowRegistration(!showRegistration)}>
-                    {showRegistration ? 'Hide Registration' : 'Show Registration'}
+                <button onClick={() => setDisplayMode(4)}>
+                    {displayMode === 4 ? 'Hide Registration' : 'Show Registration'}
                 </button>
                 <DeletePoll selectedPoll={selectedPoll} refreshPolls={fetchPolls} setSelectedPoll={setSelectedPoll} />
             </div>
 
-            {/* Render Poll Content */}
             <div className="poll-content">
-                {/* Your existing rendering logic */}
-                {displayMode !== 1 ? (
-                    selectedPoll ? (
-                        <>
-                            <h2>{selectedPoll.name}</h2>
-                            <h4>Beschreibung: {selectedPoll.description}</h4>
-                            {selectedPoll.Questions &&
-                                selectedPoll.Questions.map((question) => (
-                                    <div key={question.id} className="question">
-                                        <h3>{question.name}</h3>
-                                        {question.Answers &&
-                                            question.Answers.map((answer) => {
-                                                switch (displayMode) {
-                                                    case 2:
-                                                        return (
-                                                            <Voting
-                                                                key={answer.id}
-                                                                question={question}
-                                                                answer={answer}
-                                                                selectedAnswers={selectedAnswers}
-                                                                handleAnswerChange={handleAnswerChange}
-                                                            />
-                                                        );
-                                                    case 3:
-                                                        return (
-                                                            <Results
-                                                                key={answer.id}
-                                                                answer={answer}
-                                                                question={question}
-                                                                showVotersMode={showVotersMode}
-                                                            />
-                                                        );
-                                                    default:
-                                                        return (
-                                                            <div className="answer">
-                                                                <h4>{answer.name}</h4>
-                                                            </div>
-                                                        );
-                                                }
-                                            })}
-                                    </div>
-                                ))}
-                            {showButton()}
-                        </>
-                    ) : (
-                        <p>Please select a poll</p>
-                    )
-                ) : (
+                {displayMode === 1 && (
                     <EditPolls selectedPoll={selectedPoll} refreshPolls={fetchPolls} />
                 )}
-            </div>
-            {showRegistration && (
-                <div className="registration-section">
+                {displayMode === 2 && selectedPoll && (
+                    <>
+                        <h2>{selectedPoll.name}</h2>
+                        <h4>Beschreibung: {selectedPoll.description}</h4>
+                        {selectedPoll.Questions &&
+                            selectedPoll.Questions.map((question) => (
+                                <div key={question.id} className="question">
+                                    <h3>{question.name}</h3>
+                                    {question.Answers &&
+                                        question.Answers.map((answer) => (
+                                            <Voting
+                                                key={answer.id}
+                                                question={question}
+                                                answer={answer}
+                                                selectedAnswers={selectedAnswers}
+                                                handleAnswerChange={handleAnswerChange}
+                                            />
+                                        ))}
+                                </div>
+                            ))}
+                        {showButton()}
+                    </>
+                )}
+                {displayMode === 3 && selectedPoll && (
+                    <>
+                        <h2>{selectedPoll.name}</h2>
+                        <h4>Beschreibung: {selectedPoll.description}</h4>
+                        {selectedPoll.Questions &&
+                            selectedPoll.Questions.map((question) => (
+                                <div key={question.id} className="question">
+                                    <h3>{question.name}</h3>
+                                    {question.Answers &&
+                                        question.Answers.map((answer) => (
+                                            <Results
+                                                key={answer.id}
+                                                answer={answer}
+                                                question={question}
+                                                showVotersMode={showVotersMode}
+                                            />
+                                        ))}
+                                </div>
+                            ))}
+                        {showButton()}
+                    </>
+                )}
+                {displayMode === 4 && (
                     <Register />
-                </div>
-            )}
-            {/* Response Message */}
+                )}
+                {displayMode === 0 && (
+                    <p>Select an action to proceed.</p>
+                )}
+                {!selectedPoll && displayMode > 1 && displayMode < 4 && (
+                    <p>Please select a poll</p>
+                )}
+            </div>
+
             <div className="response-message">
                 {response && <p>{response}</p>}
             </div>
