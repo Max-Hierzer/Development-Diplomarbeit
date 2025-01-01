@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import Datetime from 'react-datetime';
+import "react-datetime/css/react-datetime.css";
+import moment from 'moment';
 
 function CreatePoll() {
     const [poll, setPoll] = useState('');
@@ -7,12 +10,13 @@ function CreatePoll() {
     const [endDate, setEndDate] = useState('');
     const [questions, setQuestions] = useState([{ name: '', answers: [{ name: '' }, { name: '' }] }]);
     const [response, setResponse] = useState(null);
+    const [resetKey, setResetKey] = useState(0);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         const payload = {
-            poll: { name: poll, description: description, publishDate: publishDate, endDate: endDate },
+            poll: { name: poll, description: description, publishDate: publishDate, endDate: endDate},
             questions,
         };
 
@@ -36,6 +40,7 @@ function CreatePoll() {
                 setDescription('');
                 setPublishDate('');
                 setEndDate('');
+                setResetKey(resetKey + 1);
             } else {
                 setResponse(`Error: ${data.error || 'Something went wrong'}`);
             }
@@ -100,17 +105,23 @@ function CreatePoll() {
         onChange={(e) => setDescription(e.target.value)}
         />
         <br />
-        <input
-        type="datetime-local"
-        placeholder={`Publish Date`}
-        value={publishDate}
-        onChange={(e) => setPublishDate(e.target.value)}
+        <Datetime
+            key={`publish-${resetKey}`}
+            value={publishDate}
+            onChange={(date) => setPublishDate(date)}
+            dateFormat="DD/MM/YYYY"
+            timeFormat="HH:mm"
+            closeOnSelect={true}
+            inputProps={{ placeholder: "Publish Date" }}
         />
-        <input
-        type="datetime-local"
-        placeholder={`End Date`}
-        value={endDate}
-        onChange={(e) => setEndDate(e.target.value)}
+        <Datetime
+            key={`end-${resetKey}`}
+            value={endDate}
+            onChange={(date) => setEndDate(date)}
+            dateFormat="DD/MM/YYYY"
+            timeFormat="HH:mm"
+            closeOnSelect={true}
+            inputProps={{ placeholder: "End Date" }}
         />
         <br />
 
