@@ -20,8 +20,9 @@ This is the development repository for our diplomarbeit.
 * In einer Konsole zu Development-Diplomarbeit\frontend\ navigieren
   und in einer anderen Konsole zu Development-Diplomarbeit\backend\ navigieren
 * Im backend Befehl "node app.js" ausführen
-*Falls man die Rollenfunktion austesten will:*
-  *in pgAdmin Rolle in der Rolestabelle Rollen manuell hinzufügen*
+* Falls man die Rollenfunktion austesten will:*
+  *in pgAdmin Rolle in der Rolestabelle Rollen manuell hinzufügen(admin = id 1, poweruser = id 2, normal = id 3)*
+* einen Admin muss man händisch in der Datenbank in der Users tabelle erstellen, dieser kann dann in der Applikation weitere Nutzer Registrieren.
 
 * Im frontend Befehl "npm start" ausführen
 
