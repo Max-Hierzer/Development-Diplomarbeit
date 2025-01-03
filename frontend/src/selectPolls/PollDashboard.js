@@ -81,14 +81,6 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             setEditPolls(edit);
             setVotePolls(vote);
             setResultsPolls(results);
-
-            const linkParam = new URLSearchParams(window.location.search);
-            const mode = linkParam.get('poll');
-            if (mode) {
-                handleDisplayMode(2, vote);
-                const selected = data.find((poll) => poll.name.toString() === mode);
-                setSelectedPoll(selected || null);
-            }
         } catch (error) {
             console.error('Error fetching polls:', error);
         }
@@ -119,16 +111,22 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
         }
     }
 
-    /*useEffect(() => {
+    useEffect(() => {
         const linkParam = new URLSearchParams(window.location.search);
-        const mode = linkParam.get('poll');
+        const pollName = linkParam.get('poll');
 
-        if (mode) {
-            const selected = polls.find((poll) => poll.name.toString() === mode);
-            handleDisplayMode(2, votePolls);
-            setSelectedPoll(selected || null);
+        if (pollName && displayMode === 0) {
+            const selected = votePolls.find((poll) => poll.name.toString() === pollName);
+            console.log('hi');
+            if (selected) {
+                setDisplayMode(2);
+                setSelectedPoll(selected);
+            } else {
+                setDisplayMode(0);
+            }
         }
-    }, [polls, votePolls]);*/
+    }, [votePolls]);
+
 
     const showVoters = () => setShowVoters(!showVotersMode);
 
