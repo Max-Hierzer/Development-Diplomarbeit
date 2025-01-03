@@ -5,11 +5,9 @@ import WriteMessages from './messages/WriteMessage';
 import InputMessage from './messages/InputMessage';
 import Login from './usermanagment/Login';
 import PollDashboard from './selectPolls/PollDashboard';
-import CreatePoll from './createPolls/CreatePolls';
 
 function App() {
-  const [isPollMode, setIsPollMode] = useState(false);
-  const [isInputMode, setIsInputMode] = useState(true);
+  const [isInputMode, setIsInputMode] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
     return storedLoginStatus ? JSON.parse(storedLoginStatus) : false;
@@ -59,10 +57,6 @@ function App() {
           <div className='Logout'>
             <button onClick={handleLogout}>Logout</button>
           </div>
-          <button onClick={() => setIsPollMode(!isPollMode)}>
-            {isPollMode ? 'Back' : 'Create Poll'}
-          </button>
-          {!isPollMode ? (
             <div>
               <div>
                 <PollDashboard userId={userId} userName={userName} userRoleId = {userRoleId}/>
@@ -82,9 +76,6 @@ function App() {
                 )}
               </div>
             </div>
-          ) : (
-            <CreatePoll />
-          )}
         </div>
       )}
     </div>
