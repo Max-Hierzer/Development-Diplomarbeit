@@ -157,35 +157,33 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             case 1:
                 return (
                     <>
-                    {showSelect(displayMode)}
-
                     <div className="button-section">
+                    <div>
+                    <button onClick={() => setDisplayMode(4)}>Registration</button>
+                    <button onClick={() => setDisplayMode(5)}>Create Poll</button>
+                    <DeletePoll selectedPoll={selectedPoll} refreshPolls={fetchPolls} setSelectedPoll={setSelectedPoll} />
+                    </div>
+                    <div>
                     <button onClick={() => handleDisplayMode(1, editPolls)}>Edit</button>
                     <button onClick={() => handleDisplayMode(2, votePolls)}>Vote</button>
                     <button onClick={() => handleDisplayMode(3, resultsPolls)}>Results</button>
-                    <button onClick={() => setDisplayMode(4)}>
-                    {displayMode === 4 ? 'Hide Registration' : 'Show Registration'}
-                    </button>
-                    <button onClick={() => setDisplayMode(5)}>
-                    {displayMode === 5 ? 'Back' : 'Create Poll'}
-                    </button>
-                    <DeletePoll selectedPoll={selectedPoll} refreshPolls={fetchPolls} setSelectedPoll={setSelectedPoll} />
+                    </div>
                     </div>
                     </>
                 );
             case 2:
                 return (
                     <>
-                    {showSelect(displayMode)}
-
                     <div className="button-section">
+                    <div>
+                        <button onClick={() => setDisplayMode(5)}>Create Poll</button>
+                        <DeletePoll selectedPoll={selectedPoll} refreshPolls={fetchPolls} setSelectedPoll={setSelectedPoll} />
+                    </div>
+                    <div>
                     <button onClick={() => handleDisplayMode(1, editPolls)}>Edit</button>
                     <button onClick={() => handleDisplayMode(2, votePolls)}>Vote</button>
                     <button onClick={() => handleDisplayMode(3, resultsPolls)}>Results</button>
-                    <DeletePoll selectedPoll={selectedPoll} refreshPolls={fetchPolls} setSelectedPoll={setSelectedPoll} />
-                    <button onClick={() => setDisplayMode(5)}>
-                    {displayMode === 5 ? 'Back' : 'Create Poll'}
-                    </button>
+                    </div>
                     </div>
                     </>
                 );
@@ -193,8 +191,6 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             case 3:
                 return (
                     <>
-                    {showSelect(displayMode)}
-
                     <div className="button-section">
                     <button onClick={() => handleDisplayMode(2, votePolls)}>Vote</button>
                     <button onClick={() => handleDisplayMode(3, resultsPolls)}>Results</button>
@@ -208,6 +204,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     return (
         <div className="dashboard-container">
             {showContent(roleId)}
+            {showSelect(displayMode)}
             <div className="poll-content">
             {displayMode === 1 && (
                 <EditPolls selectedPoll={selectedPoll} refreshPolls={fetchPolls} />

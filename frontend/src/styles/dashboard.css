@@ -29,10 +29,11 @@
 
 .button-section {
     display: flex;
-    justify-content: space-around;
     padding: 1rem;
     background-color: #eee;
     border-bottom: 1px solid #ccc;
+    width: 100%;
+    flex-direction: column;
 }
 
 .question {
