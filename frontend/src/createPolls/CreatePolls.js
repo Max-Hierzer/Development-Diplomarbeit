@@ -89,7 +89,7 @@ function CreatePoll() {
 
     const handlePollChange = (e) => {
         setPoll(e.target.value);
-        let link = 'http://localhost:3000/?pollname=';
+        let link = 'http://localhost:3000/?poll=';
         link += e.target.value;
         setPollLink(link);
     }
