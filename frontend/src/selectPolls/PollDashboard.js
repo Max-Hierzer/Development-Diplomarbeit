@@ -7,7 +7,7 @@ import DeletePoll from '../DeletePolls/DeletePoll';
 import EditPolls from '../editPolls/editPolls';
 import Register from '../usermanagment/Register';
 
-const PollDashboard = ({ userId, userName }) => {
+const PollDashboard = ({ userId, userName, userRoleId }) => {
     const [polls, setPolls] = useState([]);
     const [selectedAnswers, setSelectedAnswers] = useState({});
     const [displayMode, setDisplayMode] = useState(0); // 0: initial, 1: Edit, 2: Vote, 3: Results, 4: Registration
@@ -18,6 +18,7 @@ const PollDashboard = ({ userId, userName }) => {
     const [votePolls, setVotePolls] = useState([]);
     const [resultsPolls, setResultsPolls] = useState([]);
 
+    console.log(userRoleId)
     const resetAnswers = () => {
         setSelectedAnswers({});
     };

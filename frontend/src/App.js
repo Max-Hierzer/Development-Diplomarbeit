@@ -16,24 +16,28 @@ function App() {
   });
   const [userId, setUserId] = useState(sessionStorage.getItem('userId') || 0);
   const [userName, setUserName] = useState(sessionStorage.getItem('userName') || '');
+  const [userRoleId, setUserRoleId] = useState(sessionStorage.getItem('userRoleId') || 0);
 
   useEffect(() => {
     // Save login state to sessionStorage whenever it changes
     sessionStorage.setItem('isLoggedIn', isLoggedIn);
     sessionStorage.setItem('userId', userId);
     sessionStorage.setItem('userName', userName);
-  }, [isLoggedIn, userId, userName]);
+    sessionStorage.setItem('userRoleId', userRoleId);
+  }, [isLoggedIn, userId, userName, userRoleId]);
 
-  const handleLoginChange = (loginMode, userId, userName) => {
+  const handleLoginChange = (loginMode, userId, userName, userRoleId) => {
     setIsLoggedIn(loginMode);
     setUserId(userId);
     setUserName(userName);
+    setUserRoleId(userRoleId);
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUserId(0);
     setUserName('');
+    setUserRoleId(0);
     sessionStorage.clear(); // Clear session storage on logout
   };
 
@@ -61,7 +65,7 @@ function App() {
           {!isPollMode ? (
             <div>
               <div>
-                <PollDashboard userId={userId} userName={userName} />
+                <PollDashboard userId={userId} userName={userName} userRoleId = {userRoleId}/>
               </div>
               <div className='Messenger'>
                 <h1>{isInputMode ? 'Submit a Message' : 'Messages'}</h1>

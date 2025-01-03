@@ -15,7 +15,7 @@ async function createUser(name, email, password, roleId) {
 async function fetchLogin() {
     try {
         const users = await Users.findAll({                 // getting data from Users
-                attributes: ['id', 'name', 'password']      // getting attributes id, name, password
+                attributes: ['id', 'name', 'password', 'roleId']      // getting attributes id, name, password
             });
         return users;
     } catch (error) {
