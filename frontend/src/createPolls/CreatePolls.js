@@ -6,6 +6,7 @@ import moment from 'moment';
 function CreatePoll() {
     const [poll, setPoll] = useState('');
     const [description, setDescription] = useState('');
+    const [pollLink, setPollLink] = useState('');
     const [publishDate, setPublishDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [questions, setQuestions] = useState([{ name: '', answers: [{ name: '' }, { name: '' }] }]);
@@ -86,6 +87,13 @@ function CreatePoll() {
         setQuestions(newQuestions);
     };
 
+    const handlePollChange = (e) => {
+        setPoll(e.target.value);
+        let link = 'http://localhost:3000/?pollname=';
+        link += e.target.value;
+        setPollLink(link);
+    }
+
 
     return (
         <div>
@@ -95,7 +103,7 @@ function CreatePoll() {
         type="text"
         placeholder={`Pollname`}
         value={poll}
-        onChange={(e) => setPoll(e.target.value)}
+        onChange={handlePollChange}
         />
         <br />
         <textarea
@@ -125,6 +133,10 @@ function CreatePoll() {
             closeOnSelect={true}
             inputProps={{ placeholder: "End Date" }}
         />
+        <label>Link:
+        <p>{pollLink}</p>
+        </label>
+        <br />
         <br />
 
         <h3>Questions</h3>
