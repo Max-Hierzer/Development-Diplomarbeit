@@ -131,11 +131,13 @@ function EditPolls({ selectedPoll }) {
             placeholder="Poll Name"
             />
             <h4>Description</h4>
-            <input
-            type="text"
+            <textarea
+            placeholder="Poll Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Description"
+            rows={5} // Adjust the number of rows for the desired height
+            cols={50} // Adjust the number of columns for the desired width
+            style={{ resize: 'vertical' }} // Optional: Allow resizing vertically only
             />
             {questions.map((question, questionIndex) => (
                 <div key={question.id || questionIndex}>

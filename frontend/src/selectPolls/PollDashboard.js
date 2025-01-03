@@ -18,6 +18,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     const [editPolls, setEditPolls] = useState([]);
     const [votePolls, setVotePolls] = useState([]);
     const [resultsPolls, setResultsPolls] = useState([]);
+    const roleId = parseInt(userRoleId);
 
     const resetAnswers = () => {
         setSelectedAnswers({});
@@ -151,8 +152,8 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
         }
     }
 
-    const showContent = (userRoleId) => {
-        switch (userRoleId) {
+    const showContent = (roleId) => {
+        switch (roleId) {
             case 1:
                 return (
                     <>
@@ -200,13 +201,13 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                     </div>
                     </>);
             default:
-                return ('');
+                return ('test');
         }
     }
 
     return (
         <div className="dashboard-container">
-            {showContent(userRoleId)}
+            {showContent(roleId)}
             <div className="poll-content">
             {displayMode === 1 && (
                 <EditPolls selectedPoll={selectedPoll} refreshPolls={fetchPolls} />

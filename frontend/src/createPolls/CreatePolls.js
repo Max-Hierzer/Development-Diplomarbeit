@@ -98,11 +98,13 @@ function CreatePoll() {
         onChange={(e) => setPoll(e.target.value)}
         />
         <br />
-        <input
-        type="text"
-        placeholder={`Poll Description`}
+        <textarea
+        placeholder="Poll Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
+        rows={5} // Adjust the number of rows for the desired height
+        cols={50} // Adjust the number of columns for the desired width
+        style={{ resize: 'vertical' }} // Optional: Allow resizing vertically only
         />
         <br />
         <Datetime
