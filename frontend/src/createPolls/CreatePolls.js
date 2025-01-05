@@ -13,6 +13,7 @@ function CreatePoll() {
     const [resetKey, setResetKey] = useState(0);
     const [questions, setQuestions] = useState([{ name: '', answers: [{ name: '' }, { name: '' }] }]);
     const [response, setResponse] = useState(null);
+    const [showLink, setShowLink] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -35,7 +36,8 @@ function CreatePoll() {
 
             const response = await fetch('http://localhost:3001/api/pollId');
             const maxId = await response.json();
-            console.log(maxId);
+
+            setShowLink(true);
 
             let pollVoteLink = 'http://localhost:3000/?mode=vote&poll=';
             let pollResultsLink = 'http://localhost:3000/?mode=results&poll=';
@@ -101,16 +103,6 @@ function CreatePoll() {
         setQuestions(newQuestions);
     };
 
-    const handlePollChange = (e) => {
-        setPoll(e.target.value);
-        /*let pollVoteLink = 'http://localhost:3000/?mode=vote&poll=';
-        let pollResultsLink = 'http://localhost:3000/?mode=results&poll=';
-        pollVoteLink += e.target.value;
-        pollResultsLink += e.target.value;
-        setVoteLink(pollVoteLink);
-        setResultsLink(pollResultsLink);*/
-    }
-
 
     return (
         <div>
@@ -120,7 +112,7 @@ function CreatePoll() {
         type="text"
         placeholder={`Pollname`}
         value={poll}
-        onChange={handlePollChange}
+        onChange={(e) => setPoll(e.target.value)}
         />
         <br />
         <textarea
@@ -198,13 +190,17 @@ function CreatePoll() {
         </form>
         <p>{response}</p>
         <br />
-        <label>Vote Link:
-        <h4>{voteLink}</h4>
-        </label>
-        <br />
-        <label>Results Link:
-        <h4>{resultsLink}</h4>
-        </label>
+        {showLink && (
+            <div>
+                <label>Vote Link:
+                <h4>{voteLink}</h4>
+                </label>
+                <br />
+                <label>Results Link:
+                <h4>{resultsLink}</h4>
+                </label>
+            </div>
+        )}
         </div>
     );
 }

@@ -164,5 +164,5 @@ label {
 .datetime-container {
     display: flex;
     justify-content: center;
-    margin: 10px 0; /* Abstände zwischen den Pickern */
+    margin: 10px 0;
 }
