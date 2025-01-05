@@ -132,24 +132,28 @@ function CreatePoll() {
         style={{ resize: 'vertical' }} // Optional: Allow resizing vertically only
         />
         <br />
-        <Datetime
-            key={`publish-${resetKey}`}
-            value={publishDate}
-            onChange={(date) => setPublishDate(date)}
-            dateFormat="DD/MM/YYYY"
-            timeFormat="HH:mm"
-            closeOnSelect={true}
-            inputProps={{ placeholder: "Publish Date" }}
-        />
-        <Datetime
-            key={`end-${resetKey}`}
-            value={endDate}
-            onChange={(date) => setEndDate(date)}
-            dateFormat="DD/MM/YYYY"
-            timeFormat="HH:mm"
-            closeOnSelect={true}
-            inputProps={{ placeholder: "End Date" }}
-        />
+        <div className="datetime-container">
+            <Datetime
+                key={`publish-${resetKey}`}
+                value={publishDate}
+                onChange={(date) => setPublishDate(date)}
+                dateFormat="DD/MM/YYYY"
+                timeFormat="HH:mm"
+                closeOnSelect={true}
+                inputProps={{ placeholder: "Publish Date" }}
+            />
+        </div>
+        <div className="datetime-container">
+            <Datetime
+                key={`end-${resetKey}`}
+                value={endDate}
+                onChange={(date) => setEndDate(date)}
+                dateFormat="DD/MM/YYYY"
+                timeFormat="HH:mm"
+                closeOnSelect={true}
+                inputProps={{ placeholder: "End Date" }}
+            />
+        </div>
         <br />
         <br />
         {questions.map((question, questionIndex) => (

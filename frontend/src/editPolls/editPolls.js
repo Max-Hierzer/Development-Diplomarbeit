@@ -147,23 +147,25 @@ function EditPolls({ selectedPoll }) {
             cols={50} // Adjust the number of columns for the desired width
             style={{ resize: 'vertical' }} // Optional: Allow resizing vertically only
             />
-            <div>
-            <Datetime
-                value={publishDate}
-                onChange={(date) => setPublishDate(date)}
-                dateFormat="DD/MM/YYYY"
-                timeFormat="HH:mm"
-                closeOnSelect={true}
-                inputProps={{ placeholder: "Publish Date" }}
-            />
-            <Datetime
-                value={endDate}
-                onChange={(date) => setEndDate(date)}
-                dateFormat="DD/MM/YYYY"
-                timeFormat="HH:mm"
-                closeOnSelect={true}
-                inputProps={{ placeholder: "End Date" }}
-            />
+            <div className="datetime-container">
+                <Datetime
+                    value={publishDate}
+                    onChange={(date) => setPublishDate(date)}
+                    dateFormat="DD/MM/YYYY"
+                    timeFormat="HH:mm"
+                    closeOnSelect={true}
+                    inputProps={{ placeholder: "Publish Date" }}
+                />
+            </div>
+            <div className="datetime-container">
+                <Datetime
+                    value={endDate}
+                    onChange={(date) => setEndDate(date)}
+                    dateFormat="DD/MM/YYYY"
+                    timeFormat="HH:mm"
+                    closeOnSelect={true}
+                    inputProps={{ placeholder: "End Date" }}
+                />
             </div>
             {questions.map((question, questionIndex) => (
                 <div key={question.id || questionIndex}>
