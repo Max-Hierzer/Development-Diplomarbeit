@@ -21,7 +21,7 @@ function CreatePoll() {
             questions,
         };
 
-        console.log("Payload to be sent:", JSON.stringify(payload, null, 2));
+        console.log(JSON.stringify(payload, null, 2));
 
         try {
             const res = await fetch('http://localhost:3001/api/poll', {
@@ -138,10 +138,9 @@ function CreatePoll() {
         </label>
         <br />
         <br />
-
-        <h3>Questions</h3>
         {questions.map((question, questionIndex) => (
             <div key={questionIndex}>
+            <h3>Question</h3>
             <input
             type="text"
             placeholder={`Question ${questionIndex + 1}`}

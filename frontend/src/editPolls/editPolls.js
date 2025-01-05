@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import Datetime from 'react-datetime';
+import "react-datetime/css/react-datetime.css";
+import moment from 'moment';
 
 function EditPolls({ selectedPoll }) {
     const [poll, setPoll] = useState('');
     const [questions, setQuestions] = useState([]);
     const [response, setResponse] = useState('');
     const [description, setDescription] = useState('');
+    const [publishDate, setPublishDate] = useState('');
+    const [endDate, setEndDate] = useState('');
 
     // Initialize state with `selectedPoll`
     useEffect(() => {
@@ -84,6 +89,8 @@ function EditPolls({ selectedPoll }) {
                 pollId: selectedPoll.id,
                 pollName: poll,
                 pollDescription: description,
+                publishDate: publishDate,
+                endDate: endDate,
                 Questions: questions.map((q) => ({
                     id: q.id || null,
                     name: q.name,
@@ -93,6 +100,7 @@ function EditPolls({ selectedPoll }) {
                     })),
                 })),
             };
+            console.log(JSON.stringify(payload, null, 2));
 
             try {
                 const res = await fetch(`http://localhost:3001/api/polls/${selectedPoll.id}`, {
@@ -139,8 +147,27 @@ function EditPolls({ selectedPoll }) {
             cols={50} // Adjust the number of columns for the desired width
             style={{ resize: 'vertical' }} // Optional: Allow resizing vertically only
             />
+            <div>
+            <Datetime
+                value={publishDate}
+                onChange={(date) => setPublishDate(date)}
+                dateFormat="DD/MM/YYYY"
+                timeFormat="HH:mm"
+                closeOnSelect={true}
+                inputProps={{ placeholder: "Publish Date" }}
+            />
+            <Datetime
+                value={endDate}
+                onChange={(date) => setEndDate(date)}
+                dateFormat="DD/MM/YYYY"
+                timeFormat="HH:mm"
+                closeOnSelect={true}
+                inputProps={{ placeholder: "End Date" }}
+            />
+            </div>
             {questions.map((question, questionIndex) => (
                 <div key={question.id || questionIndex}>
+                <h3>Question</h3>
                 <input
                 type="text"
                 placeholder={`Question ${questionIndex + 1}`}
@@ -148,7 +175,7 @@ function EditPolls({ selectedPoll }) {
                 onChange={(e) => handleQuestionChange(questionIndex, e.target.value)}
                 />
                 <button type="button" onClick={() => deleteQuestion(questionIndex)}>
-                Delete Question
+                Delete
                 </button>
                 <h4>Answers</h4>
                 {question.Answers.map((answer, answerIndex) => (
@@ -165,7 +192,7 @@ function EditPolls({ selectedPoll }) {
                     type="button"
                     onClick={() => deleteAnswer(questionIndex, answerIndex)}
                     >
-                    Delete Answer
+                    Delete
                     </button>
                     </div>
                 ))}
