@@ -6,12 +6,13 @@ import moment from 'moment';
 function CreatePoll() {
     const [poll, setPoll] = useState('');
     const [description, setDescription] = useState('');
-    const [pollLink, setPollLink] = useState('');
+    const [voteLink, setVoteLink] = useState('');
+    const [resultsLink, setResultsLink] = useState('');
     const [publishDate, setPublishDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    const [resetKey, setResetKey] = useState(0);
     const [questions, setQuestions] = useState([{ name: '', answers: [{ name: '' }, { name: '' }] }]);
     const [response, setResponse] = useState(null);
-    const [resetKey, setResetKey] = useState(0);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -31,6 +32,19 @@ function CreatePoll() {
                 },
                 body: JSON.stringify(payload),
             });
+
+            const response = await fetch('http://localhost:3001/api/pollId');
+            const maxId = await response.json();
+            console.log(maxId);
+
+            let pollVoteLink = 'http://localhost:3000/?mode=vote&poll=';
+            let pollResultsLink = 'http://localhost:3000/?mode=results&poll=';
+            pollVoteLink += maxId;
+            pollResultsLink += maxId;
+            setVoteLink(pollVoteLink);
+            setResultsLink(pollResultsLink);
+
+
 
             const data = await res.json();
 
@@ -89,9 +103,12 @@ function CreatePoll() {
 
     const handlePollChange = (e) => {
         setPoll(e.target.value);
-        let link = 'http://localhost:3000/?poll=';
-        link += e.target.value;
-        setPollLink(link);
+        /*let pollVoteLink = 'http://localhost:3000/?mode=vote&poll=';
+        let pollResultsLink = 'http://localhost:3000/?mode=results&poll=';
+        pollVoteLink += e.target.value;
+        pollResultsLink += e.target.value;
+        setVoteLink(pollVoteLink);
+        setResultsLink(pollResultsLink);*/
     }
 
 
@@ -133,9 +150,6 @@ function CreatePoll() {
             closeOnSelect={true}
             inputProps={{ placeholder: "End Date" }}
         />
-        <label>Link:
-        <p>{pollLink}</p>
-        </label>
         <br />
         <br />
         {questions.map((question, questionIndex) => (
@@ -179,6 +193,14 @@ function CreatePoll() {
         <button type="submit">Submit</button>
         </form>
         <p>{response}</p>
+        <br />
+        <label>Vote Link:
+        <h4>{voteLink}</h4>
+        </label>
+        <br />
+        <label>Results Link:
+        <h4>{resultsLink}</h4>
+        </label>
         </div>
     );
 }
