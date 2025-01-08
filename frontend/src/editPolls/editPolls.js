@@ -14,8 +14,14 @@ function EditPolls({ selectedPoll }) {
     // Initialize state with `selectedPoll`
     useEffect(() => {
         if (selectedPoll) {
+            const publish = new Date(selectedPoll.publish_date);
+            const end = new Date(selectedPoll.end_date);
             setPoll(selectedPoll.name || '');
             setDescription(selectedPoll.description || '');
+            setPublishDate(publish || '');
+            setEndDate(end || '');
+            console.log(publishDate);
+            console.log(endDate);
             setQuestions(
                 (selectedPoll.Questions || []).map((q) => ({
                     ...q,
@@ -154,7 +160,7 @@ function EditPolls({ selectedPoll }) {
                     dateFormat="DD/MM/YYYY"
                     timeFormat="HH:mm"
                     closeOnSelect={true}
-                    inputProps={{ placeholder: "Publish Date" }}
+                    //inputProps={{ placeholder: "Publish Date" }}
                 />
             </div>
             <div className="datetime-container">
@@ -164,7 +170,7 @@ function EditPolls({ selectedPoll }) {
                     dateFormat="DD/MM/YYYY"
                     timeFormat="HH:mm"
                     closeOnSelect={true}
-                    inputProps={{ placeholder: "End Date" }}
+                    //inputProps={{ placeholder: "End Date" }}
                 />
             </div>
             {questions.map((question, questionIndex) => (
