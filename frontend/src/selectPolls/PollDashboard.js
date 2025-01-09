@@ -237,7 +237,9 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             {displayMode === 2 && selectedPoll && (
                 <>
                 <h2>{selectedPoll.name}</h2>
-                <h4>Beschreibung: {selectedPoll.description}</h4>
+                <h4 className='Beschreibung'>Beschreibung: </h4>
+                <h5 className='Beschreibung'>{selectedPoll.description}</h5>
+                <br></br>
                 {selectedPoll.Questions &&
                     selectedPoll.Questions.map((question) => (
                         <div key={question.id} className="question">
@@ -260,7 +262,9 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             {displayMode === 3 && selectedPoll && (
                 <>
                 <h2>{selectedPoll.name}</h2>
-                <h4>Beschreibung: {selectedPoll.description}</h4>
+                <h4 className='Beschreibung'>Beschreibung: </h4>
+                <h5 className='Beschreibung'>{selectedPoll.description}</h5>
+                <br></br>
                 {selectedPoll.Questions &&
                     selectedPoll.Questions.map((question) => (
                         <div key={question.id} className="question">

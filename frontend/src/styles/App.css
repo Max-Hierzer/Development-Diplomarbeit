@@ -166,3 +166,8 @@ label {
     justify-content: center;
     margin: 10px 0;
 }
+
+.Beschreibung {
+  width: 400px;
+  text-align: left;
+}
