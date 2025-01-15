@@ -6,7 +6,7 @@ async function createPoll(poll, questions) {
     try {
         const pollPublishDate = new Date(poll.publishDate);
         const pollEndDate = new Date(poll.endDate);
-        const createdPoll = await Poll.create({ name: poll.name, description: poll.description, user_id: poll.userId, publish_date: pollPublishDate, end_date: pollEndDate });
+        const createdPoll = await Poll.create({ name: poll.name, description: poll.description, user_id: poll.userId, public: poll.public, anonymous: poll.anon, publish_date: pollPublishDate, end_date: pollEndDate });
 
         const createdQuestions = [];
         for (const question of questions) {

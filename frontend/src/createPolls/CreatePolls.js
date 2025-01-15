@@ -14,12 +14,17 @@ function CreatePoll() {
     const [questions, setQuestions] = useState([{ name: '', answers: [{ name: '' }, { name: '' }] }]);
     const [response, setResponse] = useState(null);
     const [showLink, setShowLink] = useState(false);
+    const [selectedPublic, setSelectedPublic] = useState('No');
+    const [selectedAnon, setSelectedAnon] = useState('Yes');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        let isPublic = selectedPublic === "Yes";
+        let isAnon = selectedAnon === "Yes";
+
         const payload = {
-            poll: { name: poll, description: description, userId: sessionStorage.getItem('userId'), publishDate: publishDate, endDate: endDate},
+            poll: { name: poll, description: description, userId: sessionStorage.getItem('userId'), public: isPublic, anon: isAnon, publishDate: publishDate, endDate: endDate},
             questions,
         };
 
@@ -123,6 +128,21 @@ function CreatePoll() {
         cols={50} // Adjust the number of columns for the desired width
         style={{ resize: 'vertical' }} // Optional: Allow resizing vertically only
         />
+        <br />
+        <br />
+        <h4>Public</h4>
+        <select onChange={(e) => setSelectedPublic(e.target.value)}>
+            <option>No</option>
+            <option>Yes</option>
+        </select>
+        <br />
+        <br />
+        <h4>Anonymous</h4>
+        <select onChange={(e) => setSelectedAnon(e.target.value)}>
+            <option>Yes</option>
+            <option>No</option>
+        </select>
+        <br />
         <br />
         <div className="datetime-container">
             <Datetime
