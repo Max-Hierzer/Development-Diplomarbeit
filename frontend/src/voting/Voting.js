@@ -1,6 +1,9 @@
 import '../styles/voting.css';
 
 function Voting({ question, answer, selectedAnswers, handleAnswerChange }) {
+
+
+
     return (
         <div >
             <label className="answer" key={answer.id}>

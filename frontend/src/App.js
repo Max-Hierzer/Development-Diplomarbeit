@@ -5,6 +5,7 @@ import WriteMessages from './messages/WriteMessage';
 import InputMessage from './messages/InputMessage';
 import Login from './usermanagment/Login';
 import PollDashboard from './selectPolls/PollDashboard';
+import PublicPolls from './publicPolls/publicPolls';
 
 function App() {
   const [isInputMode, setIsInputMode] = useState(0);
@@ -15,6 +16,7 @@ function App() {
   const [userId, setUserId] = useState(sessionStorage.getItem('userId') || 0);
   const [userName, setUserName] = useState(sessionStorage.getItem('userName') || '');
   const [userRoleId, setUserRoleId] = useState(sessionStorage.getItem('userRoleId') || 0);
+  const [isPublic] = useState(1);
 
   useEffect(() => {
     // Save login state to sessionStorage whenever it changes
@@ -41,7 +43,8 @@ function App() {
 
   return (
     <div className="App">
-      {!isLoggedIn ? (
+      {!isPublic ?
+        !isLoggedIn ? (
         // Render the login component if the user is not logged in
         <div className='Usermanagement'>
           <div>
@@ -50,7 +53,7 @@ function App() {
             <h2>Please log in to continue</h2>
           </div>
         </div>
-      ) : (
+        ) : (
 
         // Render the main content if the user is logged in
         <div className='MainContent'>
@@ -77,7 +80,11 @@ function App() {
               </div>
             </div>
         </div>
-      )}
+        ) :
+        (
+          <PublicPolls />
+        )
+      }
     </div>
   );
 }
