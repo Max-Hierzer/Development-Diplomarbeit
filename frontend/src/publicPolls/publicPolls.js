@@ -1,20 +1,40 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
+import './publicPolls.css';
 
 const PublicPolls = () => {
     const [showVoting, setShowVoting] = useState(false);
     const [poll, setPoll] = useState([]);
     const [selectedAnswers, setSelectedAnswers] = useState({});
     const [gender, setGender] = useState('');
-    const [age, setAge] = useState(0);
+    const [age, setAge] = useState('');
     const [job, setJob] = useState('');
+    const [submitted, setSubmitted] = useState(false);
+    const [formErrors, setFormErrors] = useState({});
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        setShowVoting(true);
+        setSubmitted(true);
+
+        // Validate form fields
+        const newFormErrors = {};
+        if (!gender) {
+            newFormErrors.gender = " *";
+        }
+        if (!age) {
+            newFormErrors.age = "*";
+        }
+        if (!job) {
+            newFormErrors.job = "*";
+        }
+
+        setFormErrors(newFormErrors);
+
+        // Check if there are any errors
+        if (Object.keys(newFormErrors).length === 0) {
+            setShowVoting(true);
+        }
     };
 
-    console.log(gender);
-    console.log(age);
-    console.log(job);
     useEffect(() => {
         const fetchPoll = async () => {
             const linkParam = new URLSearchParams(window.location.search);
@@ -25,8 +45,6 @@ const PublicPolls = () => {
                     const data = await response.json();
 
                     const poll_ = data.find((p) => p.id === Number(pollId));
-
-                    console.log(poll_);
 
                     if (!poll_) {
                         setPoll(null); // No poll found for the given pollId
@@ -49,8 +67,8 @@ const PublicPolls = () => {
             }
         };
 
-        fetchPoll(); // Invoke the async function
-    }, []); // Empty dependency array ensures this runs once on mount
+        fetchPoll();
+    }, []);
 
     const handleAnswerChange = (questionId, answerId) => {
         setSelectedAnswers((prevAnswers) => ({
@@ -60,58 +78,101 @@ const PublicPolls = () => {
     };
 
     return (
-        <div className = "publicPoll">
-        {
-            !showVoting ? (
-            <div className = "publicData">
+        <div className="publicPoll">
+        {!showVoting ? (
+            <div className="publicData">
             <h1>Please fill out your data</h1>
-            <form className = "publicForm" onSubmit={handleSubmit}>
-                <h3>Gender</h3>
-                <select onChange={(e) => setGender(e.target.value)}>
-                <option defaultValue="">Select a gender</option>
-                <option defaultValue="male">Male</option>
-                <option defaultValue="female">Female</option>
-                <option defaultValue="non-binary">Non-binary</option>
-                </select>
-                <input type="text" placeholder="Your Age" onChange={(e) => setAge(e.target.value)}></input>
-                <input type="text" placeholder="Your Job" onChange={(e) => setJob(e.target.value)}></input>
-                <br></br>
-                <button type="submit">Submit</button>
+            <form>
+            <div>
+            <label
+            htmlFor="gender"
+            className="required-label"
+            >
+            Gender:
+            </label>
+            <select
+            id="gender"
+            required
+            onChange={(e) => setGender(e.target.value)}
+            className={`required-${formErrors.gender ? 'invalid' : '1'}`}
+            >
+            <option value="">Select a gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="non-binary">Non-binary</option>
+            </select>
+            {formErrors.gender && <span className="error-message">{formErrors.gender}</span>}
+            </div>
+
+            <div>
+            <label
+            htmlFor="age"
+            className="required-label"
+            >
+            Your Age:
+            </label>
+            <input
+            type="text"
+            id="age"
+            required
+            placeholder="Your Age"
+            onChange={(e) => setAge(e.target.value)}
+            className={`required-${formErrors.age ? 'invalid' : '1'}`}
+            />
+            {formErrors.age && <span className="error-message">{formErrors.age}</span>}
+            </div>
+
+            <div>
+            <label
+            htmlFor="job"
+            className="required-label"
+            >
+            Your Job:
+            </label>
+            <input
+            type="text"
+            id="job"
+            required
+            placeholder="Your Job"
+            onChange={(e) => setJob(e.target.value)}
+            className={`required-${formErrors.job ? 'invalid' : '1'}`}
+            />
+            {formErrors.job && <span className="error-message">{formErrors.job}</span>}
+            </div>
+            <button type="submit" onClick={handleSubmit}>Submit</button>
             </form>
             </div>
-            ) : (
-            <div className = "publicVote">
-                <h2>{poll.name}</h2>
-                <h4 className='Beschreibung'>Beschreibung: </h4>
-                <h5 className='Beschreibung'>{poll.description}</h5>
-                <br></br>
-                {poll.Questions &&
-                    poll.Questions.map((question) => (
-                        <div key={question.id} className="question">
-                        <h3>{question.name}</h3>
-                        {question.Answers &&
-                            question.Answers.map((answer) => (
-                                <div key={answer.id}  className="answer">
-                                <label className="answer" key={answer.id}>
-                                <input
-                                type="radio"
-                                name={`question-${question.id}`} // Unique name for each question
-                                value={answer.id}
-                                checked={selectedAnswers[question.id] === answer.id}
-                                    onChange={() => handleAnswerChange(question.id, answer.id)} // Update selected answer for this question
-                                key={answer.id}
-                                />
-                                <span>{answer.name}</span>
-                                </label>
-                                </div>
-                            ))}
+        ) : (
+            <div className="publicVote">
+            <h2>{poll.name}</h2>
+            <h4 className="Beschreibung">Beschreibung: </h4>
+            <h5 className="Beschreibung">{poll.description}</h5>
+            <br />
+            {poll.Questions &&
+                poll.Questions.map((question) => (
+                    <div key={question.id} className="question">
+                    <h3>{question.name}</h3>
+                    {question.Answers &&
+                        question.Answers.map((answer) => (
+                            <div key={answer.id} className="answer">
+                            <label className="answer" key={answer.id}>
+                            <input
+                            type="radio"
+                            name={`question-${question.id}`}
+                            value={answer.id}
+                            checked={selectedAnswers[question.id] === answer.id}
+                            onChange={() => handleAnswerChange(question.id, answer.id)}
+                            />
+                            <span>{answer.name}</span>
+                            </label>
+                            </div>
+                        ))}
                         </div>
-                    ))}
-            </div>
-            )
-        }
+                ))}
+                </div>
+        )}
         </div>
-    )
-}
+    );
+};
 
 export default PublicPolls;

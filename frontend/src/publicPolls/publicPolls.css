@@ -1,0 +1,20 @@
+.required-1 {
+    border: 2px solid #ccc;
+    padding: 8px;
+    font-size: 16px;
+}
+
+.required-invalid {
+    border-color: red;
+}
+
+.required-label {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
