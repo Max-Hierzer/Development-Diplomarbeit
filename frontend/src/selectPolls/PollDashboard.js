@@ -8,6 +8,7 @@ import EditPolls from '../editPolls/editPolls';
 import Register from '../usermanagment/Register';
 import CreatePoll from '../createPolls/CreatePolls';
 import MyPoll from '../myPolls/MyPolls'
+import SHA256 from 'crypto-js/sha256';
 
 const PollDashboard = ({ userId, userName, userRoleId }) => {
     const [polls, setPolls] = useState([]);
@@ -20,6 +21,8 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     const [votePolls, setVotePolls] = useState([]);
     const [resultsPolls, setResultsPolls] = useState([]);
     const [userPolls, setUserPolls] = useState([]);
+    const [maxId, setMaxId] = useState(null);
+
     const roleId = parseInt(userRoleId);
 
     const resetAnswers = () => {
@@ -67,8 +70,12 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
         try {
             const userId = parseInt(sessionStorage.getItem('userId'));
             const response = await fetch('http://localhost:3001/results/polls');
+            const res = await fetch('http://localhost:3001/api/pollId');
             const data = await response.json();
+            const maxIdValue = await res.json();
+
             setPolls(data);
+            setMaxId(maxIdValue);
             if (selectedPoll?.id && !data.find((poll) => poll.id === selectedPoll.id)) {
                 setSelectedPoll(null);
             }
@@ -123,12 +130,20 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     useEffect(() => {
         const linkParam = new URLSearchParams(window.location.search);
         const mode = linkParam.get('mode');
-        const pollId = linkParam.get('poll');
+        const hashedPollId = linkParam.get('poll');
+        let pollId = 0;
+        for (let i = 1; i <= maxId; i++) {
+            const newHash = SHA256(i.toString()).toString();
+            if (hashedPollId === newHash) {
+                pollId = i;
+                break;
+            }
+        }
 
         if (pollId && mode && displayMode === 0) {
             let selected = null;
             if (mode === 'vote') {
-                selected = votePolls.find((poll) => poll.id.toString() === pollId);
+                selected = votePolls.find((poll) => poll.id.toString() === pollId.toString());
                 if (selected) {
                     setSelectedPoll(selected);
                     setDisplayMode(2);

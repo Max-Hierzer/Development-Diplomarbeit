@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import SHA256 from 'crypto-js/sha256';
 
 function MyPoll({ pollId }) {
     const [response, setResponse] = useState(null);
-    let voteLink = `http://localhost:3000/?mode=vote&poll=${pollId}`;
-    let resultsLink = `http://localhost:3000/?mode=results&poll=${pollId}`;
+
+    const hashedPollId = SHA256(pollId.toString()).toString();
+
+    let voteLink = `http://localhost:3000/?mode=vote&poll=${hashedPollId}`;
+    let resultsLink = `http://localhost:3000/?mode=results&poll=${hashedPollId}`;
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -15,12 +19,12 @@ function MyPoll({ pollId }) {
         <div>
             <h3>Vote Link:</h3>
             <br />
-            <h4>{voteLink}</h4>
+            <h5>{voteLink}</h5>
             <br />
             <br />
             <h3>Results Link:</h3>
             <br />
-            <h4>{resultsLink}</h4>
+            <h5>{resultsLink}</h5>
             <p>{response}</p>
             <br />
         </div>
