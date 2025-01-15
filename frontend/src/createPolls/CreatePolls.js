@@ -19,7 +19,7 @@ function CreatePoll() {
         event.preventDefault();
 
         const payload = {
-            poll: { name: poll, description: description, publishDate: publishDate, endDate: endDate},
+            poll: { name: poll, description: description, userId: sessionStorage.getItem('userId'), publishDate: publishDate, endDate: endDate},
             questions,
         };
 

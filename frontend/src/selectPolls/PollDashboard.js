@@ -7,6 +7,7 @@ import DeletePoll from '../DeletePolls/DeletePoll';
 import EditPolls from '../editPolls/editPolls';
 import Register from '../usermanagment/Register';
 import CreatePoll from '../createPolls/CreatePolls';
+import MyPoll from '../myPolls/MyPolls'
 
 const PollDashboard = ({ userId, userName, userRoleId }) => {
     const [polls, setPolls] = useState([]);
@@ -18,6 +19,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     const [editPolls, setEditPolls] = useState([]);
     const [votePolls, setVotePolls] = useState([]);
     const [resultsPolls, setResultsPolls] = useState([]);
+    const [userPolls, setUserPolls] = useState([]);
     const roleId = parseInt(userRoleId);
 
     const resetAnswers = () => {
@@ -63,6 +65,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
 
     const fetchPolls = useCallback(async () => {
         try {
+            const userId = parseInt(sessionStorage.getItem('userId'));
             const response = await fetch('http://localhost:3001/results/polls');
             const data = await response.json();
             setPolls(data);
@@ -73,7 +76,11 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             const edit = [];
             const vote = [];
             const results = [];
+            const user = [];
             data.forEach((poll) => {
+                if (poll.user_id === userId) {
+                    user.push(poll);
+                }
                 if (poll.publish_date > current_datetime) edit.push(poll);
                 else if (poll.publish_date <= current_datetime && poll.end_date >= current_datetime) vote.push(poll);
                 else results.push(poll);
@@ -81,6 +88,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             setEditPolls(edit);
             setVotePolls(vote);
             setResultsPolls(results);
+            setUserPolls(user);
 
         } catch (error) {
             console.error('Error fetching polls:', error);
@@ -159,6 +167,14 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                         </button>
                     </div>
                 );
+            case 4:
+                return (
+                    <div>
+                        <button>
+                            Poll links
+                        </button>
+                    </div>
+                );
             default:
                 return <p>Select an action to proceed.</p>;
         }
@@ -172,6 +188,8 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                 return (<SelectPolls polls={votePolls} handleSetSelectedPoll={handleSetSelectedPoll} selectedPoll={selectedPoll} />)
             case 3:
                 return (<SelectPolls polls={resultsPolls} handleSetSelectedPoll={handleSetSelectedPoll} selectedPoll={selectedPoll} />)
+            case 4:
+                return (<SelectPolls polls={userPolls} handleSetSelectedPoll={handleSetSelectedPoll} selectedPoll={selectedPoll} />)
             default:
                 return ('')
         }
@@ -184,14 +202,15 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                     <>
                     <div className="button-section">
                     <div>
-                    <button onClick={() => setDisplayMode(4)}>Registration</button>
-                    <button onClick={() => setDisplayMode(5)}>Create Poll</button>
+                    <button onClick={() => setDisplayMode(5)}>Registration</button>
+                    <button onClick={() => setDisplayMode(6)}>Create Poll</button>
                     <DeletePoll selectedPoll={selectedPoll} refreshPolls={fetchPolls} setSelectedPoll={setSelectedPoll} />
                     </div>
                     <div>
                     <button onClick={() => handleDisplayMode(1, editPolls)}>Edit</button>
                     <button onClick={() => handleDisplayMode(2, votePolls)}>Vote</button>
                     <button onClick={() => handleDisplayMode(3, resultsPolls)}>Results</button>
+                    <button onClick={() => handleDisplayMode(4, userPolls)}>My Polls</button>
                     </div>
                     </div>
                     </>
@@ -201,13 +220,14 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                     <>
                     <div className="button-section">
                     <div>
-                        <button onClick={() => setDisplayMode(5)}>Create Poll</button>
+                        <button onClick={() => setDisplayMode(6)}>Create Poll</button>
                         <DeletePoll selectedPoll={selectedPoll} refreshPolls={fetchPolls} setSelectedPoll={setSelectedPoll} />
                     </div>
                     <div>
                     <button onClick={() => handleDisplayMode(1, editPolls)}>Edit</button>
                     <button onClick={() => handleDisplayMode(2, votePolls)}>Vote</button>
                     <button onClick={() => handleDisplayMode(3, resultsPolls)}>Results</button>
+                    <button onClick={() => handleDisplayMode(4, userPolls)}>My Polls</button>
                     </div>
                     </div>
                     </>
@@ -283,16 +303,19 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                     {showButton()}
                     </>
             )}
-            {displayMode === 4 && (
-                <Register />
+            {displayMode === 4 && selectedPoll && (
+                <MyPoll pollId={selectedPoll.id}/>
             )}
             {displayMode === 5 && (
+                <Register />
+            )}
+            {displayMode === 6 && (
                 <CreatePoll />
             )}
             {displayMode === 0 && (
                 <p>Select an action to proceed.</p>
             )}
-            {!selectedPoll && displayMode > 1 && displayMode < 4 && (
+            {!selectedPoll && displayMode > 1 && displayMode < 5 && (
                 <p>Please select a poll</p>
             )}
             </div>
