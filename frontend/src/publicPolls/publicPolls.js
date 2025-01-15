@@ -4,12 +4,17 @@ const PublicPolls = () => {
     const [showVoting, setShowVoting] = useState(false);
     const [poll, setPoll] = useState([]);
     const [selectedAnswers, setSelectedAnswers] = useState({});
-
+    const [gender, setGender] = useState('');
+    const [age, setAge] = useState(0);
+    const [job, setJob] = useState('');
     const handleSubmit = (event) => {
         event.preventDefault();
         setShowVoting(true);
     };
 
+    console.log(gender);
+    console.log(age);
+    console.log(job);
     useEffect(() => {
         const fetchPoll = async () => {
             const linkParam = new URLSearchParams(window.location.search);
@@ -18,8 +23,7 @@ const PublicPolls = () => {
                 try {
                     const response = await fetch('http://localhost:3001/results/polls');
                     const data = await response.json();
-                    console.log(typeof data[0].id);
-                    console.log(typeof Number(pollId));
+
                     const poll_ = data.find((p) => p.id === Number(pollId));
 
                     console.log(poll_);
@@ -62,6 +66,16 @@ const PublicPolls = () => {
             <div className = "publicData">
             <h1>Please fill out your data</h1>
             <form className = "publicForm" onSubmit={handleSubmit}>
+                <h3>Gender</h3>
+                <select onChange={(e) => setGender(e.target.value)}>
+                <option defaultValue="">Select a gender</option>
+                <option defaultValue="male">Male</option>
+                <option defaultValue="female">Female</option>
+                <option defaultValue="non-binary">Non-binary</option>
+                </select>
+                <input type="text" placeholder="Your Age" onChange={(e) => setAge(e.target.value)}></input>
+                <input type="text" placeholder="Your Job" onChange={(e) => setJob(e.target.value)}></input>
+                <br></br>
                 <button type="submit">Submit</button>
             </form>
             </div>
@@ -77,7 +91,7 @@ const PublicPolls = () => {
                         <h3>{question.name}</h3>
                         {question.Answers &&
                             question.Answers.map((answer) => (
-                                <div >
+                                <div key={answer.id}  className="answer">
                                 <label className="answer" key={answer.id}>
                                 <input
                                 type="radio"
