@@ -122,6 +122,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
         setDisplayMode(displayM);
         await fetchPolls();
         if (selectedPoll?.id) {
+            //console.log(selectedPoll);
             const updatedPoll = polla.find((poll) => poll.id === selectedPoll.id);
             setSelectedPoll(updatedPoll || null);
         }
@@ -129,16 +130,12 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
 
     useEffect(() => {
         const linkParam = new URLSearchParams(window.location.search);
-        const mode = linkParam.get('mode');
-        const hashedPollId = linkParam.get('poll');
-        let pollId = 0;
-        for (let i = 1; i <= maxId; i++) {
-            const newHash = SHA256(i.toString()).toString();
-            if (hashedPollId === newHash) {
-                pollId = i;
-                break;
-            }
-        }
+        const hashed = linkParam.toString();
+        const paddedVoteHash = hashed.padEnd(hashed.length + (4 - (hashed.length % 4)) % 4, '=');
+        const unhashed = atob(paddedVoteHash);
+        const params = new URLSearchParams(unhashed);
+        const mode = params.get('mode');
+        const pollId = params.get('poll');
 
         if (pollId && mode && displayMode === 0) {
             let selected = null;
@@ -330,7 +327,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             {displayMode === 0 && (
                 <p>Select an action to proceed.</p>
             )}
-            {!selectedPoll && displayMode > 1 && displayMode < 5 && (
+            {!selectedPoll && displayMode > 1 && displayMode < 4 && (
                 <p>Please select a poll</p>
             )}
             </div>
