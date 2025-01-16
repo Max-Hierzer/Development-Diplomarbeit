@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import SHA256 from 'crypto-js/sha256';
 
-function MyPoll({ pollId }) {
+function MyPoll({ pollId, isPublic }) {
     const [response, setResponse] = useState(null);
 
-    //const hashedPollId = SHA256(pollId.toString()).toString();
-    const voteHash = btoa(`mode=vote&poll=${pollId}`).replace(/=*$/, '');
-    const resultsHash =btoa(`mode=results&poll=${pollId}`).replace(/=*$/, '');
+    const voteHash = btoa(`public=${isPublic}&mode=vote&poll=${pollId}`).replace(/=*$/, '');
+    const resultsHash = btoa(`public=${isPublic}&mode=results&poll=${pollId}`).replace(/=*$/, '');
 
     let voteLink = `http://localhost:3000/?${voteHash}`;
     let resultsLink = `http://localhost:3000/?${resultsHash}`;
@@ -28,6 +26,7 @@ function MyPoll({ pollId }) {
             <h3>Results Link:</h3>
             <br />
             <h5>{resultsLink}</h5>
+            <br />
             <p>{response}</p>
             <br />
         </div>

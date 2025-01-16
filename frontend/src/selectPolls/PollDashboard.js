@@ -21,7 +21,6 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     const [votePolls, setVotePolls] = useState([]);
     const [resultsPolls, setResultsPolls] = useState([]);
     const [userPolls, setUserPolls] = useState([]);
-    const [maxId, setMaxId] = useState(null);
 
     const roleId = parseInt(userRoleId);
 
@@ -70,12 +69,9 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
         try {
             const userId = parseInt(sessionStorage.getItem('userId'));
             const response = await fetch('http://localhost:3001/results/polls');
-            const res = await fetch('http://localhost:3001/api/pollId');
             const data = await response.json();
-            const maxIdValue = await res.json();
 
             setPolls(data);
-            setMaxId(maxIdValue);
             if (selectedPoll?.id && !data.find((poll) => poll.id === selectedPoll.id)) {
                 setSelectedPoll(null);
             }
@@ -317,7 +313,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                     </>
             )}
             {displayMode === 4 && selectedPoll && (
-                <MyPoll pollId={selectedPoll.id}/>
+                <MyPoll pollId={selectedPoll.id} isPublic={selectedPoll.public}/>
             )}
             {displayMode === 5 && (
                 <Register />

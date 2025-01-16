@@ -41,6 +41,8 @@ function App() {
     sessionStorage.clear(); // Clear session storage on logout
   };
 
+
+
   return (
     <div className="App">
       {!isPublic ?
