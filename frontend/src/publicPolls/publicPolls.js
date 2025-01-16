@@ -100,6 +100,8 @@ const PublicPolls = () => {
         fetchPoll();
     }, []);
 
+    console.log(poll);
+
     const handleAnswerChange = (questionId, answerId) => {
         setSelectedAnswers((prevAnswers) => ({
             ...prevAnswers,
