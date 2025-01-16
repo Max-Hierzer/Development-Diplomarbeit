@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import Cookies from 'js-cookie';
+import ReCAPTCHA from 'react-google-recaptcha';
 import './publicPolls.css';
 
 const PublicPolls = () => {
@@ -8,30 +10,64 @@ const PublicPolls = () => {
     const [gender, setGender] = useState('');
     const [age, setAge] = useState('');
     const [job, setJob] = useState('');
-    const [submitted, setSubmitted] = useState(false);
     const [formErrors, setFormErrors] = useState({});
+    const recaptchaRef = useRef(null);
 
-    const handleSubmit = (event) => {
+    const handleSubmitData = async (event) => {
         event.preventDefault();
-        setSubmitted(true);
 
-        // Validate form fields
         const newFormErrors = {};
-        if (!gender) {
-            newFormErrors.gender = " *";
-        }
-        if (!age) {
-            newFormErrors.age = "*";
-        }
-        if (!job) {
-            newFormErrors.job = "*";
-        }
+        if (!gender) newFormErrors.gender = '*';
+        if (!age) newFormErrors.age = '*';
+        if (!job) newFormErrors.job = '*';
 
         setFormErrors(newFormErrors);
 
-        // Check if there are any errors
         if (Object.keys(newFormErrors).length === 0) {
-            setShowVoting(true);
+            // Trigger reCAPTCHA validation before proceeding
+            const token = await recaptchaRef.current.executeAsync();
+            recaptchaRef.current.reset(); // Reset CAPTCHA after execution
+
+            if (token) {
+                // Send the CAPTCHA token to the backend for validation
+                const response = await fetch('http://localhost:3001/verify-recaptcha', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ token }),
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    // Proceed to show the voting section after successful CAPTCHA validation
+                    setShowVoting(true);
+                } else {
+                    alert('CAPTCHA verification failed. Please try again.');
+                }
+            } else {
+                alert('CAPTCHA verification failed.');
+            }
+        } else {
+            alert('Please fill out all fields.');
+        }
+    };
+
+    const handleVoteSubmit = async () => {
+        // Check if the poll has already been submitted
+        if (!Cookies.get('pollSubmitted')) {
+            // Mark the poll as submitted by setting the cookie
+            Cookies.set('pollSubmitted', 'true', {
+                expires: 1, // Expire in 1 day
+                SameSite: 'None', // For cross-site access (reCAPTCHA)
+            Secure: true, // Only works over HTTPS
+            });
+
+            alert('Vote submitted!');
+            // After submitting the vote, you can either submit the vote data to the backend
+            // or display a success message.
+        } else {
+            alert('You have already submitted your vote.');
         }
     };
 
@@ -43,26 +79,20 @@ const PublicPolls = () => {
                 try {
                     const response = await fetch('http://localhost:3001/results/polls');
                     const data = await response.json();
-
                     const poll_ = data.find((p) => p.id === Number(pollId));
-
-                    if (!poll_) {
-                        setPoll(null); // No poll found for the given pollId
-                        return;
-                    }
-
-                    const currentDateTime = new Date().toISOString();
-                    if (
-                        poll_.publish_date <= currentDateTime &&
-                        poll_.end_date >= currentDateTime
-                    ) {
-                        setPoll(poll_); // Poll is valid and active
+                    if (poll_) {
+                        const currentDateTime = new Date().toISOString();
+                        if (poll_.publish_date <= currentDateTime && poll_.end_date >= currentDateTime) {
+                            setPoll(poll_);
+                        } else {
+                            setPoll(null);
+                        }
                     } else {
-                        setPoll(null); // Poll is outside the valid date range
+                        setPoll(null);
                     }
                 } catch (error) {
                     console.error('Error fetching polls:', error);
-                    setPoll(null); // Handle fetch error gracefully
+                    setPoll(null);
                 }
             }
         };
@@ -84,17 +114,12 @@ const PublicPolls = () => {
             <h1>Please fill out your data</h1>
             <form>
             <div>
-            <label
-            htmlFor="gender"
-            className="required-label"
-            >
-            Gender:
-            </label>
+            <label htmlFor="gender" className="required-label">Gender:</label>
             <select
             id="gender"
             required
             onChange={(e) => setGender(e.target.value)}
-            className={`required-${formErrors.gender ? 'invalid' : '1'}`}
+            className={`required${formErrors.gender ? 'invalid' : ''}`}
             >
             <option value="">Select a gender</option>
             <option value="male">Male</option>
@@ -105,47 +130,43 @@ const PublicPolls = () => {
             </div>
 
             <div>
-            <label
-            htmlFor="age"
-            className="required-label"
-            >
-            Your Age:
-            </label>
+            <label htmlFor="age" className="required-label">Your Age:</label>
             <input
             type="text"
             id="age"
             required
             placeholder="Your Age"
             onChange={(e) => setAge(e.target.value)}
-            className={`required-${formErrors.age ? 'invalid' : '1'}`}
+            className={`required${formErrors.age ? 'invalid' : ''}`}
             />
             {formErrors.age && <span className="error-message">{formErrors.age}</span>}
             </div>
 
             <div>
-            <label
-            htmlFor="job"
-            className="required-label"
-            >
-            Your Job:
-            </label>
+            <label htmlFor="job" className="required-label">Your Job:</label>
             <input
             type="text"
             id="job"
             required
             placeholder="Your Job"
             onChange={(e) => setJob(e.target.value)}
-            className={`required-${formErrors.job ? 'invalid' : '1'}`}
+            className={`required${formErrors.job ? 'invalid' : ''}`}
             />
             {formErrors.job && <span className="error-message">{formErrors.job}</span>}
             </div>
-            <button type="submit" onClick={handleSubmit}>Submit</button>
+
+            <ReCAPTCHA
+            sitekey="6Ld8frkqAAAAAAKm_-7OMjklQf8jSHw442msli5v" // Replace with your actual site key
+            size="invisible"
+            ref={recaptchaRef}
+            />
+            <button type="submit" onClick={handleSubmitData}>Submit</button>
             </form>
             </div>
         ) : (
             <div className="publicVote">
             <h2>{poll.name}</h2>
-            <h4 className="Beschreibung">Beschreibung: </h4>
+            <h4 className="Beschreibung">Beschreibung:</h4>
             <h5 className="Beschreibung">{poll.description}</h5>
             <br />
             {poll.Questions &&
@@ -155,7 +176,7 @@ const PublicPolls = () => {
                     {question.Answers &&
                         question.Answers.map((answer) => (
                             <div key={answer.id} className="answer">
-                            <label className="answer" key={answer.id}>
+                            <label>
                             <input
                             type="radio"
                             name={`question-${question.id}`}
@@ -169,6 +190,7 @@ const PublicPolls = () => {
                         ))}
                         </div>
                 ))}
+                <button onClick={handleVoteSubmit}>Submit Vote</button>
                 </div>
         )}
         </div>

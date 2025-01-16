@@ -12,6 +12,7 @@ const deletionRoutes = require('./routes/deletionRoutes');
 const editRoutes = require('./routes/editRoutes');
 const rolesRoutes = require('./routes/rolesRoutes');
 const idRoutes = require('./routes/idRoutes');
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 
 sequelize.sync({ alter: true })
@@ -39,6 +40,31 @@ app.use('/api', deletionRoutes);
 app.use('/api', editRoutes);
 app.use('/api', rolesRoutes);
 app.use('/api', idRoutes);
+
+app.post('/verify-recaptcha', async (req, res) => {
+    const { token } = req.body;
+
+    const secretKey = '6Ld8frkqAAAAAP-3bPPej1wVh7-b7ZL3DsAYKTqE';
+    const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+        });
+        const data = await response.json();
+
+        if (data.success && data.score > 0.5) {
+            // Validation successful
+            res.json({ success: true });
+        } else {
+            // Validation failed
+            res.json({ success: false, message: 'Verification failed' });
+        }
+    } catch (error) {
+        console.error('Error verifying reCAPTCHA:', error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {                            // listens for requests on port
