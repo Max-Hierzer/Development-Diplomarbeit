@@ -16,7 +16,7 @@ function App() {
   const [userId, setUserId] = useState(sessionStorage.getItem('userId') || 0);
   const [userName, setUserName] = useState(sessionStorage.getItem('userName') || '');
   const [userRoleId, setUserRoleId] = useState(sessionStorage.getItem('userRoleId') || 0);
-  const [isPublic] = useState(1);
+  const [isPublic, setIsPublic] = useState(null);
 
   useEffect(() => {
     // Save login state to sessionStorage whenever it changes
@@ -40,6 +40,22 @@ function App() {
     setUserRoleId(0);
     sessionStorage.clear(); // Clear session storage on logout
   };
+
+
+  useEffect(() => {
+    const linkParam = new URLSearchParams(window.location.search);
+    const hashed = linkParam.toString();
+    const paddedVoteHash = hashed.padEnd(hashed.length + (4 - (hashed.length % 4)) % 4, '=');
+    const unhashed = atob(paddedVoteHash);
+    const params = new URLSearchParams(unhashed);
+    const publicValue = params.get('public');
+
+    if (publicValue === "true") {
+      setIsPublic(1);
+    } else {
+      setIsPublic(0);
+    }
+    }, []);
 
 
 

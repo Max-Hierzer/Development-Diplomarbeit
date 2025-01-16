@@ -118,11 +118,6 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
         setDisplayMode(displayM);
         await fetchPolls();
         setSelectedPoll(null);
-        /*if (selectedPoll?.id) {
-            //console.log(selectedPoll);
-            const updatedPoll = polla.find((poll) => poll.id === selectedPoll.id);
-            setSelectedPoll(updatedPoll || null);
-        }*/
     }
 
     useEffect(() => {
