@@ -4,10 +4,13 @@ import SHA256 from 'crypto-js/sha256';
 function MyPoll({ pollId }) {
     const [response, setResponse] = useState(null);
 
-    const hashedPollId = SHA256(pollId.toString()).toString();
+    //const hashedPollId = SHA256(pollId.toString()).toString();
+    const voteHash = btoa(`mode=vote&poll=${pollId}`).replace(/=*$/, '');
+    const resultsHash =btoa(`mode=results&poll=${pollId}`).replace(/=*$/, '');
 
-    let voteLink = `http://localhost:3000/?mode=vote&poll=${hashedPollId}`;
-    let resultsLink = `http://localhost:3000/?mode=results&poll=${hashedPollId}`;
+    let voteLink = `http://localhost:3000/?${voteHash}`;
+    let resultsLink = `http://localhost:3000/?${resultsHash}`;
+    console.log(atob(voteHash));
 
     const handleSubmit = async (event) => {
         event.preventDefault();
