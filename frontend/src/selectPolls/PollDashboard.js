@@ -121,11 +121,12 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     const handleDisplayMode = async (displayM, polla) => {
         setDisplayMode(displayM);
         await fetchPolls();
-        if (selectedPoll?.id) {
+        setSelectedPoll(null);
+        /*if (selectedPoll?.id) {
             //console.log(selectedPoll);
             const updatedPoll = polla.find((poll) => poll.id === selectedPoll.id);
             setSelectedPoll(updatedPoll || null);
-        }
+        }*/
     }
 
     useEffect(() => {
@@ -327,7 +328,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             {displayMode === 0 && (
                 <p>Select an action to proceed.</p>
             )}
-            {!selectedPoll && displayMode > 1 && displayMode < 4 && (
+            {!selectedPoll && displayMode > 1 && displayMode < 5 && (
                 <p>Please select a poll</p>
             )}
             </div>
