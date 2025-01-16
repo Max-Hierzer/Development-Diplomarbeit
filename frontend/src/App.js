@@ -16,7 +16,7 @@ function App() {
   const [userId, setUserId] = useState(sessionStorage.getItem('userId') || 0);
   const [userName, setUserName] = useState(sessionStorage.getItem('userName') || '');
   const [userRoleId, setUserRoleId] = useState(sessionStorage.getItem('userRoleId') || 0);
-  const [isPublic] = useState(1);
+  const [isPublic] = useState(0);
 
   useEffect(() => {
     // Save login state to sessionStorage whenever it changes
