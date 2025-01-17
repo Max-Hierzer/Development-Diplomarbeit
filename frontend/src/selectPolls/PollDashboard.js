@@ -21,6 +21,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     const [votePolls, setVotePolls] = useState([]);
     const [resultsPolls, setResultsPolls] = useState([]);
     const [userPolls, setUserPolls] = useState([]);
+    const [isPublic, setIsPublic] = useState(null);
 
     const roleId = parseInt(userRoleId);
 
@@ -85,7 +86,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                     user.push(poll);
                 }
                 if (poll.publish_date > current_datetime) edit.push(poll);
-                else if (poll.publish_date <= current_datetime && poll.end_date >= current_datetime) vote.push(poll);
+                else if (poll.publish_date <= current_datetime && poll.end_date >= current_datetime && poll.public === false) vote.push(poll);
                 else results.push(poll);
             })
             setEditPolls(edit);
@@ -96,7 +97,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
         } catch (error) {
             console.error('Error fetching polls:', error);
         }
-    }, [])
+    }, [isPublic])
 
     useEffect(() => {
         fetchPolls();
