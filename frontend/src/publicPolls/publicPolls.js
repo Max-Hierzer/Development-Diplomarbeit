@@ -89,6 +89,11 @@ const PublicPolls = () => {
                         },
                         body: JSON.stringify({
                             answers: selectedAnswers,
+                            userData: {
+                                gender: gender,
+                                age: age,
+                                job: job
+                            }
                         }),
                     });
 
