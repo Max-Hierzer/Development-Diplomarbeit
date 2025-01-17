@@ -6,6 +6,7 @@ module.exports = (sequelize) => {
     class Polls extends Model {
         static associate(models) {  // define relations
             Polls.hasMany(models.Questions, { foreignKey: 'pollId' }); // 1 poll has many questions
+            Polls.hasMany(models.PublicUserData, { foreignKey: 'pollId' });
         }
     }
 
