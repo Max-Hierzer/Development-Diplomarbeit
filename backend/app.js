@@ -12,7 +12,7 @@ const deletionRoutes = require('./routes/deletionRoutes');
 const editRoutes = require('./routes/editRoutes');
 const rolesRoutes = require('./routes/rolesRoutes');
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
-
+require('dotenv').config();
 
 sequelize.sync({ alter: true })
 .then(() => {

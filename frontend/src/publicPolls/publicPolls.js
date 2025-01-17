@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import ReCAPTCHA from 'react-google-recaptcha';
 import './publicPolls.css';
 
-const PublicPolls = (captcha) => {
+const PublicPolls = () => {
     const [showVoting, setShowVoting] = useState(false);
     const [poll, setPoll] = useState([]);
     const [selectedAnswers, setSelectedAnswers] = useState({});
@@ -13,6 +13,7 @@ const PublicPolls = (captcha) => {
     const [formErrors, setFormErrors] = useState({});
     const recaptchaRef = useRef(null);
     const [pollValue, setPollValue] = useState(0);
+
 
     const handleSubmitData = async (event) => {
         event.preventDefault();
@@ -70,7 +71,6 @@ const PublicPolls = (captcha) => {
     }, []);
 
     const handleVoteSubmit = async () => {
-        // Check if the poll has already been submitted
         if (!Cookies.get('pollSubmitted')) {
             // Mark the poll as submitted by setting the cookie
             Cookies.set('pollSubmitted', 'true', {
@@ -84,6 +84,36 @@ const PublicPolls = (captcha) => {
             // or display a success message.
         } else {
             alert('You have already submitted your vote.');
+        }
+        const current_datetime = new Date().toISOString();
+        if (poll.end_date > current_datetime) {
+            if (!(Object.keys(selectedAnswers).length === poll.Questions.length)) {
+                console.log('Please select all questions');
+                return;
+            }
+
+            try {
+                const res = await fetch('http://localhost:3001/api/vote', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        answers: selectedAnswers,
+                    }),
+                });
+
+                if (res.ok) {
+                    console.log("voted successfully")
+                } else {
+                    alert(`User has already voted.`);
+                }
+            } catch (error) {
+                console.error('Error submitting vote:', error);
+            }
+        }
+        else {
+            console.log('Poll has already ended')
         }
     };
 
@@ -170,7 +200,7 @@ const PublicPolls = (captcha) => {
             </div>
 
             <ReCAPTCHA
-            sitekey={captcha.captcha} // Replace with your actual site key
+            sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY} // Replace with your actual site key
             size="invisible"
             ref={recaptchaRef}
             />

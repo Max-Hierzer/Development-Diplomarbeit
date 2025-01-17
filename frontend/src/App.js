@@ -100,7 +100,7 @@ function App() {
         </div>
         ) :
         (
-          <PublicPolls captcha={process.env.REACT_APP_RECAPTCHA_SITE_KEY} />
+          <PublicPolls  />
         )
       }
     </div>
