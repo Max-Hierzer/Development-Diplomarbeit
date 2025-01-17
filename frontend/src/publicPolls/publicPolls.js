@@ -14,7 +14,6 @@ const PublicPolls = () => {
     const recaptchaRef = useRef(null);
     const [pollValue, setPollValue] = useState(0);
 
-
     const handleSubmitData = async (event) => {
         event.preventDefault();
 
@@ -80,35 +79,33 @@ const PublicPolls = () => {
                 SameSite: 'None', // For cross-site access (reCAPTCHA)
             Secure: true, // Only works over HTTPS
             });
+            const current_datetime = new Date().toISOString();
+            if (poll.end_date > current_datetime) {
+                try {
+                    const res = await fetch('http://localhost:3001/api/vote/public', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            answers: selectedAnswers,
+                        }),
+                    });
 
+                    if (res.ok) {
+                        console.log("voted successfully")
+                    }
+                } catch (error) {
+                    console.error('Error submitting vote:', error);
+                }
+            }
+            else {
+                console.log('Poll has already ended')
+            }
         alert('Vote submitted!');
-            // After submitting the vote, you can either submit the vote data to the backend
-            // or display a success message.
+
         } else {
             alert('You have already submitted your vote.');
-        }
-        const current_datetime = new Date().toISOString();
-        if (poll.end_date > current_datetime) {
-            try {
-                const res = await fetch('http://localhost:3001/api/vote', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        answers: selectedAnswers,
-                    }),
-                });
-
-                if (res.ok) {
-                    console.log("voted successfully")
-                }
-            } catch (error) {
-                console.error('Error submitting vote:', error);
-            }
-        }
-        else {
-            console.log('Poll has already ended')
         }
     };
 
