@@ -92,7 +92,8 @@ const PublicPolls = () => {
                             userData: {
                                 gender: gender,
                                 age: age,
-                                job: job
+                                job: job,
+                                pollId: poll.id
                             }
                         }),
                     });
