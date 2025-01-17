@@ -165,13 +165,16 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                     </div>
                 );
             case 3:
-                return (
+                if (selectedPoll.public) return ("")
+                else {
+                    return (
                     <div>
                         <button onClick={showVoters}>
                             Show Voters
                         </button>
                     </div>
-                );
+                    );
+                }
             case 4:
                 return (
                     <div>
@@ -301,6 +304,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                                 answer={answer}
                                 question={question}
                                 showVotersMode={showVotersMode}
+                                isPublic={selectedPoll.public}
                                 />
                             ))}
                             </div>
