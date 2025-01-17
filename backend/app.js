@@ -42,7 +42,7 @@ app.use('/api', rolesRoutes);
 app.post('/verify-recaptcha', async (req, res) => {
     const { token } = req.body;
 
-    const secretKey = '6Ld8frkqAAAAAP-3bPPej1wVh7-b7ZL3DsAYKTqE';
+    const secretKey = process.env.RECAPTCHA_SECRET_KEY;
     const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`;
 
     try {

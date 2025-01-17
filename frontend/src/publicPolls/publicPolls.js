@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import ReCAPTCHA from 'react-google-recaptcha';
 import './publicPolls.css';
 
-const PublicPolls = () => {
+const PublicPolls = (captcha) => {
     const [showVoting, setShowVoting] = useState(false);
     const [poll, setPoll] = useState([]);
     const [selectedAnswers, setSelectedAnswers] = useState({});
@@ -12,6 +12,7 @@ const PublicPolls = () => {
     const [job, setJob] = useState('');
     const [formErrors, setFormErrors] = useState({});
     const recaptchaRef = useRef(null);
+    const [pollValue, setPollValue] = useState(0);
 
     const handleSubmitData = async (event) => {
         event.preventDefault();
@@ -53,6 +54,21 @@ const PublicPolls = () => {
         }
     };
 
+    useEffect(() => {
+        const linkParam = new URLSearchParams(window.location.search);
+        const hashed = linkParam.toString();
+        const paddedVoteHash = hashed.padEnd(hashed.length + (4 - (hashed.length % 4)) % 4, '=');
+        const unhashed = atob(paddedVoteHash);
+        const params = new URLSearchParams(unhashed);
+        const pollValue = params.get('poll');
+
+        if (pollValue) {
+            setPollValue(pollValue);
+        } else {
+            setPollValue(0);
+        }
+    }, []);
+
     const handleVoteSubmit = async () => {
         // Check if the poll has already been submitted
         if (!Cookies.get('pollSubmitted')) {
@@ -73,13 +89,11 @@ const PublicPolls = () => {
 
     useEffect(() => {
         const fetchPoll = async () => {
-            const linkParam = new URLSearchParams(window.location.search);
-            const pollId = linkParam.get('poll');
-            if (pollId) {
+            if (pollValue) {
                 try {
                     const response = await fetch('http://localhost:3001/results/polls');
                     const data = await response.json();
-                    const poll_ = data.find((p) => p.id === Number(pollId));
+                    const poll_ = data.find((p) => p.id === Number(pollValue));
                     if (poll_) {
                         const currentDateTime = new Date().toISOString();
                         if (poll_.publish_date <= currentDateTime && poll_.end_date >= currentDateTime) {
@@ -99,8 +113,6 @@ const PublicPolls = () => {
 
         fetchPoll();
     }, []);
-
-    console.log(poll);
 
     const handleAnswerChange = (questionId, answerId) => {
         setSelectedAnswers((prevAnswers) => ({
@@ -158,7 +170,7 @@ const PublicPolls = () => {
             </div>
 
             <ReCAPTCHA
-            sitekey="6Ld8frkqAAAAAAKm_-7OMjklQf8jSHw442msli5v" // Replace with your actual site key
+            sitekey={captcha.captcha} // Replace with your actual site key
             size="invisible"
             ref={recaptchaRef}
             />
