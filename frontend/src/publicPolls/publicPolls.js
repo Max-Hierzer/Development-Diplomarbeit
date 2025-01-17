@@ -69,6 +69,10 @@ const PublicPolls = () => {
     }, []);
 
     const handleVoteSubmit = async () => {
+        if (!(Object.keys(selectedAnswers).length === poll.Questions.length)) {
+            alert('Please select all questions');
+            return;
+        }
         if (!Cookies.get('pollSubmitted')) {
             // Mark the poll as submitted by setting the cookie
             Cookies.set('pollSubmitted', 'true', {
@@ -77,7 +81,7 @@ const PublicPolls = () => {
             Secure: true, // Only works over HTTPS
             });
 
-            alert('Vote submitted!');
+        alert('Vote submitted!');
             // After submitting the vote, you can either submit the vote data to the backend
             // or display a success message.
         } else {
@@ -85,11 +89,6 @@ const PublicPolls = () => {
         }
         const current_datetime = new Date().toISOString();
         if (poll.end_date > current_datetime) {
-            if (!(Object.keys(selectedAnswers).length === poll.Questions.length)) {
-                console.log('Please select all questions');
-                return;
-            }
-
             try {
                 const res = await fetch('http://localhost:3001/api/vote', {
                     method: 'POST',
@@ -103,8 +102,6 @@ const PublicPolls = () => {
 
                 if (res.ok) {
                     console.log("voted successfully")
-                } else {
-                    alert(`User has already voted.`);
                 }
             } catch (error) {
                 console.error('Error submitting vote:', error);
