@@ -19,6 +19,7 @@ const PublicPolls = () => {
 
         const newFormErrors = {};
         if (!gender) newFormErrors.gender = '*';
+        if (isNaN(age) || parseInt(age) < 0) newFormErrors.age = 'Please enter a valid age.';
         if (!age) newFormErrors.age = '*';
         if (!job) newFormErrors.job = '*';
 
@@ -91,7 +92,7 @@ const PublicPolls = () => {
                             answers: selectedAnswers,
                             userData: {
                                 gender: gender,
-                                age: age,
+                                age: parseInt(age),
                                 job: job,
                                 pollId: poll.id
                             }
