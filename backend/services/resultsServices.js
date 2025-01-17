@@ -1,14 +1,20 @@
-const { UserAnswers, Polls, Questions, Answers } = require('../models/index');
+const { UserAnswers, Polls, Questions, Answers, PublicVotes } = require('../models/index');
 
 // getting results from database
 async function fetchResults() {
     try {
-        const results = await UserAnswers.findAll({             // get data from UserAnswers
-            attributes: ['userId', 'answerId', 'questionId']    // get attributes userId, answerId, questionId
+        const publicAnswers = await PublicVotes.findAll({
+            attributes: ['answerId', 'questionId']
         });
-        return results;
-    }
-    catch (error) {
+
+        const userAnswers = await UserAnswers.findAll({
+            attributes: ['userId', 'answerId', 'questionId'],
+        });
+
+        const combinedResults = [...publicAnswers, ...userAnswers];
+
+        return combinedResults;
+    } catch (error) {
         console.error('Error fetching results in service: ', error);
         throw error;
     }
