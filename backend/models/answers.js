@@ -7,6 +7,7 @@ module.exports = (sequelize) => {
         static associate(models) {                                                      // define relations
             Answers.hasMany(models.UserAnswers, { foreignKey: 'answerId' });            // 1 Answer has many UserAnswers
             Answers.belongsToMany(models.Questions, { through: 'QuestionAnswers' });    // many Answers have many Questions
+            Answers.hasMany(models.PublicVotes, { foreignKey: 'answerId' });
         }
     }
     // attributes of Answers
