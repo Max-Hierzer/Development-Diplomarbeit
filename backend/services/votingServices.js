@@ -1,5 +1,5 @@
 // services/voteService.js
-const { UserAnswers, Users, Answers, Questions } = require('../models/index');
+const { UserAnswers, Users, Answers, Questions, PublicVotes } = require('../models/index');
 
 // writing vote in UserAnswers
 async function submitVote(userId, answers) {
@@ -26,4 +26,16 @@ async function submitVote(userId, answers) {
     }
 }
 
-module.exports = { submitVote };
+async function submitPublicVote(answers) {
+    try {
+        const publicAnswers = Object.entries(answers).map(([questionId, answerId]) =>
+        PublicVotes.create({ answerId, questionId })
+        );
+        return publicAnswers;
+    } catch (error) {
+        console.error('Error creating vote in service:', error);
+        throw error;
+    }
+}
+
+module.exports = { submitVote, submitPublicVote };
