@@ -29,7 +29,6 @@ const PublicPolls = () => {
             // Trigger reCAPTCHA validation before proceeding
             const token = await recaptchaRef.current.executeAsync();
             recaptchaRef.current.reset(); // Reset CAPTCHA after execution
-
             if (token) {
                 // Send the CAPTCHA token to the backend for validation
                 const response = await fetch('http://localhost:3001/verify-recaptcha', {
@@ -62,7 +61,6 @@ const PublicPolls = () => {
         const unhashed = atob(paddedVoteHash);
         const params = new URLSearchParams(unhashed);
         const pollValue = params.get('poll');
-
         if (pollValue) {
             setPollValue(pollValue);
         } else {
@@ -142,7 +140,7 @@ const PublicPolls = () => {
         };
 
         fetchPoll();
-    }, []);
+    }, [pollValue]);
 
     const handleAnswerChange = (questionId, answerId) => {
         setSelectedAnswers((prevAnswers) => ({
