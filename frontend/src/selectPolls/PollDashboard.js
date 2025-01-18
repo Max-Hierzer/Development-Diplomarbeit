@@ -29,6 +29,21 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
         setSelectedAnswers({});
     };
 
+    const handleExportPoll = async () => {
+        try {
+            const response = await fetch(`http://localhost:3001/api/export/${selectedPoll.id}`);
+            if (response.ok) {
+            } else {
+                alert('Error exporting poll')
+            }
+        } catch (error) {
+            console.error('Error exporting poll:', error);
+            alert('Error exporting poll');
+        }
+    };
+
+
+
     const handleVote = async () => {
         const current_datetime = new Date().toISOString();
         if (selectedPoll.end_date > current_datetime) {
@@ -171,6 +186,9 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                     <div>
                         <button onClick={showVoters}>
                             Show Voters
+                        </button>
+                        <button onClick={handleExportPoll}>
+                            Export Poll
                         </button>
                     </div>
                     );
