@@ -5,7 +5,6 @@ const { Parser } = require('json2csv');
 // Controller zum Exportieren der Poll-Daten als CSV
 exports.exportPollResults = async (req, res) => {
     const { pollId } = req.params;
-    console.log('Request received for poll ID:', pollId);
 
     try {
         const poll = await Polls.findByPk(pollId);
@@ -13,8 +12,6 @@ exports.exportPollResults = async (req, res) => {
         if (!poll) {
             return res.status(404).json({ success: false, message: 'Poll not found' });
         }
-
-        console.log('Poll found:', poll);
 
         // CSV aus den Poll-Daten
         const pollData = [
