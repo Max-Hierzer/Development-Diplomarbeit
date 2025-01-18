@@ -11,7 +11,7 @@ const votingRoutes = require('./routes/votingRoutes');
 const deletionRoutes = require('./routes/deletionRoutes');
 const editRoutes = require('./routes/editRoutes');
 const rolesRoutes = require('./routes/rolesRoutes');
-const csvExport = require('./routes/csvExportRoutes');
+const csvExportRoutes = require('./routes/csvExportRoutes');
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 require('dotenv').config();
 
@@ -39,7 +39,7 @@ app.use('/api', votingRoutes);
 app.use('/api', deletionRoutes);
 app.use('/api', editRoutes);
 app.use('/api', rolesRoutes);
-app.use('/api', csvExport);
+app.use('/api', csvExportRoutes);
 
 app.post('/verify-recaptcha', async (req, res) => {
     const { token } = req.body;

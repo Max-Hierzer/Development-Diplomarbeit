@@ -33,8 +33,17 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
         try {
             const response = await fetch(`http://localhost:3001/api/export/${selectedPoll.id}`);
             if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${selectedPoll.name}_poll.csv`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
             } else {
-                alert('Error exporting poll')
+                console.log(response)
+                alert('Error exporting poll');
             }
         } catch (error) {
             console.error('Error exporting poll:', error);

@@ -6,4 +6,3 @@ const router = express.Router();
 router.get('/export/:pollId', exportPollResults);
 
 module.exports = router;
-
