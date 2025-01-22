@@ -9,6 +9,7 @@ import Register from '../usermanagment/Register';
 import CreatePoll from '../createPolls/CreatePolls';
 import MyPoll from '../myPolls/MyPolls'
 import SHA256 from 'crypto-js/sha256';
+import Cookies from 'js-cookie';
 
 const PollDashboard = ({ userId, userName, userRoleId }) => {
     const [polls, setPolls] = useState([]);
@@ -23,7 +24,6 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     const [userPolls, setUserPolls] = useState([]);
     const [isPublic, setIsPublic] = useState(null);
     const [isAnonymous, setIsAnonymous] = useState(null);
-
 
     const roleId = parseInt(userRoleId);
 
@@ -93,38 +93,45 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     };
 
     const handleAnonymousVote = async () => {
-        const current_datetime = new Date().toISOString();
-        if (selectedPoll.end_date > current_datetime) {
-            if (!(Object.keys(selectedAnswers).length === selectedPoll.Questions.length)) {
-                setResponse('Please select all questions');
-                return;
-            }
-
-            try {
-                const res = await fetch('http://localhost:3001/api/vote/anonymous', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        answers: selectedAnswers,
-                    }),
-                });
-
-                if (res.ok) {
-                    setResponse(`Voted successfully.`);
-                    resetAnswers();
-                } else {
-                    alert(`User has already voted.`);
-                    resetAnswers();
-                }
-            } catch (error) {
-                console.error('Error submitting vote:', error);
-                setResponse('Error submitting vote');
-            }
+        if (!(Object.keys(selectedAnswers).length === selectedPoll.Questions.length)) {
+            alert('Please select all questions');
+            return;
         }
-        else {
-            setResponse('Poll has already ended')
+        console.log(typeof(selectedPoll.end_date))
+        if (!Cookies.get('pollSubmitted')) {
+            // Mark the poll as submitted by setting the cookie
+            Cookies.set('pollSubmitted', 'true', {
+                expires: new Date(selectedPoll.end_date), // Expire in 1 day
+                SameSite: 'None', // For cross-site access (reCAPTCHA)
+            Secure: true, // Only works over HTTPS
+            });
+            const current_datetime = new Date().toISOString();
+            if (selectedPoll.end_date > current_datetime) {
+                try {
+                    const res = await fetch('http://localhost:3001/api/vote/anonymous', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            answers: selectedAnswers,
+                        }),
+                    });
+
+                    if (res.ok) {
+                        console.log("voted successfully")
+                    }
+                } catch (error) {
+                    console.error('Error submitting vote:', error);
+                }
+            }
+            else {
+                console.log('Poll has already ended')
+            }
+            alert('Vote submitted!');
+
+        } else {
+            alert('You have already submitted your vote.');
         }
     };
 

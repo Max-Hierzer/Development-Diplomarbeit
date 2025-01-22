@@ -76,7 +76,7 @@ const PublicPolls = () => {
         if (!Cookies.get('pollSubmitted')) {
             // Mark the poll as submitted by setting the cookie
             Cookies.set('pollSubmitted', 'true', {
-                expires: 1, // Expire in 1 day
+                expires: new Date(poll.end_date), // Expire in 1 day
                 SameSite: 'None', // For cross-site access (reCAPTCHA)
             Secure: true, // Only works over HTTPS
             });
