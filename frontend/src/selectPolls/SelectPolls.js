@@ -5,13 +5,13 @@ const SelectPolls = ({ polls, handleSetSelectedPoll, selectedPoll, mode }) => {
     const showHeading = () => {
         switch (mode) {
             case 1:
-                return (<h2>Edit</h2>);
+                return (<h1>Edit</h1>);
             case 2:
-                return (<h2>Vote</h2>);
+                return (<h1>Vote</h1>);
             case 3:
-                return (<h2>Results</h2>);
+                return (<h1>Results</h1>);
             case 4:
-                return (<h2>My Polls</h2>);
+                return (<h1>My Polls</h1>);
             default:
                 return ("");
         }
@@ -19,6 +19,7 @@ const SelectPolls = ({ polls, handleSetSelectedPoll, selectedPoll, mode }) => {
 
     return (
         <div>
+        <br />
         {showHeading()}
         <br />
         <select

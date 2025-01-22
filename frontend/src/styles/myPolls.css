@@ -1,0 +1,12 @@
+.pollname {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.linkhead {
+  margin-top: 10px;
+  margin-bottom: -5px;
+  text-align: left;
+  padding: 3px 10px;
+  background-color: #ccc;
+}

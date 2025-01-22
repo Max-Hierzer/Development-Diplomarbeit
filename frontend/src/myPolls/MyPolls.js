@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import '../styles/myPolls.css';
 
-function MyPoll({ pollId, isPublic, isAnonymous}) {
+function MyPoll({ pollId, pollName, isPublic, isAnonymous}) {
     const [response, setResponse] = useState(null);
     const [copiedText, setCopiedText] = useState(null);
 
@@ -29,19 +30,17 @@ function MyPoll({ pollId, isPublic, isAnonymous}) {
 
     return (
         <div>
-            <h3>Vote Link:</h3>
-            <button onClick={() => copyClipboard(1)}>
-                {copiedText === 1 ? "Copied!" : "Copy Link"}
-            </button>
-            <br />
-            <br />
-            <h3>Results Link:</h3>
-            <button onClick={() => copyClipboard(0)}>
-                {copiedText === 0 ? "Copied!" : "Copy Link"}
-            </button>
-            <br />
-            <p>{response}</p>
-            <br />
+          <h2 className="pollname">{pollName}</h2>
+          <h3 className="linkhead">Vote Link:</h3>
+          <button onClick={() => copyClipboard(1)}>
+            {copiedText === 1 ? 'Copied!' : 'Copy Link'}
+          </button>
+          <br />
+          <br />
+          <h3 className="linkhead">Results Link:</h3>
+          <button onClick={() => copyClipboard(0)}>
+            {copiedText === 0 ? 'Copied!' : 'Copy Link'}
+          </button>
         </div>
     );
 }
