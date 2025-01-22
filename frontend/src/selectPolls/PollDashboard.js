@@ -89,7 +89,8 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                     user.push(poll);
                 }
                 if (poll.publish_date > current_datetime) edit.push(poll);
-                else if (poll.publish_date <= current_datetime && poll.end_date >= current_datetime) vote.push(poll);
+                else if (poll.publish_date <= current_datetime && poll.end_date >= current_datetime && poll.public === false) vote.push(poll);
+                else if (poll.public === true && poll.end_date < current_datetime) results.push(poll);
                 else results.push(poll);
             })
             setEditPolls(edit);
@@ -173,13 +174,21 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                     </div>
                 );
             case 3:
-                return (
+                if (selectedPoll.public || selectedPoll.anonymous) return (
+                    <button onClick={handleExportPoll}>
+                        Export Poll
+                    </button>
+                )
+                else {
+                    return (
                     <div>
                         <button onClick={showVoters}>
                             Show Voters
                         </button>
                     </div>
+                
                 );
+            }
             case 4:
                 return (
                     <div>
