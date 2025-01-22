@@ -3,17 +3,11 @@ const { UserAnswers, Polls, Questions, Answers, PublicVotes } = require('../mode
 // getting results from database
 async function fetchResults() {
     try {
-        const publicAnswers = await PublicVotes.findAll({
-            attributes: ['answerId', 'questionId']
-        });
-
         const userAnswers = await UserAnswers.findAll({
             attributes: ['userId', 'answerId', 'questionId'],
         });
 
-        const combinedResults = [...publicAnswers, ...userAnswers];
-
-        return combinedResults;
+        return userAnswers;
     } catch (error) {
         console.error('Error fetching results in service: ', error);
         throw error;

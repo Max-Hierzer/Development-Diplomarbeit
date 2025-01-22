@@ -37,6 +37,7 @@ const Results = ({ answer, question, showVotersMode, isPublic }) => {
     const showResults = (results, question, answer) => {
         let counter = 0;    // count how many have voted for option
         let voters = [];    // userIds who have voted for this question and answer
+        console.log(results)
         results.forEach((r) => {
             if (r.questionId === question.id && r.answerId === answer.id) {
                 counter++;
