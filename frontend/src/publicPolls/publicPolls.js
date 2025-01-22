@@ -152,7 +152,8 @@ const PublicPolls = () => {
 
     return (
         <div className="publicPoll">
-        {!showVoting ? (
+        {poll ?
+        !showVoting ? (
             <div className="publicData">
             <h1>Please fill out your data</h1>
             <form>
@@ -235,7 +236,7 @@ const PublicPolls = () => {
                 ))}
                 <button onClick={handleVoteSubmit}>Submit Vote</button>
                 </div>
-        )}
+        ) : "Poll not available"}
         </div>
     );
 };
