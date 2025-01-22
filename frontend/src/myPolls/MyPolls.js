@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function MyPoll({ pollId, isPublic }) {
+function MyPoll({ pollId, isPublic, isAnonymous}) {
     const [response, setResponse] = useState(null);
 
 <<<<<<< HEAD
