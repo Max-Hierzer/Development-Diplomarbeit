@@ -1,5 +1,5 @@
 // services/voteService.js
-const { UserAnswers, Users, Answers, Questions, PublicVotes, PublicUserData } = require('../models/index');
+const { UserAnswers, Users, Answers, Questions, PublicUserData } = require('../models/index');
 
 // writing vote in UserAnswers
 async function submitVote(userId, answers) {
