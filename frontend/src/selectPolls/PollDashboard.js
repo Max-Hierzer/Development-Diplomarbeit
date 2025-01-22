@@ -24,7 +24,6 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     const [isPublic, setIsPublic] = useState(null);
     const [isAnonymous, setIsAnonymous] = useState(null);
 
-    console.log(isAnonymous)
 
     const roleId = parseInt(userRoleId);
 
@@ -221,24 +220,13 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             case 1:
                 break;
             case 2:
-                if (isAnonymous) {
-                    return (
-                        <div>
-                        <button onClick={handleAnonymousVote}>
-                        Submit Vote
+                return (
+                    <div>
+                        <button onClick={isAnonymous === "true" ? handleAnonymousVote : handleVote}>
+                            Submit Vote
                         </button>
-                        </div>
-                    );
-                }
-                else {
-                    return (
-                        <div>
-                            <button onClick={handleVote}>
-                                Submit Vote
-                            </button>
-                        </div>
-                    );
-                }
+                    </div>
+                );
             case 3:
                 if (selectedPoll.public) return (
                     <button onClick={handleExportPoll}>

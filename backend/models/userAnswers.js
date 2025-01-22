@@ -19,14 +19,9 @@ module.exports = (sequelize) => {
 
         },
 
-        { sequelize, modelName: 'UserAnswers', indexes: [
-            {
-                unique: true,
-                fields: ['answerId', 'questionId']  // Composite unique constraint
-            }
-        ], },
+        { sequelize, modelName: 'UserAnswers' },
 
     );
-    UserAnswers.removeAttribute("id");  // remove primary key id which is not needed with composite constraint [userId, answerId, questionId]
+
     return UserAnswers;
 };
