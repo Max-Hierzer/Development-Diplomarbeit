@@ -26,6 +26,17 @@ async function submitVote(userId, answers) {
     }
 }
 
+async function submitAnonymousVote(answers) {
+    try {
+        const userAnswers = Object.entries(answers).map(([questionId, answerId]) =>
+        UserAnswers.create({ userId, answerId, questionId })
+        return userAnswers;
+    } catch (error) {
+        console.error('Error creating vote in service:', error);
+        throw error;
+    }
+}
+
 async function submitPublicVote(answers, userData) {
     try {
         const publicUserData = await PublicUserData.create({
@@ -45,4 +56,4 @@ async function submitPublicVote(answers, userData) {
     }
 }
 
-module.exports = { submitVote, submitPublicVote };
+module.exports = { submitVote, submitPublicVote, submitAnonymousVote };
