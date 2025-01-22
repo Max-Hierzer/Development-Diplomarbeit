@@ -13,7 +13,7 @@ module.exports = (sequelize) => {
     // define attributes
     UserAnswers.init(
         {
-            userId: { type: DataTypes.INTEGER, allowNull: false },
+            userId: { type: DataTypes.INTEGER, allowNull: true },
             answerId: { type: DataTypes.INTEGER, allowNull: false },
             questionId: { type: DataTypes.INTEGER, allowNull: false },
 
@@ -22,7 +22,7 @@ module.exports = (sequelize) => {
         { sequelize, modelName: 'UserAnswers', indexes: [
             {
                 unique: true,
-                fields: ['userId', 'answerId', 'questionId']  // Composite unique constraint
+                fields: ['answerId', 'questionId']  // Composite unique constraint
             }
         ], },
 

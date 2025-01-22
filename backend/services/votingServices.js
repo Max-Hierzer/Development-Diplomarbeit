@@ -36,7 +36,7 @@ async function submitPublicVote(answers, userData) {
         });
 
         const publicAnswers = Object.entries(answers).map(([questionId, answerId]) =>
-        PublicVotes.create({ answerId, questionId })
+        UserAnswers.create({ answerId, questionId })
         );
         return publicAnswers;
     } catch (error) {
