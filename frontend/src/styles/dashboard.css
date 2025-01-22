@@ -20,8 +20,10 @@
 }
 
 .poll-content {
-    flex: 1; /* Fill available space */
-    overflow-y: auto; /* Enable vertical scrolling */
+    flex: none; /* Prevent flexbox from altering the size */
+    min-height: 400px; /* Set a fixed minimum height */
+    height: auto; /* Allow the container to grow dynamically */
+    overflow: visible; /* Remove internal scrolling */
     padding: 1rem;
     margin: 1rem;
     background-color: #f9f9f9;
