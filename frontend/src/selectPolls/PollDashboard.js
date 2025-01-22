@@ -24,6 +24,8 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     const [isPublic, setIsPublic] = useState(null);
     const [isAnonymous, setIsAnonymous] = useState(null);
 
+    console.log(isAnonymous)
+
     const roleId = parseInt(userRoleId);
 
     const resetAnswers = () => {
@@ -76,6 +78,42 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
 
                 if (res.ok) {
                     setResponse(`User ID: ${userId} voted successfully.`);
+                    resetAnswers();
+                } else {
+                    alert(`User has already voted.`);
+                    resetAnswers();
+                }
+            } catch (error) {
+                console.error('Error submitting vote:', error);
+                setResponse('Error submitting vote');
+            }
+        }
+        else {
+            setResponse('Poll has already ended')
+        }
+    };
+
+    const handleAnonymousVote = async () => {
+        const current_datetime = new Date().toISOString();
+        if (selectedPoll.end_date > current_datetime) {
+            if (!(Object.keys(selectedAnswers).length === selectedPoll.Questions.length)) {
+                setResponse('Please select all questions');
+                return;
+            }
+
+            try {
+                const res = await fetch('http://localhost:3001/api/vote/anonymous', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        answers: selectedAnswers,
+                    }),
+                });
+
+                if (res.ok) {
+                    setResponse(`Voted successfully.`);
                     resetAnswers();
                 } else {
                     alert(`User has already voted.`);
@@ -183,13 +221,24 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             case 1:
                 break;
             case 2:
-                return (
-                    <div>
-                        <button onClick={handleVote}>
-                            Submit Vote
+                if (isAnonymous) {
+                    return (
+                        <div>
+                        <button onClick={handleAnonymousVote}>
+                        Submit Vote
                         </button>
-                    </div>
-                );
+                        </div>
+                    );
+                }
+                else {
+                    return (
+                        <div>
+                            <button onClick={handleVote}>
+                                Submit Vote
+                            </button>
+                        </div>
+                    );
+                }
             case 3:
                 if (selectedPoll.public) return (
                     <button onClick={handleExportPoll}>

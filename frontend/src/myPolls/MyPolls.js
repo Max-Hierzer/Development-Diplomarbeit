@@ -3,8 +3,13 @@ import React, { useState } from 'react';
 function MyPoll({ pollId, isPublic }) {
     const [response, setResponse] = useState(null);
 
+<<<<<<< HEAD
     const voteHash = encodeURIComponent(btoa(`public=${isPublic}&mode=vote&poll=${pollId}`));
     const resultsHash = encodeURIComponent(btoa(`public=${isPublic}&mode=results&poll=${pollId}`));
+=======
+    const voteHash = btoa(`public=${isPublic}&mode=vote&poll=${pollId}&anonymous=${isAnonymous}`).replace(/=*$/, '');
+    const resultsHash = btoa(`public=${isPublic}&mode=results&poll=${pollId}&anonymous=${isAnonymous}`).replace(/=*$/, '');
+>>>>>>> e80da67e (added anonymous to link and implemented anonymous voting)
 
     let voteLink = `http://localhost:3000/?${voteHash}`;
     let resultsLink = `http://localhost:3000/?${resultsHash}`;

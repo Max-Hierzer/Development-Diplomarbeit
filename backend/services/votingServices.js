@@ -17,8 +17,8 @@ async function submitVote(userId, answers) {
             }
         }
         const userAnswers = Object.entries(answers).map(([questionId, answerId]) =>     // ONLY WORKS FOR SINGLE CHOICE!!! maps all questions with given answer
-        UserAnswers.create({ userId, answerId, questionId })                            // creates entry in UserAnswers with attributes userId, answerId, questionId
-        );
+        UserAnswers.create({ userId, answerId, questionId }));                  // creates entry in UserAnswers with attributes userId, answerId, questionId
+
         return userAnswers;
     } catch (error) {
         console.error('Error creating vote in service:', error);
@@ -29,7 +29,7 @@ async function submitVote(userId, answers) {
 async function submitAnonymousVote(answers) {
     try {
         const userAnswers = Object.entries(answers).map(([questionId, answerId]) =>
-        UserAnswers.create({ userId, answerId, questionId })
+        UserAnswers.create({ userId, answerId, questionId }));
         return userAnswers;
     } catch (error) {
         console.error('Error creating vote in service:', error);
