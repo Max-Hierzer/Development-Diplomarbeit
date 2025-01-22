@@ -22,6 +22,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     const [resultsPolls, setResultsPolls] = useState([]);
     const [userPolls, setUserPolls] = useState([]);
     const [isPublic, setIsPublic] = useState(null);
+    const [isAnonymous, setIsAnonymous] = useState(null);
 
     const roleId = parseInt(userRoleId);
 
@@ -152,6 +153,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             const params = new URLSearchParams(unhashed);
             const mode = params.get('mode');
             const pollId = params.get('poll');
+            const anonymous = params.get('anonymous');
             if (pollId && mode && displayMode === 0) {
                 let selected = null;
                 if (mode === 'vote') {
@@ -159,6 +161,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                     if (selected) {
                         setSelectedPoll(selected);
                         setDisplayMode(2);
+                        setIsAnonymous(anonymous);
                     }
                 } else if (mode === 'results') {
                     selected = resultsPolls.find((poll) => poll.id.toString() === pollId);
