@@ -188,7 +188,11 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                     </div>
                 );
             case 3:
-                if (selectedPoll.public) return ("")
+                if (selectedPoll.public) return (
+                    <button onClick={handleExportPoll}>
+                        Export Poll
+                    </button>
+                )
                 else {
                     return (
                     <div>
