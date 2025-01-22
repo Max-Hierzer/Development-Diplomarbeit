@@ -15,17 +15,18 @@ function MyPoll({ pollId, isPublic, isAnonymous}) {
     };
 
 
-
     return (
         <div>
             <h3>Vote Link:</h3>
             <br />
             <h5>{voteLink}</h5>
+            <button onClick={() => navigator.clipboard.writeText(voteLink)}>Copy</button>
             <br />
             <br />
             <h3>Results Link:</h3>
             <br />
             <h5>{resultsLink}</h5>
+            <button onClick={() => navigator.clipboard.writeText(resultsLink)}>Copy</button>
             <br />
             <p>{response}</p>
             <br />
