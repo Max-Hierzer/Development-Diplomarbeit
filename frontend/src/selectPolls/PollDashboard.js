@@ -146,27 +146,26 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     }
 
     useEffect(() => {
-        const linkParam = new URLSearchParams(window.location.search);
-        const hashed = linkParam.toString();
-        const paddedVoteHash = hashed.padEnd(hashed.length + (4 - (hashed.length % 4)) % 4, '=');
-        const unhashed = atob(paddedVoteHash);
-        const params = new URLSearchParams(unhashed);
-        const mode = params.get('mode');
-        const pollId = params.get('poll');
-
-        if (pollId && mode && displayMode === 0) {
-            let selected = null;
-            if (mode === 'vote') {
-                selected = votePolls.find((poll) => poll.id.toString() === pollId.toString());
-                if (selected) {
-                    setSelectedPoll(selected);
-                    setDisplayMode(2);
-                }
-            } else if (mode === 'results') {
-                selected = resultsPolls.find((poll) => poll.id.toString() === pollId);
-                if (selected) {
-                    setSelectedPoll(selected);
-                    setDisplayMode(3);
+        const linkParam = window.location.search.substring(1);
+        if (linkParam) {
+            const unhashed = atob(decodeURIComponent(linkParam));
+            const params = new URLSearchParams(unhashed);
+            const mode = params.get('mode');
+            const pollId = params.get('poll');
+            if (pollId && mode && displayMode === 0) {
+                let selected = null;
+                if (mode === 'vote') {
+                    selected = votePolls.find((poll) => poll.id.toString() === pollId.toString());
+                    if (selected) {
+                        setSelectedPoll(selected);
+                        setDisplayMode(2);
+                    }
+                } else if (mode === 'results') {
+                    selected = resultsPolls.find((poll) => poll.id.toString() === pollId);
+                    if (selected) {
+                        setSelectedPoll(selected);
+                        setDisplayMode(3);
+                    }
                 }
             }
         }

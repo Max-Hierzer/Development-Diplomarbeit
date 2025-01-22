@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 function MyPoll({ pollId, isPublic }) {
     const [response, setResponse] = useState(null);
 
-    const voteHash = btoa(`public=${isPublic}&mode=vote&poll=${pollId}`).replace(/=*$/, '');
-    const resultsHash = btoa(`public=${isPublic}&mode=results&poll=${pollId}`).replace(/=*$/, '');
+    const voteHash = encodeURIComponent(btoa(`public=${isPublic}&mode=vote&poll=${pollId}`));
+    const resultsHash = encodeURIComponent(btoa(`public=${isPublic}&mode=results&poll=${pollId}`));
 
     let voteLink = `http://localhost:3000/?${voteHash}`;
     let resultsLink = `http://localhost:3000/?${resultsHash}`;
-    console.log(atob(voteHash));
+    console.log(atob(decodeURIComponent(voteHash)));
 
     const handleSubmit = async (event) => {
         event.preventDefault();

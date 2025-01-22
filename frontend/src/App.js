@@ -43,17 +43,16 @@ function App() {
 
 
   useEffect(() => {
-    const linkParam = new URLSearchParams(window.location.search);
-    const hashed = linkParam.toString();
-    const paddedVoteHash = hashed.padEnd(hashed.length + (4 - (hashed.length % 4)) % 4, '=');
-    const unhashed = atob(paddedVoteHash);
-    const params = new URLSearchParams(unhashed);
-    const publicValue = params.get('public');
-
-    if (publicValue === "true") {
-      setIsPublic(1);
-    } else {
-      setIsPublic(0);
+    const linkParam = window.location.search.substring(1);
+    if (linkParam) {
+      const unhashed = atob(decodeURIComponent(linkParam));
+      const params = new URLSearchParams(unhashed);
+      const publicValue = params.get('public');
+      if (publicValue === "true") {
+        setIsPublic(1);
+      } else {
+        setIsPublic(0);
+      }
     }
     }, []);
 
