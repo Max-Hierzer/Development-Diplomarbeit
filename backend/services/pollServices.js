@@ -1,18 +1,24 @@
 const { Polls: Poll } = require('../models');
 const { Questions: Question } = require('../models');
+const { QuestionTypes: QuestionType } = require('../models');
 const { Answers: Answer } = require('../models');
 
-async function createPoll(poll, questions) {
+async function createPoll(poll, questions, questionTypes) {
     try {
         const pollPublishDate = new Date(poll.publishDate);
         const pollEndDate = new Date(poll.endDate);
         const createdPoll = await Poll.create({ name: poll.name, description: poll.description, user_id: poll.userId, public: poll.public, anonymous: poll.anon, publish_date: pollPublishDate, end_date: pollEndDate });
 
         const createdQuestions = [];
-        for (const question of questions) {
+        for (const [index, question] of questions.entries()) {
+            const questionType = await QuestionType.findOne({
+                where: { name: questionTypes[index] },
+            });
+
             const createdQuestion = await Question.create({
                 name: question.name,
                 pollId: createdPoll.id,
+                typeId: questionType.id,
             });
 
             const createdAnswers = [];
