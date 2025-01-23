@@ -326,11 +326,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                     </>
             )}
             {displayMode === 4 && selectedPoll && (
-<<<<<<< HEAD
-                <MyPoll pollId={selectedPoll.id}/>
-=======
                 <MyPoll pollId={selectedPoll.id} pollName={selectedPoll.name} isPublic={selectedPoll.public} isAnonymous={selectedPoll.anonymous}/>
->>>>>>> fcf63e26 (styled myPolls)
             )}
             {displayMode === 5 && (
                 <Register />

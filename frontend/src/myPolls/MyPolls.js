@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
-<<<<<<< HEAD
-import SHA256 from 'crypto-js/sha256';
-
-function MyPoll({ pollId }) {
-=======
 import '../styles/myPolls.css';
 
 function MyPoll({ pollId, pollName, isPublic, isAnonymous}) {
->>>>>>> fcf63e26 (styled myPolls)
     const [response, setResponse] = useState(null);
 
     //const hashedPollId = SHA256(pollId.toString()).toString();
@@ -26,18 +20,6 @@ function MyPoll({ pollId, pollName, isPublic, isAnonymous}) {
 
     return (
         <div>
-<<<<<<< HEAD
-            <h3>Vote Link:</h3>
-            <br />
-            <h5>{voteLink}</h5>
-            <br />
-            <br />
-            <h3>Results Link:</h3>
-            <br />
-            <h5>{resultsLink}</h5>
-            <p>{response}</p>
-            <br />
-=======
           <h2 className="pollname">{pollName}</h2>
           <h3 className="linkhead">Vote Link:</h3>
           <button onClick={() => copyClipboard(1)}>
@@ -49,7 +31,6 @@ function MyPoll({ pollId, pollName, isPublic, isAnonymous}) {
           <button onClick={() => copyClipboard(0)}>
             {copiedText === 0 ? 'Copied!' : 'Copy Link'}
           </button>
->>>>>>> fcf63e26 (styled myPolls)
         </div>
     );
 }
