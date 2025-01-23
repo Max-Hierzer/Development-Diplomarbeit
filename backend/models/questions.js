@@ -14,7 +14,8 @@ module.exports = (sequelize) => {
     Questions.init(
         {
             name: { type: DataTypes.STRING, allowNull: false },
-            pollId: { type: DataTypes.INTEGER, allowNull: false, references: { model: 'Polls' , key: 'id' } }
+            pollId: { type: DataTypes.INTEGER, allowNull: false, references: { model: 'Polls', key: 'id' } },
+            typeId: { type: DataTypes.INTEGER, allowNull: false, references: { model: 'QuestionTypes', key: 'id' } }
         },
         { sequelize, modelName: 'Questions' }
     );
