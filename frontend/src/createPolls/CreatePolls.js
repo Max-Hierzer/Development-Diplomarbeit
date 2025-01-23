@@ -27,31 +27,74 @@ function CreatePoll() {
             questions,
         };
 
-        console.log(JSON.stringify(payload, null, 2));
+        //console.log(JSON.stringify(payload, null, 2));
 
         try {
-            const res = await fetch('http://localhost:3001/api/poll', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),
-            });
+            let okToSend = 1;
 
-            const data = await res.json();
+            if (poll === '') {
+                okToSend = 0;
+                setResponse(`Poll name required`);
+            }
+            if (publishDate === '') {
+                okToSend = 0;
+                setResponse(`Publish date required`);
+            }
+            if (endDate === '') {
+                okToSend = 0;
+                setResponse(`End date required`);
+            }
+            for (const question of questions) {
+                if (!okToSend) {
+                    break;
+                }
+                if (question.name === '') {
+                    okToSend = 0;
+                    setResponse(`Question text required`);
+                    break;
+                }
+                const seenAnswers = new Set();
+                for (const answer of question.answers) {
+                    if (!okToSend) {
+                        break;
+                    }
+                    if (answer.name === '') {
+                        okToSend = 0;
+                        setResponse(`Answer text in Question "${question.name}" required`);
+                        break;
+                    }
+                    if (seenAnswers.has(answer.name)) {
+                        okToSend = 0;
+                        setResponse(`Duplicate Answer "${answer.name}" in Question "${question.name}"`);
+                        break;
+                    }
+                    seenAnswers.add(answer.name);
+                }
+            }
+            if (okToSend) {
+                const res = await fetch('http://localhost:3001/api/poll', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
 
-            if (res.ok) {
-                setResponse(`Poll created successfully`);
-                setPoll('');
-                setQuestions([{ name: '', answers: [{ name: '' }, { name: '' }] }]);
-                setDescription('');
-                setPublishDate('');
-                setEndDate('');
-                setResetKey(resetKey + 1);
-                setSelectedPublic('No');
-                setSelectedAnon('Yes');
-            } else {
-                setResponse(`Error: ${data.error || 'Something went wrong'}`);
+                const data = await res.json();
+
+                if (res.ok) {
+                    setResponse(`Poll created successfully`);
+                    setPoll('');
+                    setQuestions([{ name: '', answers: [{ name: '' }, { name: '' }] }]);
+                    setDescription('');
+                    setPublishDate('');
+                    setEndDate('');
+                    setResetKey(resetKey + 1);
+                    setSelectedPublic('No');
+                    setSelectedAnon('Yes');
+                } else {
+                    setResponse(`Error: ${data.error || 'Something went wrong'}`);
+                }
             }
         } catch (error) {
             console.error('Error submitting poll:', error);
