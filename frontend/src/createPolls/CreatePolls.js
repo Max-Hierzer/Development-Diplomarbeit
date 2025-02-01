@@ -11,7 +11,7 @@ function CreatePoll() {
     const [publishDate, setPublishDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [resetKey, setResetKey] = useState(0);
-    const [questions, setQuestions] = useState([{ name: '', answers: [{ name: '' }, { name: '' }] }]);
+    const [questions, setQuestions] = useState([{ name: '', type: 'Single Choice', answers: [{ name: '' }, { name: '' }] }]);
     const [response, setResponse] = useState(null);
     const [showLink, setShowLink] = useState(false);
     const [selectedPublic, setSelectedPublic] = useState('No');
@@ -25,7 +25,11 @@ function CreatePoll() {
 
         const payload = {
             poll: { name: poll, description: description, userId: sessionStorage.getItem('userId'), public: isPublic, anon: isAnon, publishDate: publishDate, endDate: endDate},
+<<<<<<< HEAD
             questions,
+=======
+            questions
+>>>>>>> e166f719 (improved question type selection)
         };
 
         console.log(JSON.stringify(payload, null, 2));
@@ -58,11 +62,16 @@ function CreatePoll() {
             if (res.ok) {
                 setResponse(`Poll created successfully`);
                 setPoll('');
-                setQuestions([{ name: '', answers: [{ name: '' }, { name: '' }] }]);
+                setQuestions([{ name: '', type: 'Single Choice', answers: [{ name: '' }, { name: '' }] }]);
                 setDescription('');
                 setPublishDate('');
                 setEndDate('');
                 setResetKey(resetKey + 1);
+<<<<<<< HEAD
+=======
+                setSelectedPublic('No');
+                setSelectedAnon('Yes');
+>>>>>>> e166f719 (improved question type selection)
             } else {
                 setResponse(`Error: ${data.error || 'Something went wrong'}`);
             }
@@ -74,7 +83,7 @@ function CreatePoll() {
 
     const addQuestion = () => {
         const newQuestions = [...questions];
-        newQuestions.push({ name: '', answers: [{ name: '' }, { name: '' }] });
+        newQuestions.push({ name: '', type: 'Single Choice', answers: [{ name: '' }, { name: '' }] });
         setQuestions(newQuestions);
     };
 
@@ -108,6 +117,15 @@ function CreatePoll() {
         setQuestions(newQuestions);
     };
 
+<<<<<<< HEAD
+=======
+    const handleQuestionTypes = (questionIndex, value) => {
+        const newType = [...questions];
+        newType[questionIndex].type = value;
+        setQuestions(newType);
+    }
+
+>>>>>>> e166f719 (improved question type selection)
 
     return (
         <div>
@@ -171,6 +189,17 @@ function CreatePoll() {
         {questions.map((question, questionIndex) => (
             <div key={questionIndex}>
             <h3>Question</h3>
+<<<<<<< HEAD
+=======
+            <br />
+            <h4>Type</h4>
+            <select onChange={(e) => handleQuestionTypes(questionIndex, e.target.value)} value={question.type}>
+                <option>Single Choice</option>
+                <option>Multiple Choice</option>
+                <option>Weighted Choice</option>
+            </select>
+            <br />
+>>>>>>> e166f719 (improved question type selection)
             <input
             type="text"
             placeholder={`Question ${questionIndex + 1}`}
