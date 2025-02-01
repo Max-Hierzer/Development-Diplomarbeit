@@ -25,11 +25,7 @@ function CreatePoll() {
 
         const payload = {
             poll: { name: poll, description: description, userId: sessionStorage.getItem('userId'), public: isPublic, anon: isAnon, publishDate: publishDate, endDate: endDate},
-<<<<<<< HEAD
-            questions,
-=======
             questions
->>>>>>> e166f719 (improved question type selection)
         };
 
         console.log(JSON.stringify(payload, null, 2));
@@ -67,11 +63,8 @@ function CreatePoll() {
                 setPublishDate('');
                 setEndDate('');
                 setResetKey(resetKey + 1);
-<<<<<<< HEAD
-=======
                 setSelectedPublic('No');
                 setSelectedAnon('Yes');
->>>>>>> e166f719 (improved question type selection)
             } else {
                 setResponse(`Error: ${data.error || 'Something went wrong'}`);
             }
@@ -117,15 +110,12 @@ function CreatePoll() {
         setQuestions(newQuestions);
     };
 
-<<<<<<< HEAD
-=======
     const handleQuestionTypes = (questionIndex, value) => {
         const newType = [...questions];
         newType[questionIndex].type = value;
         setQuestions(newType);
     }
 
->>>>>>> e166f719 (improved question type selection)
 
     return (
         <div>
@@ -189,8 +179,6 @@ function CreatePoll() {
         {questions.map((question, questionIndex) => (
             <div key={questionIndex}>
             <h3>Question</h3>
-<<<<<<< HEAD
-=======
             <br />
             <h4>Type</h4>
             <select onChange={(e) => handleQuestionTypes(questionIndex, e.target.value)} value={question.type}>
@@ -199,7 +187,6 @@ function CreatePoll() {
                 <option>Weighted Choice</option>
             </select>
             <br />
->>>>>>> e166f719 (improved question type selection)
             <input
             type="text"
             placeholder={`Question ${questionIndex + 1}`}

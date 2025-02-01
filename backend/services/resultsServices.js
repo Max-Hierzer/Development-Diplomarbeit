@@ -1,4 +1,4 @@
-const { UserAnswers, Polls, Questions, Answers } = require('../models/index');
+const { UserAnswers, Polls, Questions, QuestionTypes, Answers, PublicVotes } = require('../models/index');
 
 // getting results from database
 async function fetchResults() {
@@ -23,12 +23,10 @@ async function fetchPolls() {
             include: [                                          // include questions related to poll
                 {
                     model: Questions,
-                    attributes: ['id', 'name'],                 // include id and name from question
-                    include: [                                  // include answers related to questions
-                    {
-                        model: Answers,
-                        attributes: ['id', 'name']              // include id and name from answer
-                    }
+                    attributes: ['id', 'name', 'typeId'],       // include id and name from question
+                    include: [
+                        { model: Answers, attributes: ['id', 'name'] },
+                        { model: QuestionTypes, attributes: ['id', 'name'], as: 'QuestionType' }
                     ]
                 }
             ]
