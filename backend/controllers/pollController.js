@@ -2,7 +2,7 @@ const { createPoll } = require('../services/pollServices');
 
 async function handleCreatePoll(req, res) {
     try {
-        const { poll, questions, questionTypes } = req.body;
+        const { poll, questions } = req.body;
 
         if (!poll.name) {
             return res.status(400).json({ error: 'Poll name is required' });
@@ -34,7 +34,7 @@ async function handleCreatePoll(req, res) {
             }
         }
 
-        const newPoll = await createPoll(poll, questions, questionTypes);
+        const newPoll = await createPoll(poll, questions);
         res.status(201).json(newPoll);
     } catch (error) {
         console.error('Error creating poll:', error);

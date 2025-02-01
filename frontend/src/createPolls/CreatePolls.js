@@ -12,11 +12,10 @@ function CreatePoll() {
     const [publishDate, setPublishDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [resetKey, setResetKey] = useState(0);
-    const [questions, setQuestions] = useState([{ name: '', answers: [{ name: '' }, { name: '' }] }]);
+    const [questions, setQuestions] = useState([{ name: '', type: 'Single Choice', answers: [{ name: '' }, { name: '' }] }]);
     const [response, setResponse] = useState(null);
     const [selectedPublic, setSelectedPublic] = useState('No');
     const [selectedAnon, setSelectedAnon] = useState('Yes');
-    const [questionTypes, setQuestionTypes] = useState([ "Single Choice" ]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -26,8 +25,7 @@ function CreatePoll() {
 
         const payload = {
             poll: { name: poll, description: description, userId: sessionStorage.getItem('userId'), public: isPublic, anon: isAnon, publishDate: publishDate, endDate: endDate},
-            questions,
-            questionTypes,
+            questions
         };
 
         console.log(JSON.stringify(payload, null, 2));
@@ -52,14 +50,13 @@ function CreatePoll() {
             if (res.ok) {
                 setResponse(`Poll created successfully`);
                 setPoll('');
-                setQuestions([{ name: '', answers: [{ name: '' }, { name: '' }] }]);
+                setQuestions([{ name: '', type: 'Single Choice', answers: [{ name: '' }, { name: '' }] }]);
                 setDescription('');
                 setPublishDate('');
                 setEndDate('');
                 setResetKey(resetKey + 1);
                 setSelectedPublic('No');
                 setSelectedAnon('Yes');
-                setQuestionTypes([ "Single Choice" ]);
             } else {
                 setResponse(`Error: ${data.error || 'Something went wrong'}`);
             }
@@ -71,12 +68,8 @@ function CreatePoll() {
 
     const addQuestion = () => {
         const newQuestions = [...questions];
-        newQuestions.push({ name: '', answers: [{ name: '' }, { name: '' }] });
+        newQuestions.push({ name: '', type: 'Single Choice', answers: [{ name: '' }, { name: '' }] });
         setQuestions(newQuestions);
-
-        const newType = [...questionTypes];
-        newType.push("Single Choice");
-        setQuestionTypes(newType);
     };
 
     const addAnswer = (questionIndex) => {
@@ -89,10 +82,6 @@ function CreatePoll() {
         const newQuestions = [...questions];
         newQuestions.splice(questionIndex, 1);
         setQuestions(newQuestions);
-
-        const newType = [...questionTypes];
-        newType.splice(questionIndex, 1);
-        setQuestionTypes(newType);
     };
 
     const deleteAnswer = (questionIndex, answerIndex) => {
@@ -114,9 +103,9 @@ function CreatePoll() {
     };
 
     const handleQuestionTypes = (questionIndex, value) => {
-        const newType = [...questionTypes];
-        newType[questionIndex] = value;
-        setQuestionTypes(newType);
+        const newType = [...questions];
+        newType[questionIndex].type = value;
+        setQuestions(newType);
     }
 
 
@@ -188,7 +177,7 @@ function CreatePoll() {
             <h3>Question</h3>
             <br />
             <h4>Type</h4>
-            <select onChange={(e) => handleQuestionTypes(questionIndex, e.target.value)} value={questionTypes[questionIndex]}>
+            <select onChange={(e) => handleQuestionTypes(questionIndex, e.target.value)} value={question.type}>
                 <option>Single Choice</option>
                 <option>Multiple Choice</option>
                 <option>Weighted Choice</option>
