@@ -1,4 +1,4 @@
-const { Polls, Questions, Answers, UserAnswers } = require('../models');
+const { Polls, Questions, QuestionTypes, Answers, UserAnswers } = require('../models');
 
 const editService = {
     async updatePoll(data) {
@@ -34,8 +34,13 @@ const editService = {
                 const existingQuestion = await Questions.findByPk(question.id, {
                     include: [{ model: Answers }]
                 });
+
+                const questionType = await QuestionTypes.findOne({
+                    where: { name: question.type },
+                });
+
                 if (existingQuestion) {
-                    await existingQuestion.update({ name: question.name });
+                    await existingQuestion.update({ name: question.name, typeId: questionType.id });
 
                     // Update or add answers
                     const existingAnswers = existingQuestion.Answers;

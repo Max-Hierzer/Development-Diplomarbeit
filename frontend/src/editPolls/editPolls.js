@@ -14,14 +14,13 @@ function EditPolls({ selectedPoll }) {
     // Initialize state with `selectedPoll`
     useEffect(() => {
         if (selectedPoll) {
+            console.log(selectedPoll);
             const publish = new Date(selectedPoll.publish_date);
             const end = new Date(selectedPoll.end_date);
             setPoll(selectedPoll.name || '');
             setDescription(selectedPoll.description || '');
             setPublishDate(publish || '');
             setEndDate(end || '');
-            console.log(publishDate);
-            console.log(endDate);
             setQuestions(
                 (selectedPoll.Questions || []).map((q) => ({
                     ...q,
@@ -87,6 +86,12 @@ function EditPolls({ selectedPoll }) {
         );
     };
 
+    const handleQuestionTypes = (questionIndex, value) => {
+        const newType = [...questions];
+        newType[questionIndex].QuestionType.name = value;
+        setQuestions(newType);
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const current_datetime = new Date().toISOString();
@@ -100,6 +105,7 @@ function EditPolls({ selectedPoll }) {
                 Questions: questions.map((q) => ({
                     id: q.id || null,
                     name: q.name,
+                    type: q.QuestionType.name,
                     Answers: q.Answers.map((a) => ({
                         id: a.id || null,
                         name: a.name,
@@ -176,6 +182,14 @@ function EditPolls({ selectedPoll }) {
             {questions.map((question, questionIndex) => (
                 <div key={question.id || questionIndex}>
                 <h3>Question</h3>
+                <br />
+                <h4>Type</h4>
+                <select onChange={(e) => handleQuestionTypes(questionIndex, e.target.value)} value={question.QuestionType.name}>
+                    <option>Single Choice</option>
+                    <option>Multiple Choice</option>
+                    <option>Weighted Choice</option>
+                </select>
+                <br />
                 <input
                 type="text"
                 placeholder={`Question ${questionIndex + 1}`}
