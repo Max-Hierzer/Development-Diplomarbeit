@@ -3,6 +3,7 @@ import '../styles/dashboard.css';
 import SelectPolls from './SelectPolls';
 import Results from '../results/Results';
 import Voting from '../voting/Voting';
+import ImportanceScale from '../voting/ImportanceScale';
 import DeletePoll from '../DeletePolls/DeletePoll';
 import EditPolls from '../editPolls/editPolls';
 import Register from '../usermanagment/Register';
@@ -37,6 +38,8 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                 return;
             }
 
+            console.log("Submitting anonymous vote:", JSON.stringify({answers: selectedAnswers}, null, 2));
+
             try {
                 const res = await fetch('http://localhost:3001/api/vote', {
                     method: 'POST',
@@ -63,6 +66,50 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
         }
         else {
             setResponse('Poll has already ended')
+        }
+    };
+
+    const handleAnonymousVote = async () => {
+        if (!(Object.keys(selectedAnswers).length === selectedPoll.Questions.length)) {
+            alert('Please select all questions');
+            return;
+        }
+
+        console.log(typeof(selectedPoll.end_date))
+        if (!Cookies.get('pollSubmitted')) {
+            // Mark the poll as submitted by setting the cookie
+            Cookies.set('pollSubmitted', 'true', {
+                expires: new Date(selectedPoll.end_date), // Expire in 1 day
+                SameSite: 'None', // For cross-site access (reCAPTCHA)
+            Secure: true, // Only works over HTTPS
+            });
+            const current_datetime = new Date().toISOString();
+            if (selectedPoll.end_date > current_datetime) {
+                try {
+                    const res = await fetch('http://localhost:3001/api/vote/anonymous', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            answers: selectedAnswers,
+                        }),
+                    });
+
+                    if (res.ok) {
+                        console.log("voted successfully")
+                    }
+                } catch (error) {
+                    console.error('Error submitting vote:', error);
+                }
+            }
+            else {
+                console.log('Poll has already ended')
+            }
+            alert('Vote submitted!');
+
+        } else {
+            alert('You have already submitted your vote.');
         }
     };
 
@@ -112,23 +159,32 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
         setSelectedPoll(selected || null);
     };
 
-    const handleAnswerChange = (questionId, answerId) => {
-        setSelectedAnswers((prevAnswers) => ({
-            ...prevAnswers,
-            [questionId]: answerId,
-        }));
-    };
+const handleAnswerChange = (questionId, answerId) => {
+    setSelectedAnswers((prevAnswers) => ({
+        ...prevAnswers,
+        [questionId]: {
+            answerId, // ✅ Correctly updates only the answer ID
+            importance: prevAnswers[questionId]?.importance || null, // ✅ Keeps existing importance value
+        },
+    }));
+};
 
     const handleDisplayMode = async (displayM, polla) => {
         setDisplayMode(displayM);
         await fetchPolls();
         setSelectedPoll(null);
-        /*if (selectedPoll?.id) {
-            //console.log(selectedPoll);
-            const updatedPoll = polla.find((poll) => poll.id === selectedPoll.id);
-            setSelectedPoll(updatedPoll || null);
-        }*/
-    }
+    };
+
+    const handleImportanceChange = (questionId, importance) => {
+        setSelectedAnswers((prevAnswers) => ({
+            ...prevAnswers,
+            [questionId]: {
+                ...prevAnswers[questionId],
+                importance,
+            },
+        }));
+    };
+
 
     useEffect(() => {
         const linkParam = new URLSearchParams(window.location.search);
@@ -296,7 +352,14 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                                 handleAnswerChange={handleAnswerChange}
                                 />
                             ))}
-                            </div>
+
+                        {question.QuestionType.name === "Weighted Choice" && (
+                            <ImportanceScale
+                                questionId={question.id}
+                                onImportanceChange={handleImportanceChange}
+                            />
+                        )}
+                        </div>
                     ))}
                     {showButton()}
                     </>
