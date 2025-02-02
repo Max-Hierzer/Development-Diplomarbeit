@@ -4,3 +4,5 @@ frontend/build
 *.kate-swp
 
 *.env
+backend/env
+frontend/env
