@@ -1,21 +1,31 @@
 import '../styles/voting.css';
 
-function Voting({ question, answer, selectedAnswers, handleAnswerChange }) {
+const Voting = ({ question, answer, selectedAnswers, handleAnswerChange }) => {
+    const isMultipleChoice = question.typeId === 2; // 2 = Multiple Choice, passe den Wert an
+
+    const handleChange = (event) => {
+        const { checked } = event.target;
+        handleAnswerChange(question.id, answer.id, isMultipleChoice, checked);
+    };
+
     return (
-        <div >
-            <label className="answer" key={answer.id}>
+        <div>
+            <label>
                 <input
-                    type="radio"
-                    name={`question-${question.id}`} // Unique name for each question
+                    type={isMultipleChoice ? "checkbox" : "radio"}
+                    name={`question-${question.id}`}
                     value={answer.id}
-                    checked={selectedAnswers[question.id]?.answerId === answer.id}
-                    onChange={() => handleAnswerChange(question.id, answer.id)} // Update selected answer for this question
+                    checked={
+                        isMultipleChoice
+                            ? selectedAnswers[question.id]?.answers?.includes(answer.id)
+                            : selectedAnswers[question.id]?.answerId === answer.id
+                    }
+                    onChange={handleChange}
                     key={answer.id}
                 />
-                <span>{answer.name}</span>
+                {answer.name}
             </label>
         </div>
     );
-}
-
+};
 export default Voting;

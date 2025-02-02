@@ -153,16 +153,31 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
         setSelectedPoll(selected || null);
     };
 
-const handleAnswerChange = (questionId, answerId) => {
-    setSelectedAnswers((prevAnswers) => ({
-        ...prevAnswers,
-        [questionId]: {
-            answerId, // ✅ Correctly updates only the answer ID
-            importance: prevAnswers[questionId]?.importance || null, // ✅ Keeps existing importance value
-        },
-    }));
-};
-
+    const handleAnswerChange = (questionId, answerId, isMultipleChoice = false, checked = false) => {
+        setSelectedAnswers((prevAnswers) => {
+            if (isMultipleChoice) {
+                const currentAnswers = prevAnswers[questionId]?.answers || [];
+                return {
+                    ...prevAnswers,
+                    [questionId]: {
+                        answers: checked
+                            ? [...currentAnswers, answerId] // Add answer
+                            : currentAnswers.filter((id) => id !== answerId), // Remove answer
+                        importance: prevAnswers[questionId]?.importance || null, // Preserve importance
+                    },
+                };
+            } else {
+                return {
+                    ...prevAnswers,
+                    [questionId]: {
+                        answerId, // Update single-choice answer
+                        importance: prevAnswers[questionId]?.importance || null, // Preserve importance
+                    },
+                };
+            }
+        });
+    }; 
+    
     const handleDisplayMode = async (displayM, polla) => {
         setDisplayMode(displayM);
         await fetchPolls();
