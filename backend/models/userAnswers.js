@@ -16,6 +16,7 @@ module.exports = (sequelize) => {
             userId: { type: DataTypes.INTEGER, allowNull: true },
             answerId: { type: DataTypes.INTEGER, allowNull: false },
             questionId: { type: DataTypes.INTEGER, allowNull: false },
+            weight: { type: DataTypes.INTEGER, allowNull: true}
 
         },
 

@@ -12,7 +12,8 @@ module.exports = (sequelize) => {
     // attributes of Answers
     Answers.init(
         {
-            name: { type: DataTypes.STRING, allowNull: false }
+            name: { type: DataTypes.STRING, allowNull: false },
+            weigth: { type: DataTypes.INTEGER, allowNull: true}
         },
         { sequelize, modelName: 'Answers' }
     );

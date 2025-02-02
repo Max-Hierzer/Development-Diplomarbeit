@@ -3,6 +3,7 @@ import '../styles/dashboard.css';
 import SelectPolls from './SelectPolls';
 import Results from '../results/Results';
 import Voting from '../voting/Voting';
+import ImportanceScale from '../voting/ImportanceScale';
 import DeletePoll from '../DeletePolls/DeletePoll';
 import EditPolls from '../editPolls/editPolls';
 import Register from '../usermanagment/Register';
@@ -63,6 +64,8 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                 return;
             }
 
+            console.log("Submitting anonymous vote:", JSON.stringify({answers: selectedAnswers}, null, 2));
+
             try {
                 const res = await fetch('http://localhost:3001/api/vote', {
                     method: 'POST',
@@ -97,6 +100,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             alert('Please select all questions');
             return;
         }
+
         console.log(typeof(selectedPoll.end_date))
         if (!Cookies.get('pollSubmitted')) {
             // Mark the poll as submitted by setting the cookie
@@ -178,18 +182,32 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
         setSelectedPoll(selected || null);
     };
 
-    const handleAnswerChange = (questionId, answerId) => {
-        setSelectedAnswers((prevAnswers) => ({
-            ...prevAnswers,
-            [questionId]: answerId,
-        }));
-    };
+const handleAnswerChange = (questionId, answerId) => {
+    setSelectedAnswers((prevAnswers) => ({
+        ...prevAnswers,
+        [questionId]: {
+            answerId, // ✅ Correctly updates only the answer ID
+            importance: prevAnswers[questionId]?.importance || null, // ✅ Keeps existing importance value
+        },
+    }));
+};
 
     const handleDisplayMode = async (displayM, polla) => {
         setDisplayMode(displayM);
         await fetchPolls();
         setSelectedPoll(null);
-    }
+    };
+
+    const handleImportanceChange = (questionId, importance) => {
+        setSelectedAnswers((prevAnswers) => ({
+            ...prevAnswers,
+            [questionId]: {
+                ...prevAnswers[questionId],
+                importance,
+            },
+        }));
+    };
+
 
     useEffect(() => {
         const linkParam = window.location.search.substring(1);
@@ -360,7 +378,14 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                                 handleAnswerChange={handleAnswerChange}
                                 />
                             ))}
-                            </div>
+
+                        {question.QuestionType.name === "Weighted Choice" && (
+                            <ImportanceScale
+                                questionId={question.id}
+                                onImportanceChange={handleImportanceChange}
+                            />
+                        )}
+                        </div>
                     ))}
                     {showButton()}
                     </>
