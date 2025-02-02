@@ -19,7 +19,7 @@ const editService = {
         // Update poll name
         const pollPublishDate = new Date(data.publishDate);
         const pollEndDate = new Date(data.endDate);
-        await Polls.update({ name: data.pollName, description: data.pollDescription, publish_date: pollPublishDate, end_date: pollEndDate }, { where: { id: data.pollId } });
+        await Polls.update({ name: data.pollName, description: data.pollDescription, public: data.isPublic, anonymous: data.isAnonymous, publish_date: pollPublishDate, end_date: pollEndDate }, { where: { id: data.pollId } });
         console.log('Poll updated successfully');
         // Get all existing questions for this poll
         const existingQuestions = await Questions.findAll({

@@ -10,15 +10,25 @@ function EditPolls({ selectedPoll }) {
     const [description, setDescription] = useState('');
     const [publishDate, setPublishDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    const [isPublic, setIsPublic] = useState('');
+    const [isAnon, setIsAnon] = useState('');
 
     // Initialize state with `selectedPoll`
     useEffect(() => {
         if (selectedPoll) {
             console.log(selectedPoll);
+            let publicState;
+            let anonState;
             const publish = new Date(selectedPoll.publish_date);
             const end = new Date(selectedPoll.end_date);
             setPoll(selectedPoll.name || '');
             setDescription(selectedPoll.description || '');
+            if (selectedPoll.public.toString() === "true") publicState = "Yes";
+            else if (selectedPoll.public.toString() === "false") publicState = "No";
+            setIsPublic(publicState || '');
+            if (selectedPoll.anonymous.toString() === "true") anonState = "Yes";
+            else if (selectedPoll.anonymous.toString() === "false") anonState = "No";
+            setIsAnon(anonState || '');
             setPublishDate(publish || '');
             setEndDate(end || '');
             setQuestions(
@@ -92,6 +102,14 @@ function EditPolls({ selectedPoll }) {
         setQuestions(newType);
     };
 
+    const handlePublicChange = (value) => {
+        setIsPublic(value);
+    };
+
+    const handleAnonChange = (value) => {
+        setIsAnon(value);
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const current_datetime = new Date().toISOString();
@@ -99,6 +117,8 @@ function EditPolls({ selectedPoll }) {
             const payload = {
                 pollId: selectedPoll.id,
                 pollName: poll,
+                isPublic: isPublic === "Yes",
+                isAnonymous: isAnon === "Yes",
                 pollDescription: description,
                 publishDate: publishDate,
                 endDate: endDate,
@@ -159,6 +179,26 @@ function EditPolls({ selectedPoll }) {
             cols={50} // Adjust the number of columns for the desired width
             style={{ resize: 'vertical' }} // Optional: Allow resizing vertically only
             />
+            <br />
+            <br />
+            <h4>Public</h4>
+            <select onChange={(e) => handlePublicChange(e.target.value)} value={isPublic}>
+                <option>No</option>
+                <option>Yes</option>
+            </select>
+            <br />
+            <br />
+            {isPublic === "No" && (
+                <div>
+                <h4>Anonymous</h4>
+                <select onChange={(e) => handleAnonChange(e.target.value)} value={isAnon}>
+                    <option>Yes</option>
+                    <option>No</option>
+                </select>
+                <br />
+                <br />
+                </div>
+            )}
             <div className="datetime-container">
                 <Datetime
                     value={publishDate}
