@@ -12,6 +12,7 @@ function EditPolls({ selectedPoll }) {
     const [endDate, setEndDate] = useState('');
     const [isPublic, setIsPublic] = useState('');
     const [isAnon, setIsAnon] = useState('');
+    const [submitted, setSubmitted] = useState(null);
 
     // Initialize state with `selectedPoll`
     useEffect(() => {
@@ -103,6 +104,7 @@ function EditPolls({ selectedPoll }) {
     };
 
     const handlePublicChange = (value) => {
+        if (value === "Yes") setIsAnon(value);
         setIsPublic(value);
     };
 
@@ -145,6 +147,8 @@ function EditPolls({ selectedPoll }) {
                 const data = await res.json();
 
                 if (res.ok) {
+                    setSubmitted(1);
+                    setTimeout(() => setSubmitted(null), 1000);
                     setResponse(`Poll updated successfully`);
                 } else {
                     setResponse(`Error: ${data.error || 'Something went wrong'}`);
@@ -267,7 +271,9 @@ function EditPolls({ selectedPoll }) {
             Add Question
             </button>
             <br />
-            <button type="submit">Submit Changes</button>
+            <button type="submit">
+                {submitted ? 'Submitted!' : 'Submit Changes'}
+            </button>
             </form>
         ) : (
             <p>Please select a poll</p>
