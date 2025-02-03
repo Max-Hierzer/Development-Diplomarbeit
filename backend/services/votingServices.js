@@ -6,7 +6,6 @@ async function submitVote(userId, answers) {
     try {
         for (const [questionId, data] of Object.entries(answers)) { // checking if user has already voted
             const { answers: answerIds, importance } = data;
-            
             const answerArray = Array.isArray(answerIds) ? answerIds : [answerIds]; // check if answerIds is array, if not make it array
 
             // Check if user has already voted
@@ -14,12 +13,12 @@ async function submitVote(userId, answers) {
                 const existingVote = await UserAnswers.findOne({
                     where: { userId, questionId, answerId },
                 });
+                if (existingVote) {                                         // if he has already voted for this question throw error to not violate unique constraint
+                    throw new Error(`User has already voted for question ${questionId} with answer ${answerId}`);
+                }
             }
-            console.log(existingVote);
 
-            if (existingVote) {                                         // if he has already voted for this question throw error to not violate unique constraint
-                throw new Error(`User has already voted for question ${questionId} with answer ${answerId}`);
-            }
+            
         }
 
         //const userAnswers = Object.entries(answers).map(([questionId, data]) =>     // ONLY WORKS FOR SINGLE CHOICE!!! maps all questions with given answer
@@ -49,15 +48,20 @@ async function submitAnonymousVote(answers, userId, pollId) {
         }
 
         // Create user answers
-        const userAnswers = await Promise.all(
-            Object.entries(answers).map(([questionId, data]) =>
-            UserAnswers.create({
-                questionId: questionId,
-                answerId: data.answerId,
-                weight: data.importance || null
-            })
-            )
-        );
+        const userAnswers = [];
+        for (const [questionId, data] of Object.entries(answers)) {
+            const { answer: answersIds, importance } = data;
+            const answersArray = Array.isArray(answersIds) ? answerIds : [answerIds];
+
+            for (const answerId of answersArray) {
+                const createdAnswer = await UserAnswers.create({
+                    questionId,
+                    answerId,
+                    weight: importance || null
+                });
+                userAnswers.push(createdAnswer);
+            }
+        }
 
         // Create a record in UserPolls to mark that this user has voted
         await UserPolls.create({ userId, pollId });
@@ -79,10 +83,21 @@ async function submitPublicVote(answers, userData) {
             pollId: userData.pollId
         });
 
-        const publicAnswers = Object.entries(answers).map(([questionId, answerId]) =>
-        UserAnswers.create({ answerId, questionId })
-        );
-        return publicAnswers;
+        const publicAnswers = [];
+        for (const [questionId, data] of Object.entries(answers)) {
+            const { answers: answerIds } = data;
+            const answerArray = Array.isArray(answerIds) ? answerIds : [answerIds];
+            
+            for (const answerId of answerArray) {
+                const createdAnswer = await UserAnswers.create({
+                    questionId,
+                    answerId
+                });
+                publicAnswers.push(createdAnswer);
+            }
+        }
+        
+        return { message: "Public vote submitted succesfully", publicAnswers};
     } catch (error) {
         console.error('Error creating vote in service:', error);
         throw error;
