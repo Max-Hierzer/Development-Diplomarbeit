@@ -162,7 +162,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                 return {
                     ...prevAnswers,
                     [questionId]: {
-                        answers: checked
+                        answer: checked
                             ? [...currentAnswers, answerId] // Add answer
                             : currentAnswers.filter((id) => id !== answerId), // Remove answer
                         importance: prevAnswers[questionId]?.importance || null, // Preserve importance
@@ -172,7 +172,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                 return {
                     ...prevAnswers,
                     [questionId]: {
-                        answerId, // Update single-choice answer
+                        answer: [answerId], // Update single-choice answer
                         importance: prevAnswers[questionId]?.importance || null, // Preserve importance
                     },
                 };
