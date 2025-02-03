@@ -74,6 +74,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             alert('Please select all questions');
             return;
         }
+        console.log("anon", JSON.stringify({answers: selectedAnswers}, null, 2));
 
         const current_datetime = new Date().toISOString();
         if (selectedPoll.end_date > current_datetime) {
@@ -151,6 +152,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     const handleSetSelectedPoll = (pollId) => {
         const selected = polls.find((poll) => poll.id.toString() === pollId);
         setSelectedPoll(selected || null);
+        setIsAnonymous(selected.anonymous || null);
     };
 
     const handleAnswerChange = (questionId, answerId, isMultipleChoice = false, checked = false) => {
@@ -233,7 +235,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             case 2:
                 return (
                     <div>
-                        <button onClick={handleVote}>
+                        <button onClick={isAnonymous === true ? handleAnonymousVote : handleVote}>
                             Submit Vote
                         </button>
                     </div>
