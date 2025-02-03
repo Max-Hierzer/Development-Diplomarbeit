@@ -38,7 +38,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                 return;
             }
 
-            console.log("Submitting anonymous vote:", JSON.stringify({answers: selectedAnswers}, null, 2));
+            console.log("Submitting vote:", JSON.stringify({answers: selectedAnswers}, null, 2));
 
             try {
                 const res = await fetch('http://localhost:3001/api/vote', {
@@ -74,7 +74,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             alert('Please select all questions');
             return;
         }
-        console.log("anon", JSON.stringify({answers: selectedAnswers}, null, 2));
+        console.log("Submitting Anonymous Vote", JSON.stringify({answers: selectedAnswers}, null, 2));
 
         const current_datetime = new Date().toISOString();
         if (selectedPoll.end_date > current_datetime) {
