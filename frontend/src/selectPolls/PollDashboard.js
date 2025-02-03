@@ -75,41 +75,35 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             return;
         }
 
-        console.log(typeof(selectedPoll.end_date))
-        if (!Cookies.get('pollSubmitted')) {
-            // Mark the poll as submitted by setting the cookie
-            Cookies.set('pollSubmitted', 'true', {
-                expires: new Date(selectedPoll.end_date), // Expire in 1 day
-                SameSite: 'None', // For cross-site access (reCAPTCHA)
-            Secure: true, // Only works over HTTPS
-            });
-            const current_datetime = new Date().toISOString();
-            if (selectedPoll.end_date > current_datetime) {
-                try {
-                    const res = await fetch('http://localhost:3001/api/vote/anonymous', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            answers: selectedAnswers,
-                        }),
-                    });
+        const current_datetime = new Date().toISOString();
+        if (selectedPoll.end_date > current_datetime) {
+            try {
+                const res = await fetch('http://localhost:3001/api/vote/anonymous', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        answers: selectedAnswers,
+                        pollId: selectedPoll.id,
+                        userId: userId
+                    }),
+                });
 
-                    if (res.ok) {
-                        console.log("voted successfully")
-                    }
-                } catch (error) {
-                    console.error('Error submitting vote:', error);
+                if (res.ok) {
+                    const data = await res.json();
+                    alert(data.message);
+                } else {
+                    const errorData = await res.json();
+                    alert(errorData.message || "An error occurred while submitting the vote.");
                 }
+            } catch (error) {
+                console.error('Error submitting vote:', error);
+                alert("Something went wrong. Please try again.");
             }
-            else {
-                console.log('Poll has already ended')
-            }
-            alert('Vote submitted!');
-
-        } else {
-            alert('You have already submitted your vote.');
+        }
+        else {
+            alert('Poll has already ended')
         }
     };
 
