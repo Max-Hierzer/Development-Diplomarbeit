@@ -34,6 +34,8 @@ async function submitVote(userId, answers) {
     }
 }
 
+
+
 async function submitAnonymousVote(answers, userId, pollId) {
     try {
         // Check if the user has already voted in this poll
