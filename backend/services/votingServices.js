@@ -4,28 +4,33 @@ const { UserAnswers, Users, Answers, Questions, PublicUserData, UserPolls } = re
 // writing vote in UserAnswers
 async function submitVote(userId, answers) {
     try {
-        for (const [questionId, answerId] of Object.entries(answers)) { // checking if user has already voted
-            const existingVote = await UserAnswers.findOne({
-                where: {                                                // get user if he has voted for this question
-                    userId: userId,
-                    questionId: questionId,
-                },
-            });
-        console.log(answers)
+        for (const [questionId, data] of Object.entries(answers)) { // checking if user has already voted
+            const { answers: answerIds, importance } = data;
+            
+            const answerArray = Array.isArray(answerIds) ? answerIds : [answerIds]; // check if answerIds is array, if not make it array
+
+            // Check if user has already voted
+            for (const answerId of answerArray) {
+                const existingVote = await UserAnswers.findOne({
+                    where: { userId, questionId, answerId },
+                });
+            }
+            console.log(existingVote);
+
             if (existingVote) {                                         // if he has already voted for this question throw error to not violate unique constraint
                 throw new Error(`User has already voted for question ${questionId} with answer ${answerId}`);
             }
         }
 
-        const userAnswers = Object.entries(answers).map(([questionId, data]) =>     // ONLY WORKS FOR SINGLE CHOICE!!! maps all questions with given answer
-        UserAnswers.create({
+        //const userAnswers = Object.entries(answers).map(([questionId, data]) =>     // ONLY WORKS FOR SINGLE CHOICE!!! maps all questions with given answer
+        await UserAnswers.create({
             userId,
-            questionId: questionId,
-            answerId: data.answerId,
-            weight: data.importance
-        }));                  // creates entry in UserAnswers with attributes userId, answerId, questionId
+            questionId,
+            answerId,
+            weight: importance || null
+        });                  // creates entry in UserAnswers with attributes userId, answerId, questionId
 
-        return userAnswers;
+        return { message: "Vote(s) successfully recorded."};
     } catch (error) {
         console.error('Error creating vote in service:', error);
         throw error;
