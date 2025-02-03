@@ -181,7 +181,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     const handleAnswerChange = (questionId, answerId, isMultipleChoice = false, checked = false) => {
         setSelectedAnswers((prevAnswers) => {
             if (isMultipleChoice) {
-                const currentAnswers = prevAnswers[questionId]?.answers || [];
+                const currentAnswers = prevAnswers[questionId]?.answer || [];
                 return {
                     ...prevAnswers,
                     [questionId]: {
