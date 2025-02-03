@@ -17,8 +17,8 @@ const Voting = ({ question, answer, selectedAnswers, handleAnswerChange }) => {
                     value={answer.id}
                     checked={
                         isMultipleChoice
-                            ? selectedAnswers[question.id]?.answers?.includes(answer.id)
-                            : selectedAnswers[question.id]?.answerId === answer.id
+                            ? selectedAnswers[question.id]?.answer?.includes(answer.id)
+                            : selectedAnswers[question.id]?.answer?.[0] === answer.id 
                     }
                     onChange={handleChange}
                     key={answer.id}
