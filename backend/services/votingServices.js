@@ -1,5 +1,5 @@
 // services/voteService.js
-const { UserAnswers, Users, Answers, Questions } = require('../models/index');
+const { UserAnswers, Users, Answers, Questions, PublicUserData, UserPolls } = require('../models/index');
 
 // writing vote in UserAnswers
 async function submitVote(userId, answers) {
@@ -32,14 +32,23 @@ async function submitVote(userId, answers) {
     }
 }
 
-async function submitAnonymousVote(answers) {
+async function submitAnonymousVote(votingData) {
     try {
+        const answers = votingData.answers;
+        const pollId = votingData.pollId;
+        const userId = votingData.userId;
         const userAnswers = Object.entries(answers).map(([questionId, data]) =>
         UserAnswers.create({
             questionId: questionId,
             answerId: data.answerId,
             weight: data.importance || null
         }));
+        UserPolls.create(
+            {
+                userId: userId,
+                pollId: pollId
+            }
+        )
         return userAnswers;
     } catch (error) {
         console.error('Error creating vote in service:', error);
