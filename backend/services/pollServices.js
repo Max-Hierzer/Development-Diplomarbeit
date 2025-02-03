@@ -8,13 +8,13 @@ async function createPoll(poll, questions) {
         const pollPublishDate = new Date(poll.publishDate);
         const pollEndDate = new Date(poll.endDate);
         const createdPoll = await Poll.create({ name: poll.name, description: poll.description, user_id: poll.userId, public: poll.public, anonymous: poll.anon, publish_date: pollPublishDate, end_date: pollEndDate });
-
+        console.log(createdPoll.id)
         const createdQuestions = [];
         for (const question of questions) {
             const questionType = await QuestionType.findOne({
                 where: { name: question.type },
             });
-
+            console.log(typeof(questionType.id))
             const createdQuestion = await Question.create({
                 name: question.name,
                 pollId: createdPoll.id,
