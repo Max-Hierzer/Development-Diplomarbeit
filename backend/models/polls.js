@@ -7,6 +7,7 @@ module.exports = (sequelize) => {
         static associate(models) {  // define relations
             Polls.hasMany(models.Questions, { foreignKey: 'pollId' }); // 1 poll has many questions
             Polls.hasMany(models.PublicUserData, { foreignKey: 'pollId' });
+            Polls.hasMany(models.UserPolls, { foreignKey: 'pollId' });
         }
     }
 
