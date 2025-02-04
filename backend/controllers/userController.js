@@ -14,8 +14,14 @@ async function handleCreateUser(req, res) {
 // resolves api connection with frontend for to give login data
 async function handleFetchLogin(req, res) {
     try {
-        const login = await fetchLogin();                           // gets the data from service
-        res.status(200).json(login);                                // passes the data to frontend
+        const { username, password } = req.body;
+        const loginData = await fetchLogin(username, password);
+
+        if (!loginData.success) {
+            return res.status(401).json({ message: loginData.message });
+        }
+
+        res.status(200).json(loginData);                                // passes the data to frontend
     } catch (error) {
         console.error('Error fetching userData:', error);
         res.status(500).json({error: 'Error fetching userData in controller'});

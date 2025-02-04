@@ -7,13 +7,13 @@ function Register() {
     const [password, setPassword] = useState('');
     const [roleId, setRoleId] = useState('');
     const [roles, setRoles] = useState([]);
-    const [response, setResponse] = useState(null); // To show success/error message
+    const [response, setResponse] = useState(null);
     const [selectedRoleDescription, setSelectedRoleDescription] = useState('');
 
     useEffect(() => {
         const fetchRoles = async () => {
             try {
-                const res = await fetch('http://localhost:3001/api/roles'); // Replace with your roles endpoint
+                const res = await fetch('http://localhost:3001/api/roles');
                 const data = await res.json();
                 setRoles(data);
             } catch (error) {

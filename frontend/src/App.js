@@ -59,7 +59,7 @@ function App() {
           </div>
             <div>
               <div>
-                <PollDashboard userId={userId} userName={userName} userRoleId = {userRoleId}/>
+                <PollDashboard userId={userId} userName={userName} userRoleId={userRoleId}/>
               </div>
               <div className='Messenger'>
                 <h1>{isInputMode ? 'Submit a Message' : 'Messages'}</h1>
