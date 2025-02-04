@@ -10,7 +10,7 @@ const ImportanceScale = ({ questionId, onImportanceChange }) => {
     };
 
     return (
-        <div style={{ textAlign: "center", marginTop: "5px" }}>
+        <div style={{ textAlign: "center", marginTop: "-15px" }}>
             <div style={{
                 display: "flex",
                 justifyContent: "center",
@@ -18,15 +18,15 @@ const ImportanceScale = ({ questionId, onImportanceChange }) => {
                 gap: "3px",
                 fontSize: "12px"
             }}>
-                <span style={{ fontSize: "12px", fontWeight: "bold", color: "#888" }}>Not <br />Important</span>
+                {/*<span style={{ fontSize: "12px", fontWeight: "bold", color: "#888" }}>Not <br />Important</span>*/}
 
                 {scaleValues.map((value) => (
                     <button
                         key={value}
                         onClick={() => handleSelectImportance(value)}
                         style={{
-                            width: "30px",
-                            height: "30px",
+                            width: "40px",
+                            height: "40px",
                             borderRadius: "4px",
                             border: "1px solid #ccc",
                             backgroundColor: importance === value ? "#D55C27" : "#EAEAEA",
@@ -42,7 +42,7 @@ const ImportanceScale = ({ questionId, onImportanceChange }) => {
                     </button>
                 ))}
 
-                <span style={{ fontSize: "12px", fontWeight: "bold", color: "#888" }}>Important</span>
+                {/*<span style={{ fontSize: "12px", fontWeight: "bold", color: "#888" }}>Important</span>*/}
             </div>
         </div>
     );

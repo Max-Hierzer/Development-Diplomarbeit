@@ -1,16 +1,9 @@
-.poll h2{
+h2{
     width: 100%;
     text-align: center;
-    background-color: lightblue;
+    margin-bottom: 30px;
+
 }
-
-.question h3{
-    width: 400px;
-    text-align: left;
-    background-color: #ccc;
-}
-
-
 
 .dashboard-container {
     display: flex;
@@ -62,12 +55,32 @@
 
 .question-type {
     text-align: right;
-    margin-right: 4px;
+    margin-right: 0px;
     font-size: 0.7rem;
+    background-color: #A8B3C5;
+    margin-bottom: 6px;
+    padding: 2px;
+    padding-bottom: 0px;
+    border-radius: 2px;
 }
 
 .question-header {
-    padding: 2px 0;
+    width: 400px;
+    background-color: #ccc;
+    padding: 3px 3px;
     display: flex;
     justify-content: space-between;
+    margin-bottom: 15px;
+    margin-top: 25px;
+    border-radius: 5px;
+}
+
+.description-header {
+    text-align: left;
+    margin-bottom: 1px;
+}
+
+.description {
+    text-align: left;
+    font-weight: normal;
 }
