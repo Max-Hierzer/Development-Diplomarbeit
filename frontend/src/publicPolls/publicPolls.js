@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import ReCAPTCHA from 'react-google-recaptcha';
 import './publicPolls.css';
 import Voting from '../voting/Voting';
+import ImportanceScale from '../voting/ImportanceScale';
 
 const PublicPolls = () => {
     const [showVoting, setShowVoting] = useState(false);
@@ -169,6 +170,17 @@ const PublicPolls = () => {
         });
     };
 
+    const handleImportanceChange = (questionId, importance) => {
+        setSelectedAnswers((prevAnswers) => ({
+            ...prevAnswers,
+            [questionId]: {
+                ...prevAnswers[questionId],
+                importance,
+            },
+        }));
+    };
+
+
     return (
         <div className="publicPoll">
         {poll ?
@@ -246,6 +258,13 @@ const PublicPolls = () => {
                                 handleAnswerChange={handleAnswerChange}
                                 />
                             ))}
+
+                            {question.QuestionType.name === "Weighted Choice" && (
+                                <ImportanceScale
+                                    questionId={question.id}
+                                    onImportanceChange={handleImportanceChange}
+                                />
+                            )}
                         </div>
                 ))}
                 <button onClick={handleVoteSubmit}>Submit Vote</button>
