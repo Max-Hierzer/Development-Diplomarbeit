@@ -84,12 +84,13 @@ async function submitPublicVote(answers, userData) {
 
         const publicAnswers = [];
         for (const [questionId, data] of Object.entries(answers)) {
-            const { answer: answerIds } = data;
+            const { answer: answerIds, importance } = data;
             
             for (const answerId of answerIds) {
                 const createdAnswer = await UserAnswers.create({
                     questionId,
-                    answerId
+                    answerId,
+                    weight: importance || null
                 });
                 publicAnswers.push(createdAnswer);
             }
