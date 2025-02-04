@@ -54,3 +54,20 @@
     border: 1px solid #b3ffb3;
     border-radius: 5px;
 }
+
+.question-text {
+    text-align: left;
+    margin-left: 4px;
+}
+
+.question-type {
+    text-align: right;
+    margin-right: 4px;
+    font-size: 0.7rem;
+}
+
+.question-header {
+    padding: 2px 0;
+    display: flex;
+    justify-content: space-between;
+}

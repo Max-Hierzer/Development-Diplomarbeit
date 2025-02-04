@@ -1,7 +1,7 @@
 import '../styles/voting.css';
 
 const Voting = ({ question, answer, selectedAnswers, handleAnswerChange }) => {
-    const isMultipleChoice = question.typeId === 2; // 2 = Multiple Choice, passe den Wert an
+    const isMultipleChoice = question.QuestionType.name === "Multiple Choice";
 
     const handleChange = (event) => {
         const { checked } = event.target;
