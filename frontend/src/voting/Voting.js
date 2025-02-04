@@ -9,8 +9,7 @@ const Voting = ({ question, answer, selectedAnswers, handleAnswerChange }) => {
     };
 
     return (
-        <div>
-            <label>
+        <div className="answer">
                 <input
                     type={isMultipleChoice ? "checkbox" : "radio"}
                     name={`question-${question.id}`}
@@ -23,8 +22,7 @@ const Voting = ({ question, answer, selectedAnswers, handleAnswerChange }) => {
                     onChange={handleChange}
                     key={answer.id}
                 />
-                {answer.name}
-            </label>
+            <label>{answer.name}</label>
         </div>
     );
 };

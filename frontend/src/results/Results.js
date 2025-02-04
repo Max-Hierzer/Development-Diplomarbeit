@@ -57,7 +57,7 @@ const Results = ({ answer, question, showVotersMode, isPublic }) => {
 
     return (
         <div>
-            <div key={answer.id} className="answer">
+            <div key={answer.id} className="results-answer">
                 <h4>{answer.name}</h4>
                 <h4 className='showResults'>{showVotersMode
                     ? showResults(results, question, answer).counter
