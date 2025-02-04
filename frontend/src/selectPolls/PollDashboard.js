@@ -378,7 +378,10 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                 {selectedPoll.Questions &&
                     selectedPoll.Questions.map((question) => (
                         <div key={question.id} className="question">
-                        <h3>{question.name}</h3>
+                        <h3 className="question-header">
+                            <span className="question-text">{question.name}</span>
+                            <span className="question-type">{question.QuestionType.name}</span>
+                        </h3>
                         {question.Answers &&
                             question.Answers.map((answer) => (
                                 <Voting
@@ -410,7 +413,10 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                 {selectedPoll.Questions &&
                     selectedPoll.Questions.map((question) => (
                         <div key={question.id} className="question">
-                        <h3>{question.name}</h3>
+                        <h3 className="question-header">
+                            <span className="question-text">{question.name}</span>
+                            <span className="question-type">{question.QuestionType.name}</span>
+                        </h3>
                         {question.Answers &&
                             question.Answers.map((answer) => (
                                 <Results
