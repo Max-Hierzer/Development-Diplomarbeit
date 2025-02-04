@@ -403,6 +403,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                                 onImportanceChange={handleImportanceChange}
                             />
                         )}
+                        <br />
                         </div>
                     ))}
                     {showButton()}
@@ -420,7 +421,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                 <br />
                 {selectedPoll.Questions &&
                     selectedPoll.Questions.map((question) => (
-                        <div key={question.id} className="question">
+                    <div key={question.id} className="question">
                         <h3 className="question-header">
                             <span className="question-text">{question.name}</span>
                             <span className="question-type">{question.QuestionType.name}</span>
@@ -435,7 +436,8 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                                 isPublic={selectedPoll.public}
                                 />
                             ))}
-                            </div>
+                            <br />
+                        </div>
                     ))}
                     {showButton()}
                     </>
