@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Cookies from 'js-cookie';
 import ReCAPTCHA from 'react-google-recaptcha';
 import './publicPolls.css';
+import Voting from '../voting/Voting';
 
 const PublicPolls = () => {
     const [showVoting, setShowVoting] = useState(false);
@@ -143,11 +144,29 @@ const PublicPolls = () => {
         fetchPoll();
     }, [pollValue]);
 
-    const handleAnswerChange = (questionId, answerId) => {
-        setSelectedAnswers((prevAnswers) => ({
-            ...prevAnswers,
-            [questionId]: answerId,
-        }));
+    const handleAnswerChange = (questionId, answerId, isMultipleChoice = false, checked = false) => {
+        setSelectedAnswers((prevAnswers) => {
+            if (isMultipleChoice) {
+                const currentAnswers = prevAnswers[questionId]?.answer || [];
+                return {
+                    ...prevAnswers,
+                    [questionId]: {
+                        answer: checked
+                            ? [...currentAnswers, answerId] // Add answer
+                            : currentAnswers.filter((id) => id !== answerId), // Remove answer
+                        importance: prevAnswers[questionId]?.importance || null, // Preserve importance
+                    },
+                };
+            } else {
+                return {
+                    ...prevAnswers,
+                    [questionId]: {
+                        answer: [answerId], // Update single-choice answer
+                        importance: prevAnswers[questionId]?.importance || null, // Preserve importance
+                    },
+                };
+            }
+        });
     };
 
     return (
@@ -218,20 +237,15 @@ const PublicPolls = () => {
                     <div key={question.id} className="question">
                     <h3>{question.name}</h3>
                     {question.Answers &&
-                        question.Answers.map((answer) => (
-                            <div key={answer.id} className="answer">
-                            <label>
-                            <input
-                            type="radio"
-                            name={`question-${question.id}`}
-                            value={answer.id}
-                            checked={selectedAnswers[question.id] === answer.id}
-                            onChange={() => handleAnswerChange(question.id, answer.id)}
-                            />
-                            <span>{answer.name}</span>
-                            </label>
-                            </div>
-                        ))}
+                            question.Answers.map((answer) => (
+                                <Voting
+                                key={answer.id}
+                                question={question}
+                                answer={answer}
+                                selectedAnswers={selectedAnswers}
+                                handleAnswerChange={handleAnswerChange}
+                                />
+                            ))}
                         </div>
                 ))}
                 <button onClick={handleVoteSubmit}>Submit Vote</button>
