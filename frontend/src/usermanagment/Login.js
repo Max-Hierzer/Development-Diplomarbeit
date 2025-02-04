@@ -4,28 +4,31 @@ import '../styles/register.css';
 const Login = ({ loginChange }) => {
     const [users, setUsers] = useState([]);
     const [inputUser, setInputUser] = useState('');
-    const [inputPassword, setInputPassword] = useState('')
+    const [inputPassword, setInputPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const res = await fetch('http://localhost:3001/api/users');
-                const data = await res.json();
-                setUsers(data);
-            } catch (error) {
-                console.error('Error fetching users:', error);
-            }
-        };
-        fetchUsers();
-    }, []);
-
-    const checkLogin = (event) => {
+    const checkLogin = async (event) => {
         event.preventDefault();
-        const user = users.find(u => u.name === inputUser && u.password === inputPassword);
-        if (user) {
-            const loginMode = true;
-            loginChange(loginMode, user.id, user.name, user.roleId);
-        } else {
+        try {
+            const res = await fetch('http://localhost:3001/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: inputUser,
+                    password: inputPassword
+                }),
+            });
+            const data = await res.json();
+            setUsers(data);
+
+            if (res.ok && data.success) {
+                loginChange(true, data.userId, data.username, data.roleId);
+            } else {
+                setErrorMessage(data.message || "Invalid username or password");
+            }
+        } catch (error) {
             (console.log('Wrong username or Password'));
         }
     }
@@ -47,6 +50,8 @@ const Login = ({ loginChange }) => {
                     />
                 <button type="submit">Login</button>
             </form>
+
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
         </div>
     );
 }

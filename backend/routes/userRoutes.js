@@ -6,7 +6,7 @@ const router = express.Router();
 
 // give api names
 const postUser = router.post('/user', handleCreateUser);
-const getLogin = router.get('/users', handleFetchLogin);
+const getLogin = router.post('/login', handleFetchLogin);
 module.exports = {
     postUser: postUser,
     getLogin: getLogin
