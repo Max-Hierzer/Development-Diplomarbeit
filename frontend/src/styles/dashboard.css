@@ -1,7 +1,14 @@
-h2{
+h2 {
     width: 100%;
     text-align: center;
     margin-bottom: 20px;
+}
+
+h2 span {
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #d9e6f2;
+    color: #2c3e50;
 
 }
 
@@ -48,8 +55,16 @@ h2{
     border-radius: 5px;
 }
 
+.question {
+    border-style: solid;
+    border-radius: 7px;
+    border-width: 3px;
+    padding-bottom: 5px;
+    margin-bottom: 30px;
+}
+
 .question-text {
-    text-align: left;
+    text-align: center;
     margin-left: 4px;
 }
 
@@ -71,7 +86,7 @@ h2{
     display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
-    border-radius: 5px;
+    border-radius: 5px 5px 0 0;
 }
 
 .description-header {

@@ -19,8 +19,11 @@ const editService = {
         // Update poll name
         const pollPublishDate = new Date(data.publishDate);
         const pollEndDate = new Date(data.endDate);
+
         await Polls.update({ name: data.pollName, description: data.pollDescription, public: data.isPublic, anonymous: data.isAnonymous, publish_date: pollPublishDate, end_date: pollEndDate }, { where: { id: data.pollId } });
+
         console.log('Poll updated successfully');
+
         // Get all existing questions for this poll
         const existingQuestions = await Questions.findAll({
             where: { pollId: data.pollId },
@@ -29,14 +32,15 @@ const editService = {
 
         // Process incoming questions
         for (const question of data.Questions) {
+
+            const questionType = await QuestionTypes.findOne({
+                    where: { name: question.type },
+            });
+
             if (question.id) {
                 // Update existing question
                 const existingQuestion = await Questions.findByPk(question.id, {
                     include: [{ model: Answers }]
-                });
-
-                const questionType = await QuestionTypes.findOne({
-                    where: { name: question.type },
                 });
 
                 if (existingQuestion) {
@@ -77,6 +81,7 @@ const editService = {
                 const newQuestion = await Questions.create({
                     name: question.name,
                     pollId: data.pollId,
+                    typeId: questionType.id
                 });
 
                 for (const answer of question.Answers) {
