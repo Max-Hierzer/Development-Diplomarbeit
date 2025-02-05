@@ -1,15 +1,28 @@
   .results-answer {
-    margin-left: 15px;
+    margin-left: 20px;
     display: flex;                /* Use flexbox for horizontal alignment */
     align-items: center;          /* Align items vertically */
-    margin-bottom: 10px;          /* Space between each answer */
-    width: 100%;                  /* Ensures it stretches properly */
+    margin-bottom: 20px;          /* Space between each answer */
+    gap: 20px;
+    width: 91%;                  /* Ensures it stretches properly */
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    padding: 10px;
+    position: relative;
+  }
+
+  .results-answer label {
+    max-width: 350px;
+    flex-grow: 1; /* Ensures label fills remaining space */
+    text-align: left;
+    padding-left: 5px; /* Add slight spacing between input and text */
   }
 
 .showResults {
     width: 30%;
     margin-left: auto;
-    margin-right: 8%;
+    margin-right: 10%;
     text-align: right;
 }
 
