@@ -42,7 +42,7 @@ function EditPolls({ selectedPoll }) {
     }, [selectedPoll]);
 
     const addQuestion = () => {
-        setQuestions([...questions, { id: null, name: '', Answers: [{ name: '' }, { name: '' }] }]);
+        setQuestions([...questions, { id: null, name: '', QuestionType: { name: 'Single Choice'}, Answers: [{ name: '' }, { name: '' }] }]);
     };
 
     const addAnswer = (questionIndex) => {

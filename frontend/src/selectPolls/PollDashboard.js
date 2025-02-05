@@ -152,7 +152,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     const handleSetSelectedPoll = (pollId) => {
         const selected = polls.find((poll) => poll.id.toString() === pollId);
         setSelectedPoll(selected || null);
-        setIsAnonymous(selected.anonymous || null);
+        setIsAnonymous(selected?.anonymous || null);
     };
 
     const handleAnswerChange = (questionId, answerId, isMultipleChoice = false, checked = false) => {
@@ -345,7 +345,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             )}
             {displayMode === 2 && selectedPoll && (
                 <>
-                <h2>{selectedPoll.name}</h2>
+                <h2><span>{selectedPoll.name}</span></h2>
                 {selectedPoll.description && (
                     <div>
                     <h4 className='description-header'>Beschreibung: </h4>
@@ -377,7 +377,6 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                                 onImportanceChange={handleImportanceChange}
                             />
                         )}
-                        <br />
                         </div>
                     ))}
                     {showButton()}
@@ -385,7 +384,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             )}
             {displayMode === 3 && selectedPoll && (
                 <>
-                <h2>{selectedPoll.name}</h2>
+                <h2><span>{selectedPoll.name}</span></h2>
                 {selectedPoll.description && (
                     <div>
                     <h4 className='description-header'>Beschreibung: </h4>
@@ -409,7 +408,6 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                                 showVotersMode={showVotersMode}
                                 />
                             ))}
-                            <br />
                         </div>
                     ))}
                     {showButton()}
