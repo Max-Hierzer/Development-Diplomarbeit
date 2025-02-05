@@ -1,4 +1,3 @@
-
   .answer {
     margin-left: 30px;
     display: flex;                /* Use flexbox for horizontal alignment */
@@ -9,6 +8,7 @@
   }
 
   .answer label {
+    max-width: 350px;
     flex-grow: 1; /* Ensures label fills remaining space */
     text-align: left;
     padding-left: 5px; /* Add slight spacing between input and text */

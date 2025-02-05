@@ -15,6 +15,18 @@ async function createUser(name, email, password, roleId) {
     }
 }
 
+async function fetchUsers() {
+    try {
+        const users = await Users.findAll({
+            attributes: ['id', 'name'],
+        });
+        return users;
+    } catch (error) {
+        console.error('Error fetching users in service: ', error);
+        throw error;
+    }
+}
+
 // getting login data from database
 async function fetchLogin(username, password) {
     try {
@@ -48,5 +60,6 @@ async function fetchLogin(username, password) {
 
 module.exports = {
     createUser: createUser,
+    fetchUsers: fetchUsers,
     fetchLogin: fetchLogin
 };

@@ -29,6 +29,7 @@ h2 span {
     background-color: #f9f9f9;
     border: 1px solid #ccc;
     border-radius: 5px;
+    width: 450px;
 }
 
 .button-section {
@@ -57,15 +58,25 @@ h2 span {
 
 .question {
     border-style: solid;
-    border-radius: 7px;
+    border-radius: 8px;
     border-width: 3px;
     padding-bottom: 5px;
     margin-bottom: 30px;
 }
 
+.question-header {
+    background-color: #ccc;
+    padding: 8px 5px;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    border-radius: 5px 5px 0 0;
+}
+
 .question-text {
-    text-align: center;
-    margin-left: 4px;
+    text-align: left;
+    margin-left: 15px;
 }
 
 .question-type {
@@ -73,20 +84,10 @@ h2 span {
     margin-right: 0px;
     font-size: 0.7rem;
     background-color: #A8B3C5;
-    margin-bottom: 6px;
     padding: 2px;
-    padding-bottom: 0px;
-    border-radius: 2px;
-}
-
-.question-header {
-    width: 400px;
-    background-color: #ccc;
-    padding: 3px 3px;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-    border-radius: 5px 5px 0 0;
+    border-radius: 4px;
+    display: inline-block;
+    height: fit-content;
 }
 
 .description-header {
