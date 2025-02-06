@@ -3,19 +3,29 @@ import '../styles/myPolls.css';
 
 function MyPoll({ pollId, pollName, isPublic, isAnonymous}) {
     const [response, setResponse] = useState(null);
+    const [copiedText, setCopiedText] = useState(null);
 
-    //const hashedPollId = SHA256(pollId.toString()).toString();
-    const voteHash = btoa(`mode=vote&poll=${pollId}`).replace(/=*$/, '');
-    const resultsHash =btoa(`mode=results&poll=${pollId}`).replace(/=*$/, '');
+    const voteHash = encodeURIComponent(btoa(`public=${isPublic}&mode=vote&poll=${pollId}&anonymous=${isAnonymous}`));
+    const resultsHash = encodeURIComponent(btoa(`public=${isPublic}&mode=results&poll=${pollId}&anonymous=${isAnonymous}`));
 
     let voteLink = `http://localhost:3000/?${voteHash}`;
     let resultsLink = `http://localhost:3000/?${resultsHash}`;
-    console.log(atob(voteHash));
+    console.log(atob(decodeURIComponent(voteHash)));
 
     const handleSubmit = async (event) => {
         event.preventDefault();
     };
 
+    const copyClipboard = async(type) => {
+        if (type) {
+            await navigator.clipboard.writeText(voteLink);
+        } else {
+            await navigator.clipboard.writeText(resultsLink);
+        }
+
+        setCopiedText(type);
+        setTimeout(() => setCopiedText(null), 1000);
+    }
 
 
     return (

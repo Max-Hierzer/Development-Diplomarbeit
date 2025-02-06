@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/results.css';
 
-const Results = ({ answer, question, showVotersMode }) => {
+const Results = ({ answer, question, showVotersMode, isPublic }) => {
     const [results, setResults] = useState([]);
     const [users, setUsers] = useState([]);
-
 
     // gets the data from UserData
     useEffect(() => {

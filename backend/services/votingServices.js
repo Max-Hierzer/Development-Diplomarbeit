@@ -25,7 +25,7 @@ async function submitVote(userId, answers) {
         }
 
         //const userAnswers = Object.entries(answers).map(([questionId, data]) =>     // ONLY WORKS FOR SINGLE CHOICE!!! maps all questions with given answer
-        
+
 
         return { message: "Vote(s) successfully recorded."};
     } catch (error) {
@@ -103,4 +103,4 @@ async function submitPublicVote(answers, userData) {
     }
 }
 
-module.exports = { submitVote };
+module.exports = { submitVote, submitPublicVote, submitAnonymousVote };

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Datetime from 'react-datetime';
 import "react-datetime/css/react-datetime.css";
 import moment from 'moment';
+import PollValidators from './ValidatePoll';
 
 function CreatePoll() {
     const [poll, setPoll] = useState('');
@@ -13,7 +14,6 @@ function CreatePoll() {
     const [resetKey, setResetKey] = useState(0);
     const [questions, setQuestions] = useState([{ name: '', type: 'Single Choice', answers: [{ name: '' }, { name: '' }] }]);
     const [response, setResponse] = useState(null);
-    const [showLink, setShowLink] = useState(false);
     const [selectedPublic, setSelectedPublic] = useState('No');
     const [selectedAnon, setSelectedAnon] = useState('Yes');
 
@@ -30,6 +30,12 @@ function CreatePoll() {
 
         console.log(JSON.stringify(payload, null, 2));
 
+        const error = PollValidators.validatePollData(poll, publishDate, endDate, questions);
+        if (error) {
+            setResponse(error);
+            return;
+        }
+
         try {
             const res = await fetch('http://localhost:3001/api/poll', {
                 method: 'POST',
@@ -38,20 +44,6 @@ function CreatePoll() {
                 },
                 body: JSON.stringify(payload),
             });
-
-            const response = await fetch('http://localhost:3001/api/pollId');
-            const maxId = await response.json();
-
-            setShowLink(true);
-
-            let pollVoteLink = 'http://localhost:3000/?mode=vote&poll=';
-            let pollResultsLink = 'http://localhost:3000/?mode=results&poll=';
-            pollVoteLink += maxId;
-            pollResultsLink += maxId;
-            setVoteLink(pollVoteLink);
-            setResultsLink(pollResultsLink);
-
-
 
             const data = await res.json();
 
@@ -139,19 +131,23 @@ function CreatePoll() {
         <br />
         <br />
         <h4>Public</h4>
-        <select onChange={(e) => setSelectedPublic(e.target.value)}>
+        <select onChange={(e) => setSelectedPublic(e.target.value)} value={selectedPublic}>
             <option>No</option>
             <option>Yes</option>
         </select>
         <br />
         <br />
-        <h4>Anonymous</h4>
-        <select onChange={(e) => setSelectedAnon(e.target.value)}>
-            <option>Yes</option>
-            <option>No</option>
-        </select>
-        <br />
-        <br />
+        {selectedPublic === "No" && (
+            <div>
+            <h4>Anonymous</h4>
+            <select onChange={(e) => setSelectedAnon(e.target.value)} value={selectedAnon}>
+                <option>Yes</option>
+                <option>No</option>
+            </select>
+            <br />
+            <br />
+            </div>
+        )}
         <div className="datetime-container">
             <Datetime
                 key={`publish-${resetKey}`}
@@ -225,18 +221,6 @@ function CreatePoll() {
         <button type="submit">Submit</button>
         </form>
         <p>{response}</p>
-        <br />
-        {showLink && (
-            <div>
-                <label>Vote Link:
-                <h4>{voteLink}</h4>
-                </label>
-                <br />
-                <label>Results Link:
-                <h4>{resultsLink}</h4>
-                </label>
-            </div>
-        )}
         </div>
     );
 }

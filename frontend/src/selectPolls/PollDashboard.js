@@ -10,6 +10,7 @@ import Register from '../usermanagment/Register';
 import CreatePoll from '../createPolls/CreatePolls';
 import MyPoll from '../myPolls/MyPolls'
 import SHA256 from 'crypto-js/sha256';
+import Cookies from 'js-cookie';
 
 const PollDashboard = ({ userId, userName, userRoleId }) => {
     const [polls, setPolls] = useState([]);
@@ -22,13 +23,38 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     const [votePolls, setVotePolls] = useState([]);
     const [resultsPolls, setResultsPolls] = useState([]);
     const [userPolls, setUserPolls] = useState([]);
-    const [maxId, setMaxId] = useState(null);
+    const [isPublic, setIsPublic] = useState(null);
+    const [isAnonymous, setIsAnonymous] = useState(null);
 
     const roleId = parseInt(userRoleId);
 
     const resetAnswers = () => {
         setSelectedAnswers({});
     };
+
+    const handleExportPoll = async () => {
+        try {
+            const response = await fetch(`http://localhost:3001/api/export/${selectedPoll.id}`);
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${selectedPoll.name}_poll.csv`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            } else {
+                console.log(response)
+                alert('Error exporting poll');
+            }
+        } catch (error) {
+            console.error('Error exporting poll:', error);
+            alert('Error exporting poll');
+        }
+    };
+
+
 
     const handleVote = async () => {
         const current_datetime = new Date().toISOString();
@@ -114,7 +140,6 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             const response = await fetch('http://localhost:3001/results/polls');
             const res = await fetch('http://localhost:3001/api/pollId');
             const data = await response.json();
-            const maxIdValue = await res.json();
 
             setPolls(data);
             setMaxId(maxIdValue);
@@ -143,7 +168,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
         } catch (error) {
             console.error('Error fetching polls:', error);
         }
-    }, [])
+    }, [isPublic])
 
     useEffect(() => {
         fetchPolls();
@@ -198,27 +223,28 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
 
 
     useEffect(() => {
-        const linkParam = new URLSearchParams(window.location.search);
-        const hashed = linkParam.toString();
-        const paddedVoteHash = hashed.padEnd(hashed.length + (4 - (hashed.length % 4)) % 4, '=');
-        const unhashed = atob(paddedVoteHash);
-        const params = new URLSearchParams(unhashed);
-        const mode = params.get('mode');
-        const pollId = params.get('poll');
-
-        if (pollId && mode && displayMode === 0) {
-            let selected = null;
-            if (mode === 'vote') {
-                selected = votePolls.find((poll) => poll.id.toString() === pollId.toString());
-                if (selected) {
-                    setSelectedPoll(selected);
-                    setDisplayMode(2);
-                }
-            } else if (mode === 'results') {
-                selected = resultsPolls.find((poll) => poll.id.toString() === pollId);
-                if (selected) {
-                    setSelectedPoll(selected);
-                    setDisplayMode(3);
+        const linkParam = window.location.search.substring(1);
+        if (linkParam) {
+            const unhashed = atob(decodeURIComponent(linkParam));
+            const params = new URLSearchParams(unhashed);
+            const mode = params.get('mode');
+            const pollId = params.get('poll');
+            const anonymous = params.get('anonymous');
+            if (pollId && mode && displayMode === 0) {
+                let selected = null;
+                if (mode === 'vote') {
+                    selected = votePolls.find((poll) => poll.id.toString() === pollId.toString());
+                    if (selected) {
+                        setSelectedPoll(selected);
+                        setDisplayMode(2);
+                        setIsAnonymous(anonymous);
+                    }
+                } else if (mode === 'results') {
+                    selected = resultsPolls.find((poll) => poll.id.toString() === pollId);
+                    if (selected) {
+                        setSelectedPoll(selected);
+                        setDisplayMode(3);
+                    }
                 }
             }
         }
@@ -251,6 +277,18 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                     <div>
                         <button onClick={showVoters}>
                             Show Voters
+                        </button>
+                        <button onClick={handleExportPoll}>
+                            Export Poll
+                        </button>
+                    </div>
+                    );
+                }
+            case 4:
+                return (
+                    <div>
+                        <button>
+                            Poll links
                         </button>
                     </div>
                 
@@ -406,6 +444,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                                 answer={answer}
                                 question={question}
                                 showVotersMode={showVotersMode}
+                                isPublic={selectedPoll.public}
                                 />
                             ))}
                         </div>

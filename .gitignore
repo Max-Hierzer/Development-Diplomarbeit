@@ -3,4 +3,10 @@ backend/node_modules
 frontend/build
 *.kate-swp
 
+<<<<<<< HEAD
 *.env
+=======
+*.env
+backend/env
+frontend/env
+>>>>>>> publicPoll

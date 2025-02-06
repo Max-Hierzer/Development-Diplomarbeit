@@ -3,12 +3,12 @@ const { UserAnswers, Polls, Questions, QuestionTypes, Answers, PublicVotes } = r
 // getting results from database
 async function fetchResults() {
     try {
-        const results = await UserAnswers.findAll({             // get data from UserAnswers
-            attributes: ['userId', 'answerId', 'questionId']    // get attributes userId, answerId, questionId
+        const userAnswers = await UserAnswers.findAll({
+            attributes: ['userId', 'answerId', 'questionId'],
         });
-        return results;
-    }
-    catch (error) {
+
+        return userAnswers;
+    } catch (error) {
         console.error('Error fetching results in service: ', error);
         throw error;
     }
@@ -19,7 +19,7 @@ async function fetchResults() {
 async function fetchPolls() {
     try {
         const polls = await Polls.findAll({                     // get data from Polls
-            attributes: ['id', 'name', 'user_id', 'publish_date', 'end_date', 'description'],                         // get attributes id and name from Polls
+            attributes: ['id', 'name', 'user_id', "public", "anonymous", 'publish_date', 'end_date', 'description'],                         // get attributes id and name from Polls
             include: [                                          // include questions related to poll
                 {
                     model: Questions,

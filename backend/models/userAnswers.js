@@ -13,21 +13,16 @@ module.exports = (sequelize) => {
     // define attributes
     UserAnswers.init(
         {
-            userId: { type: DataTypes.INTEGER, allowNull: false },
+            userId: { type: DataTypes.INTEGER, allowNull: true },
             answerId: { type: DataTypes.INTEGER, allowNull: false },
             questionId: { type: DataTypes.INTEGER, allowNull: false },
             weight: { type: DataTypes.INTEGER, allowNull: true}
 
         },
 
-        { sequelize, modelName: 'UserAnswers', indexes: [
-            {
-                unique: true,
-                fields: ['userId', 'answerId', 'questionId']  // Composite unique constraint
-            }
-        ], },
+        { sequelize, modelName: 'UserAnswers' },
 
     );
-    UserAnswers.removeAttribute("id");  // remove primary key id which is not needed with composite constraint [userId, answerId, questionId]
+
     return UserAnswers;
 };

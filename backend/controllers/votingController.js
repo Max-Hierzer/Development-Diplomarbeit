@@ -1,5 +1,5 @@
 // controllers/voteController.js
-const { submitVote } = require('../services/votingServices');
+const { submitVote, submitPublicVote, submitAnonymousVote } = require('../services/votingServices');
 
 // resolves api connection with frontend for to input votes
 async function handleVote(req, res) {
