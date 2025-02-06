@@ -25,7 +25,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     const [userPolls, setUserPolls] = useState([]);
     const [isPublic, setIsPublic] = useState(null);
     const [isAnonymous, setIsAnonymous] = useState(null);
-
+    const [maxIdValue, setMaxId] = useState(null)
     const roleId = parseInt(userRoleId);
 
     const resetAnswers = () => {
@@ -292,15 +292,6 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                         </button>
                     </div>
                 
-                );
-            }
-            case 4:
-                return (
-                    <div>
-                        <button>
-                            Poll links
-                        </button>
-                    </div>
                 );
             default:
                 return <p>Select an action to proceed.</p>;

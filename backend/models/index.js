@@ -32,8 +32,5 @@ PublicUserData.associate({ Polls });
 QuestionTypes.associate({ Questions });
 UserPolls.associate({ Polls, Users });
 
-<<<<<<< HEAD
+
 module.exports = { sequelize, Users, UserAnswers, Answers, Questions, Polls, Roles, PublicUserData, QuestionTypes, UserPolls };
-=======
-module.exports = { sequelize, Users, UserAnswers, Answers, Questions, Polls, Roles, PublicUserData, QuestionTypes, UserPolls };
->>>>>>> publicPoll
