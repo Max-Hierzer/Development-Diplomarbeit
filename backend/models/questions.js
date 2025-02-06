@@ -13,7 +13,7 @@ module.exports = (sequelize) => {
     // define attributes
     Questions.init(
         {
-            name: { type: DataTypes.STRING, allowNull: false },
+            name: { type: DataTypes.STRING(1000), allowNull: false },
             pollId: { type: DataTypes.INTEGER, allowNull: false, references: { model: 'Polls', key: 'id' } },
             typeId: { type: DataTypes.INTEGER, allowNull: false, references: { model: 'QuestionTypes', key: 'id' } }
         },

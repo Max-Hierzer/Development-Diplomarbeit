@@ -12,7 +12,7 @@ module.exports = (sequelize) => {
     // attributes of Answers
     Answers.init(
         {
-            name: { type: DataTypes.STRING, allowNull: false }
+            name: { type: DataTypes.STRING(1000), allowNull: false }
         },
         { sequelize, modelName: 'Answers' }
     );

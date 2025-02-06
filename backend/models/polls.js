@@ -14,8 +14,8 @@ module.exports = (sequelize) => {
     // gives poll atributes
     Polls.init(
         {
-            name: { type: DataTypes.STRING, allowNull: false },
-            description: { type: DataTypes.STRING, allowNull: true },
+            name: { type: DataTypes.STRING(400), allowNull: false },
+            description: { type: DataTypes.STRING(1500), allowNull: true },
             user_id: { type: DataTypes.INTEGER, allowNull: false},
             public: { type: DataTypes.BOOLEAN, allowNull: false},
             anonymous: { type: DataTypes.BOOLEAN, allowNull: false},
