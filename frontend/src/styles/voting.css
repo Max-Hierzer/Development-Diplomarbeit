@@ -25,7 +25,7 @@
   button {
     margin-top: 20px;
     padding: 10px 20px;
-    background-color: #4CAF50;
+    background-color: var(--primary-color);
     color: white;
     border: none;
     border-radius: 5px;
@@ -38,7 +38,7 @@
   }
 
   button:hover {
-    background-color: #45a049; /* Slightly darker green on hover */
+    background-color: var(--primary-hover-color); /* Slightly darker green on hover */
   }
   
   p {

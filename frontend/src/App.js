@@ -6,6 +6,8 @@ import InputMessage from './messages/InputMessage';
 import Login from './usermanagment/Login';
 import PollDashboard from './selectPolls/PollDashboard';
 import PublicPolls from './publicPolls/publicPolls';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 function App() {
   const [isInputMode, setIsInputMode] = useState(0);
@@ -54,54 +56,53 @@ function App() {
         setIsPublic(0);
       }
     }
-    }, []);
+  }, []);
 
 
 
   return (
     <div className="App">
-      {!isPublic ?
-        !isLoggedIn ? (
-        // Render the login component if the user is not logged in
-        <div className='Usermanagement'>
-          <div>
-            <h1>Welcome to the User Login</h1>
-            <Login loginChange={handleLoginChange} />
-            <h2>Please log in to continue</h2>
-          </div>
-        </div>
-        ) : (
-
-        // Render the main content if the user is logged in
-        <div className='MainContent'>
-          <div className='Logout'>
-            <button onClick={handleLogout}>Logout</button>
-          </div>
-            <div>
+      <Header isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+      <main>
+        {!isPublic ?
+          !isLoggedIn ? (
+            // Render the login component if the user is not logged in
+            <div className='Usermanagement'>
               <div>
-                <PollDashboard userId={userId} userName={userName} userRoleId={userRoleId}/>
-              </div>
-              <div className='Messenger'>
-                <h1>{isInputMode ? 'Submit a Message' : 'Messages'}</h1>
-
-                <button onClick={() => setIsInputMode(!isInputMode)}>
-                  Switch to {isInputMode ? 'View Messages' : 'Submit a Message'}
-                </button>
-                {isInputMode ? (
-                  // Input Form
-                  <InputMessage />
-                ) : (
-                  // Output View: List of Messages
-                  <WriteMessages />
-                )}
+                <h1>Welcome to the User Login</h1>
+                <Login loginChange={handleLoginChange} />
+                <h2>Please log in to continue</h2>
               </div>
             </div>
-        </div>
-        ) :
-        (
-          <PublicPolls  />
-        )
-      }
+          ) : (
+
+            // Render the main content if the user is logged in
+            <div className='MainContent'>
+              <div>
+                <div>
+                  <PollDashboard userId={userId} userName={userName} userRoleId={userRoleId} />
+                </div>
+                <div className='Messenger'>
+                  <h1>{isInputMode ? 'Submit a Message' : 'Messages'}</h1>
+
+                  <button onClick={() => setIsInputMode(!isInputMode)}>
+                    Switch to {isInputMode ? 'View Messages' : 'Submit a Message'}
+                  </button>
+                  {isInputMode ? (
+                    <InputMessage />
+                  ) : (
+                    <WriteMessages />
+                  )}
+                </div>
+              </div>
+            </div>
+          ) :
+          (
+            <PublicPolls />
+          )
+        }
+      </main>
+      <Footer />
     </div>
   );
 }

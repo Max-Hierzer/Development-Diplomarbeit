@@ -1,59 +1,46 @@
-.Register {
-    padding: 20px;
-}
+/* register.css */
 
 .registerForm {
-    display: flex;
-    flex-direction: column; 
-    align-items: center;
-
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.form-group input,
-.form-group select {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     width: 100%;
-    padding: 10px;
+    max-width: 400px;
+}
+
+.registerForm input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: border-box; 
+    font-size: 16px;
 }
 
-
-.form-group input:focus,
-.form-group select:focus {
+.registerForm input:focus {
+    border-color: var(--primary-color);
     outline: none;
-    border-color: #4CAF50;
-}
-
-.roleDescription {
-    margin-top: 10px; 
-    font-style: italic; 
-}
-
-.roleDescription .vortitel {
-    text-decoration: underline; 
-    text-decoration-style: solid; 
-    text-underline-offset: 2px; 
 }
 
 .registerForm button {
-    background-color: #4CAF50;
-    border: none;
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
     color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
+    border: none;
     border-radius: 4px;
+    font-size: 16px;
     cursor: pointer;
+}
+
+.registerForm button:hover {
+    background-color: var(--primary-hover-color);
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
 }

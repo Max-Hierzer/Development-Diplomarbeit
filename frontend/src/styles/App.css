@@ -1,3 +1,11 @@
+:root {
+  --primary-color: #51184e;
+  --secondary-color: #F9BB03;
+  --primary-hover-color: rgb(163, 131, 168);
+}
+
+
+
 /* General Reset */
 * {
   margin: 0;
@@ -6,74 +14,12 @@
 }
 
 /* Body Styling */
-body {
+body, html {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
   color: #333;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100%;
-}
-
-/* Usermanagement Section (Login/Register) */
-.Usermanagement {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 100%;
   width: 100%;
-  max-width: 100%;
-  text-align: center;
-}
-
-.Usermanagement h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
-.Usermanagement h2 {
-  font-size: 18px;
-  margin-top: 20px;
-}
-
-.Usermanagement button {
-  background-color: #2add2a;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  margin-top: 10px;
-  cursor: pointer;
-  border-radius: 4px;
-  font-size: 16px;
-}
-
-.Usermanagement button:hover {
-  background-color: green;
-}
-
-.Usermanagement form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.Usermanagement input {
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
-
-.Usermanagement input:focus {
-  outline: none;
-  border-color: #2add2a;
-}
-
-/* Ensure that the body and html take up the full height of the page */
-html, body {
-  margin: 0;  /* Remove default margin */
-  font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
 }
@@ -82,48 +28,87 @@ html, body {
 .App {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 20vh;
+  min-height: 100vh;
+  width: 100%;
 }
 
-/* Ensure that the Usermanagement section takes only necessary space */
-.Usermanagement {
+/* Header Styling */
+header {
+  background: #333;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  width: 100%;
+}
+
+/* Footer Styling */
+footer {
+  background: #333;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  margin-top: auto;
+  width: 100%;
+}
+
+/* Main Content */
+main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   padding: 20px;
+  width: 100%;
+  background-color: var(--primary-color);
 }
 
-/* Center the main content and allow it to expand */
+/* Usermanagement Section */
+.Usermanagement {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* Main Content Section */
 .MainContent {
-  flex: auto;  /* This allows MainContent to expand and take up remaining space */
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: center;  /* Vertically center content */
-  align-items: center;      /* Horizontally center content */
-  text-align: center;
-  background-color: #eee;  /* Optional, you can set a background color */
+  align-items: center; /* Zentriert den Messenger horizontal */
+  justify-content: center; /* Zentriert den Messenger vertikal */
 }
 
-/* Styling for logout button in the top-right corner */
-.Logout {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-}
-
-/* Messenger styling */
+/* Messenger Styling */
 .Messenger {
-  border-color: #ccc;
-  border-style:solid;
-  margin-top: 20%;
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Zentriert den Inhalt horizontal */
+  justify-content: center; /* Zentriert den Inhalt vertikal */
+  text-align: center;
 }
 
+/* Button Styling */
 button {
   padding: 10px 20px;
-  background-color: #2add2a;
+  background-color: var(--primary-color);
   color: white;
   border: none;
   border-radius: 5px;
@@ -133,42 +118,16 @@ button {
 }
 
 button:hover {
-  background-color: green;
+  background-color: var(--primary-color);
 }
 
-h1, h2 {
-  color: #333;
-}
+/* Responsive Design */
+@media (max-width: 768px) {
+  .MainContent, .Messenger, .Usermanagement {
+    width: 90%;
+  }
 
-h2 {
-  margin-top: 20px;
+  button {
+    width: 100%;
+  }
 }
-
-/* Styling for Register/Login forms */
-.Usermanagement h1, .Usermanagement h2 {
-  margin-bottom: 10px;
-}
-
-input {
-  padding: 10px;
-  margin: 5px;
-  width: 200px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-label {
-  margin: 5px 0;
-}
-
-.datetime-container {
-    display: flex;
-    justify-content: center;
-    margin: 10px 0;
-}
-
-.Beschreibung {
-  width: 400px;
-  text-align: left;
-}
-
