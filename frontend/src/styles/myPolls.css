@@ -8,5 +8,5 @@
   margin-bottom: -5px;
   text-align: left;
   padding: 2px 4px;
-  background-color: #ccc;
+  background-color: var(--primary-hover-color);
 }

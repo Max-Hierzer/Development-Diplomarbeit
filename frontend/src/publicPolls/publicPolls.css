@@ -1,3 +1,7 @@
+.publicPoll{
+    background-color: white;
+}
+
 .required {
     border: 1px solid #ccc;
     padding: 8px;

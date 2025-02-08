@@ -82,7 +82,7 @@ function App() {
                 <div>
                   <PollDashboard userId={userId} userName={userName} userRoleId={userRoleId} />
                 </div>
-                <div className='Messenger'>
+                {/* <div className='Messenger'>
                   <h1>{isInputMode ? 'Submit a Message' : 'Messages'}</h1>
 
                   <button onClick={() => setIsInputMode(!isInputMode)}>
@@ -93,7 +93,7 @@ function App() {
                   ) : (
                     <WriteMessages />
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
           ) :
