@@ -48,7 +48,7 @@ const Login = ({ loginChange }) => {
                         value={inputPassword}
                         onChange={(e) => setInputPassword(e.target.value)}
                     />
-                <button type="submit">Login</button>
+                <button type="submit">Anmelden</button>
             </form>
 
             {errorMessage && <p className="error-message">{errorMessage}</p>}

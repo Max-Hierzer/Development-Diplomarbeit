@@ -69,9 +69,9 @@ function App() {
             // Render the login component if the user is not logged in
             <div className='Usermanagement'>
               <div>
-                <h1>Welcome to the User Login</h1>
+                <h1>Wilkommen zu unserem Umfragetool</h1>
                 <Login loginChange={handleLoginChange} />
-                <h2>Please log in to continue</h2>
+                <h2>Bitte melden Sie sich an um fortzufahren</h2>
               </div>
             </div>
           ) : (
