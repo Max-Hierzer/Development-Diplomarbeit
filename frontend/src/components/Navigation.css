@@ -1,0 +1,61 @@
+/* Navigation.css */
+
+.navigation {
+    display: flex;
+    gap: 10px; /* Abstand zwischen den Buttons */
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .nav-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+  }
+  
+  .nav-button:hover {
+    background-color: var(--primary-hover-color);
+    color: white;
+  }
+  
+  .hamburger-menu {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .hamburger-menu div {
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+  }
+  
+  @media (max-width: 850px) {
+    .navigation {
+      display: none; 
+    }
+  
+    .hamburger-menu {
+      display: flex; 
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+    }
+  
+    .hamburger-menu.open + .navigation {
+      display: flex; 
+      flex-direction: column;
+      gap: 10px;
+      background-color: #f4f4f4;
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+  }
+  
