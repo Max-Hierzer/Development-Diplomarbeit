@@ -10,7 +10,7 @@ function Header({ isLoggedIn, handleLogout }) {
                 <h1 className="TitleName">Umfragetool</h1>
                 {isLoggedIn && <button className="LogoutButton" onClick={handleLogout}>Logout</button>}
             </div>
-            <Navigation /> {/* Navigation wird unterhalb des Headers angezeigt */}
+            {isLoggedIn && <Navigation /> }
         </header>
     );
 }
