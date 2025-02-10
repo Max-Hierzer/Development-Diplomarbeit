@@ -12,10 +12,9 @@ import MyPoll from '../myPolls/MyPolls'
 import SHA256 from 'crypto-js/sha256';
 import Cookies from 'js-cookie';
 
-const PollDashboard = ({ userId, userName, userRoleId }) => {
+const PollDashboard = ({ userId, userName, userRoleId, displayMode }) => {
     const [polls, setPolls] = useState([]);
     const [selectedAnswers, setSelectedAnswers] = useState({});
-    const [displayMode, setDisplayMode] = useState(0); // 0: initial, 1: Edit, 2: Vote, 3: Results, 4: Registration
     const [showVotersMode, setShowVoters] = useState(true);
     const [response, setResponse] = useState(null);
     const [selectedPoll, setSelectedPoll] = useState(null);
@@ -206,7 +205,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
     }; 
     
     const handleDisplayMode = async (displayM, polla) => {
-        setDisplayMode(displayM);
+        //setDisplayMode(displayM);
         await fetchPolls();
         setSelectedPoll(null);
     };
@@ -236,14 +235,14 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
                     selected = votePolls.find((poll) => poll.id.toString() === pollId.toString());
                     if (selected) {
                         setSelectedPoll(selected);
-                        setDisplayMode(2);
+                        //setDisplayMode(2);
                         setIsAnonymous(anonymous);
                     }
                 } else if (mode === 'results') {
                     selected = resultsPolls.find((poll) => poll.id.toString() === pollId);
                     if (selected) {
                         setSelectedPoll(selected);
-                        setDisplayMode(3);
+                        //setDisplayMode(3);
                     }
                 }
             }
@@ -313,7 +312,7 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
         }
     }
 
-    const showContent = (roleId) => {
+    /*const showContent = (roleId) => {
         switch (roleId) {
             case 1:
                 return (
@@ -362,11 +361,11 @@ const PollDashboard = ({ userId, userName, userRoleId }) => {
             default:
                 return ('test');
         }
-    }
+    }*/
 
     return (
         <div className="dashboard-container" style={{ minHeight: '400px',height: 'auto', overflow: 'visible' }}>
-            {showContent(roleId)}
+            {/*showContent(roleId)*/}
             {showSelect(displayMode)}
             <div className="poll-content">
             {displayMode === 1 && (

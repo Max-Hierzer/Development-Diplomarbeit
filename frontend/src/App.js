@@ -5,6 +5,7 @@ import WriteMessages from './messages/WriteMessage';
 import InputMessage from './messages/InputMessage';
 import Login from './usermanagment/Login';
 import PollDashboard from './selectPolls/PollDashboard';
+import PollDashboard2 from './selectPolls/PollDashboard2';
 import PublicPolls from './publicPolls/publicPolls';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -19,6 +20,7 @@ function App() {
   const [userName, setUserName] = useState(sessionStorage.getItem('userName') || '');
   const [userRoleId, setUserRoleId] = useState(sessionStorage.getItem('userRoleId') || 0);
   const [isPublic, setIsPublic] = useState(null);
+  const [displayMode, setDisplayMode] = useState(0);
 
   useEffect(() => {
     // Save login state to sessionStorage whenever it changes
@@ -62,7 +64,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+      <Header isLoggedIn={isLoggedIn} handleLogout={handleLogout} setDisplayMode={setDisplayMode} />
       <main>
         {!isPublic ?
           !isLoggedIn ? (
@@ -80,7 +82,7 @@ function App() {
             <div className='MainContent'>
               <div>
                 <div>
-                  <PollDashboard userId={userId} userName={userName} userRoleId={userRoleId} />
+                <PollDashboard userId={userId} userName={userName} userRoleId={userRoleId} displayMode={displayMode} />
                 </div>
                 {/* <div className='Messenger'>
                   <h1>{isInputMode ? 'Submit a Message' : 'Messages'}</h1>

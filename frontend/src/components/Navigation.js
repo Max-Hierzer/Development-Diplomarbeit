@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import './Navigation.css';
 
-function Navigation() {
+function Navigation({ setDisplayMode }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const toggleMenu = () => {
@@ -16,13 +16,13 @@ function Navigation() {
                 <div></div>
             </div>
             <nav className={`navigation ${isMenuOpen ? 'open' : ''}`}>
-                <button className="nav-button">Registrierung</button>
-                <button className="nav-button">Erstellen</button>
+                <button className="nav-button" onClick={() => setDisplayMode(5)}>Registrierung</button>
+                <button className="nav-button" onClick={() => setDisplayMode(6)}>Erstellen</button>
                 <button className="nav-button">Löschen</button>
-                <button className="nav-button">Bearbeiten</button>
-                <button className="nav-button">Abstimmen</button>
-                <button className="nav-button">Ergebnisse</button>
-                <button className="nav-button">Meine Umfragen</button>
+                <button className="nav-button" onClick={() => setDisplayMode(1)}>Bearbeiten</button>
+                <button className="nav-button" onClick={() => setDisplayMode(2)}>Abstimmen</button>
+                <button className="nav-button" onClick={() => setDisplayMode(3)}>Ergebnisse</button>
+                <button className="nav-button" onClick={() => setDisplayMode(4)}>Meine Umfragen</button>
             </nav>
         </div>
     );

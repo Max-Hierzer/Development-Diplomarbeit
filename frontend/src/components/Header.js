@@ -3,14 +3,14 @@ import React from "react";
 import './Header.css';
 import Navigation from './Navigation';
 
-function Header({ isLoggedIn, handleLogout }) {
+function Header({ isLoggedIn, handleLogout, setDisplayMode}) {
     return (
         <header className="header">
             <div className="header-top">
                 <h1 className="TitleName">Umfragetool</h1>
                 {isLoggedIn && <button className="LogoutButton" onClick={handleLogout}>Logout</button>}
             </div>
-            {isLoggedIn && <Navigation /> }
+            {isLoggedIn && <Navigation setDisplayMode={setDisplayMode} /> }
         </header>
     );
 }
