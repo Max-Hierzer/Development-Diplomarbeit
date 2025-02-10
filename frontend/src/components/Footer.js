@@ -5,9 +5,9 @@ import './Footer.css';
 function Footer(){
     return (
         <footer className="footer">
-            <p>&copy; {new Date().getFullYear()}</p>
-            <p>Impressum</p>
-            <p>Datenschuterklärung</p>
+            <a>&copy; {new Date().getFullYear()}</a>
+            <a>Impressum</a>
+            <a>Datenschuterklärung</a>
         </footer>
     );
 }
