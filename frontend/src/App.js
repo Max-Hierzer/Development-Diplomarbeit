@@ -5,7 +5,6 @@ import WriteMessages from './messages/WriteMessage';
 import InputMessage from './messages/InputMessage';
 import Login from './usermanagment/Login';
 import PollDashboard from './selectPolls/PollDashboard';
-import PollDashboard2 from './selectPolls/PollDashboard2';
 import PublicPolls from './publicPolls/publicPolls';
 import Header from './components/Header';
 import Footer from './components/Footer';
