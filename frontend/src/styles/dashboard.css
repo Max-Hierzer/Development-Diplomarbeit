@@ -12,10 +12,17 @@ h2 span {
 
 }
 
-.dashboard-container {
+.dashboard-container, .poll-content {
+    width: 100%;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
-    height: 80vh; /* Full viewport height */
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-container {
+    height: 100%;
     overflow: hidden;
 }
 
@@ -29,7 +36,6 @@ h2 span {
     background-color: #f9f9f9;
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: 450px;
     color: black;
 }
 
@@ -63,6 +69,8 @@ h2 span {
     border-width: 3px;
     padding-bottom: 5px;
     margin-bottom: 30px;
+    width: 100%;
+    max-width: 600px;
 }
 
 .question-header {
@@ -100,4 +108,8 @@ h2 span {
     text-align: left;
     font-weight: normal;
     margin-bottom: 10px;
+}
+
+.select-content {
+    max-width: 1000px;
 }

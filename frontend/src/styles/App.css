@@ -17,7 +17,6 @@
 body, html {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
-  color: white;
   height: 100%;
   width: 100%;
   display: flex;
@@ -78,7 +77,7 @@ main {
 /* Main Content Section */
 .MainContent {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1000px;
   padding: 20px;
   background-color: white;
   border-radius: 8px;
@@ -124,10 +123,6 @@ button:hover {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .MainContent, .Messenger, .Usermanagement {
-    width: 90%;
-  }
-
   button {
     width: 100%;
   }

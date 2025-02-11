@@ -12,12 +12,11 @@ import MyPoll from '../myPolls/MyPolls'
 import SHA256 from 'crypto-js/sha256';
 import Cookies from 'js-cookie';
 
-const PollDashboard = ({ userId, userName, userRoleId, displayMode }) => {
+const PollDashboard = ({ userId, userName, userRoleId, displayMode, setSelectedPoll, selectedPoll }) => {
     const [polls, setPolls] = useState([]);
     const [selectedAnswers, setSelectedAnswers] = useState({});
     const [showVotersMode, setShowVoters] = useState(true);
     const [response, setResponse] = useState(null);
-    const [selectedPoll, setSelectedPoll] = useState(null);
     const [editPolls, setEditPolls] = useState([]);
     const [votePolls, setVotePolls] = useState([]);
     const [resultsPolls, setResultsPolls] = useState([]);

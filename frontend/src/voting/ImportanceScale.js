@@ -25,7 +25,7 @@ const ImportanceScale = ({ questionId, onImportanceChange }) => {
                         key={value}
                         onClick={() => handleSelectImportance(value)}
                         style={{
-                            width: "40px",
+                            width: "10%",
                             height: "40px",
                             borderRadius: "4px",
                             border: "1px solid #ccc",

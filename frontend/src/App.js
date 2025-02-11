@@ -20,6 +20,7 @@ function App() {
   const [userRoleId, setUserRoleId] = useState(sessionStorage.getItem('userRoleId') || 0);
   const [isPublic, setIsPublic] = useState(null);
   const [displayMode, setDisplayMode] = useState(0);
+  const [selectedPoll, setSelectedPoll] = useState(null);
 
   useEffect(() => {
     // Save login state to sessionStorage whenever it changes
@@ -63,7 +64,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header isLoggedIn={isLoggedIn} handleLogout={handleLogout} setDisplayMode={setDisplayMode} />
+      <Header isLoggedIn={isLoggedIn} handleLogout={handleLogout} setDisplayMode={setDisplayMode} setSelectedPoll={setSelectedPoll} />
       <main>
         {!isPublic ?
           !isLoggedIn ? (
@@ -79,10 +80,7 @@ function App() {
 
             // Render the main content if the user is logged in
             <div className='MainContent'>
-              <div>
-                <div>
-                <PollDashboard userId={userId} userName={userName} userRoleId={userRoleId} displayMode={displayMode} />
-                </div>
+                <PollDashboard userId={userId} userName={userName} userRoleId={userRoleId} displayMode={displayMode} setSelectedPoll={setSelectedPoll} selectedPoll={selectedPoll} />
                 {/* <div className='Messenger'>
                   <h1>{isInputMode ? 'Submit a Message' : 'Messages'}</h1>
 
@@ -95,7 +93,6 @@ function App() {
                     <WriteMessages />
                   )}
                 </div> */}
-              </div>
             </div>
           ) :
           (

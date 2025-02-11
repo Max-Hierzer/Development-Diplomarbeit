@@ -18,7 +18,7 @@ const SelectPolls = ({ polls, handleSetSelectedPoll, selectedPoll, mode }) => {
     }
 
     return (
-        <div>
+        <div className="select-content">
         <br />
         {showHeading()}
         <br />
