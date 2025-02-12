@@ -65,7 +65,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header isLoggedIn={isLoggedIn} handleLogout={handleLogout} setDisplayMode={setDisplayMode} setSelectedPoll={setSelectedPoll} />
+      <Header isLoggedIn={isLoggedIn} handleLogout={handleLogout} setDisplayMode={setDisplayMode} setSelectedPoll={setSelectedPoll} userRoleId={userRoleId} />
       <main>
         {!isPublic ?
           !isLoggedIn ? (

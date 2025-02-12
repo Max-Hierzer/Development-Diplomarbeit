@@ -40,7 +40,8 @@ function MyPoll({ pollId, pollName, isPublic, isAnonymous}) {
           <h3 className="linkhead">Results Link:</h3>
           <button onClick={() => copyClipboard(0)}>
             {copiedText === 0 ? 'Copied!' : 'Copy Link'}
-          </button>
+          </button><br />
+          <button>Löschen</button>
         </div>
     );
 }

@@ -63,7 +63,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                 return;
             }
 
-            console.log("Submitting vote:", JSON.stringify({answers: selectedAnswers}, null, 2));
+            console.log("Submitting vote:", JSON.stringify({ answers: selectedAnswers }, null, 2));
 
             try {
                 const res = await fetch('http://localhost:3001/api/vote', {
@@ -99,7 +99,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
             alert('Please select all questions');
             return;
         }
-        console.log("Submitting Anonymous Vote", JSON.stringify({answers: selectedAnswers}, null, 2));
+        console.log("Submitting Anonymous Vote", JSON.stringify({ answers: selectedAnswers }, null, 2));
 
         const current_datetime = new Date().toISOString();
         if (selectedPoll.end_date > current_datetime) {
@@ -266,14 +266,14 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                 )
                 else {
                     return (
-                    <div>
-                        <button onClick={showVoters}>
-                            Show Voters
-                        </button>
-                        <button onClick={handleExportPoll}>
-                            Export Poll
-                        </button>
-                    </div>
+                        <div>
+                            <button onClick={showVoters}>
+                                Show Voters
+                            </button>
+                            <button onClick={handleExportPoll}>
+                                Export Poll
+                            </button>
+                        </div>
                     );
                 }
             case 4:
@@ -283,7 +283,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                             Poll links
                         </button>
                     </div>
-                
+
                 );
             default:
                 return <p>Select an action to proceed.</p>;
@@ -357,99 +357,99 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
     }*/
 
     return (
-        <div className="dashboard-container" style={{ minHeight: '400px',height: 'auto', overflow: 'visible' }}>
+        <div className="dashboard-container" style={{ minHeight: '400px', height: 'auto', overflow: 'visible' }}>
             {/*showContent(roleId)*/}
             {showSelect(displayMode)}
             <div className="poll-content">
-            {displayMode === 1 && (
-                <EditPolls selectedPoll={selectedPoll} refreshPolls={fetchPolls} />
-            )}
-            {displayMode === 2 && selectedPoll && (
-                <>
-                <h2><span>{selectedPoll.name}</span></h2>
-                {selectedPoll.description && (
-                    <div>
-                    <h4 className='description-header'>Beschreibung: </h4>
-                    <h5 className='description'>{selectedPoll.description}</h5>
-                    </div>
+                {displayMode === 1 && (
+                    <EditPolls selectedPoll={selectedPoll} refreshPolls={fetchPolls} />
                 )}
-                <br />
-                {selectedPoll.Questions &&
-                    selectedPoll.Questions.map((question) => (
-                        <div key={question.id} className="question">
-                        <h3 className="question-header">
-                            <span className="question-text">{question.name}</span>
-                            <span className="question-type">{question.QuestionType.name}</span>
-                        </h3>
-                        {question.Answers &&
-                            question.Answers.map((answer) => (
-                                <Voting
-                                key={answer.id}
-                                question={question}
-                                answer={answer}
-                                selectedAnswers={selectedAnswers}
-                                handleAnswerChange={handleAnswerChange}
-                                />
-                            ))}
-
-                        {question.QuestionType.name === "Weighted Choice" && (
-                            <ImportanceScale
-                                questionId={question.id}
-                                onImportanceChange={handleImportanceChange}
-                            />
+                {displayMode === 2 && selectedPoll && (
+                    <>
+                        <h2><span>{selectedPoll.name}</span></h2>
+                        {selectedPoll.description && (
+                            <div>
+                                <h4 className='description-header'>Beschreibung: </h4>
+                                <h5 className='description'>{selectedPoll.description}</h5>
+                            </div>
                         )}
-                        </div>
-                    ))}
-                    {showButton()}
-                    </>
-            )}
-            {displayMode === 3 && selectedPoll && (
-                <>
-                <h2><span>{selectedPoll.name}</span></h2>
-                {selectedPoll.description && (
-                    <div>
-                    <h4 className='description-header'>Beschreibung: </h4>
-                    <h5 className='description'>{selectedPoll.description}</h5>
-                    </div>
-                )}
-                <br />
-                {selectedPoll.Questions &&
-                    selectedPoll.Questions.map((question) => (
-                    <div key={question.id} className="question">
-                        <h3 className="question-header">
-                            <span className="question-text">{question.name}</span>
-                            <span className="question-type">{question.QuestionType.name}</span>
-                        </h3>
-                        {question.Answers &&
-                            question.Answers.map((answer) => (
-                                <Results
-                                key={answer.id}
-                                answer={answer}
-                                question={question}
-                                showVotersMode={showVotersMode}
-                                isPublic={selectedPoll.public}
-                                />
+                        <br />
+                        {selectedPoll.Questions &&
+                            selectedPoll.Questions.map((question) => (
+                                <div key={question.id} className="question">
+                                    <h3 className="question-header">
+                                        <span className="question-text">{question.name}</span>
+                                        <span className="question-type">{question.QuestionType.name}</span>
+                                    </h3>
+                                    {question.Answers &&
+                                        question.Answers.map((answer) => (
+                                            <Voting
+                                                key={answer.id}
+                                                question={question}
+                                                answer={answer}
+                                                selectedAnswers={selectedAnswers}
+                                                handleAnswerChange={handleAnswerChange}
+                                            />
+                                        ))}
+
+                                    {question.QuestionType.name === "Weighted Choice" && (
+                                        <ImportanceScale
+                                            questionId={question.id}
+                                            onImportanceChange={handleImportanceChange}
+                                        />
+                                    )}
+                                </div>
                             ))}
-                        </div>
-                    ))}
-                    {showButton()}
+                        {showButton()}
                     </>
-            )}
-            {displayMode === 4 && selectedPoll && (
-                <MyPoll pollId={selectedPoll.id} pollName={selectedPoll.name} isPublic={selectedPoll.public} isAnonymous={selectedPoll.anonymous}/>
-            )}
-            {displayMode === 5 && (
-                <Register />
-            )}
-            {displayMode === 6 && (
-                <CreatePoll />
-            )}
-            {displayMode === 0 && (
-                <p>Select an action to proceed.</p>
-            )}
-            {!selectedPoll && displayMode > 1 && displayMode < 5 && (
-                <p>Please select a poll</p>
-            )}
+                )}
+                {displayMode === 3 && selectedPoll && (
+                    <>
+                        <h2><span>{selectedPoll.name}</span></h2>
+                        {selectedPoll.description && (
+                            <div>
+                                <h4 className='description-header'>Beschreibung: </h4>
+                                <h5 className='description'>{selectedPoll.description}</h5>
+                            </div>
+                        )}
+                        <br />
+                        {selectedPoll.Questions &&
+                            selectedPoll.Questions.map((question) => (
+                                <div key={question.id} className="question">
+                                    <h3 className="question-header">
+                                        <span className="question-text">{question.name}</span>
+                                        <span className="question-type">{question.QuestionType.name}</span>
+                                    </h3>
+                                    {question.Answers &&
+                                        question.Answers.map((answer) => (
+                                            <Results
+                                                key={answer.id}
+                                                answer={answer}
+                                                question={question}
+                                                showVotersMode={showVotersMode}
+                                                isPublic={selectedPoll.public}
+                                            />
+                                        ))}
+                                </div>
+                            ))}
+                        {showButton()}
+                    </>
+                )}
+                {displayMode === 4 && selectedPoll && (
+                    <MyPoll pollId={selectedPoll.id} pollName={selectedPoll.name} isPublic={selectedPoll.public} isAnonymous={selectedPoll.anonymous} />
+                )}
+                {displayMode === 5 && (
+                    <Register />
+                )}
+                {displayMode === 6 && (
+                    <CreatePoll />
+                )}
+                {displayMode === 0 && (
+                    <p>Select an action to proceed.</p>
+                )}
+                {!selectedPoll && displayMode > 1 && displayMode < 5 && (
+                    <p>Please select a poll</p>
+                )}
             </div>
         </div>
 
