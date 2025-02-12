@@ -136,7 +136,6 @@ const PollDashboard = ({ userId, userName, userRoleId, displayMode, setSelectedP
         try {
             const userId = parseInt(sessionStorage.getItem('userId'));
             const response = await fetch('http://localhost:3001/results/polls');
-            const res = await fetch('http://localhost:3001/api/pollId');
             const data = await response.json();
 
             setPolls(data);
