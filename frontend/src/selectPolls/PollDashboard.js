@@ -12,7 +12,7 @@ import MyPoll from '../myPolls/MyPolls'
 import SHA256 from 'crypto-js/sha256';
 import Cookies from 'js-cookie';
 
-const PollDashboard = ({ userId, userName, userRoleId, displayMode, setSelectedPoll, selectedPoll }) => {
+const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMode, setSelectedPoll, selectedPoll }) => {
     const [polls, setPolls] = useState([]);
     const [selectedAnswers, setSelectedAnswers] = useState({});
     const [showVotersMode, setShowVoters] = useState(true);
@@ -22,13 +22,14 @@ const PollDashboard = ({ userId, userName, userRoleId, displayMode, setSelectedP
     const [resultsPolls, setResultsPolls] = useState([]);
     const [userPolls, setUserPolls] = useState([]);
     const [isPublic, setIsPublic] = useState(null);
-    const [isAnonymous, setIsAnonymous] = useState(null);
+    const [isAnonymous, setIsAnonymous] = useState(selectedPoll?.anonymous || null);
     const [maxIdValue, setMaxId] = useState(null)
     const roleId = parseInt(userRoleId);
 
     const resetAnswers = () => {
         setSelectedAnswers({});
     };
+
 
     const handleExportPoll = async () => {
         try {
@@ -200,12 +201,6 @@ const PollDashboard = ({ userId, userName, userRoleId, displayMode, setSelectedP
                 };
             }
         });
-    }; 
-    
-    const handleDisplayMode = async (displayM, polla) => {
-        //setDisplayMode(displayM);
-        await fetchPolls();
-        setSelectedPoll(null);
     };
 
     const handleImportanceChange = (questionId, importance) => {
@@ -233,14 +228,14 @@ const PollDashboard = ({ userId, userName, userRoleId, displayMode, setSelectedP
                     selected = votePolls.find((poll) => poll.id.toString() === pollId.toString());
                     if (selected) {
                         setSelectedPoll(selected);
-                        //setDisplayMode(2);
+                        setDisplayMode(2);
                         setIsAnonymous(anonymous);
                     }
                 } else if (mode === 'results') {
                     selected = resultsPolls.find((poll) => poll.id.toString() === pollId);
                     if (selected) {
                         setSelectedPoll(selected);
-                        //setDisplayMode(3);
+                        setDisplayMode(3);
                     }
                 }
             }

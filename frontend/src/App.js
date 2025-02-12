@@ -35,6 +35,8 @@ function App() {
     setUserId(userId);
     setUserName(userName);
     setUserRoleId(userRoleId);
+    setDisplayMode(0);
+    setSelectedPoll(null);
   };
 
   const handleLogout = () => {
@@ -61,7 +63,6 @@ function App() {
   }, []);
 
 
-
   return (
     <div className="App">
       <Header isLoggedIn={isLoggedIn} handleLogout={handleLogout} setDisplayMode={setDisplayMode} setSelectedPoll={setSelectedPoll} />
@@ -80,7 +81,7 @@ function App() {
 
             // Render the main content if the user is logged in
             <div className='MainContent'>
-                <PollDashboard userId={userId} userName={userName} userRoleId={userRoleId} displayMode={displayMode} setSelectedPoll={setSelectedPoll} selectedPoll={selectedPoll} />
+                <PollDashboard userId={userId} userName={userName} userRoleId={userRoleId} setDisplayMode={setDisplayMode} displayMode={displayMode} setSelectedPoll={setSelectedPoll} selectedPoll={selectedPoll} />
                 {/* <div className='Messenger'>
                   <h1>{isInputMode ? 'Submit a Message' : 'Messages'}</h1>
 
