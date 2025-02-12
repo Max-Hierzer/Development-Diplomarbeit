@@ -9,7 +9,16 @@ const Results = ({ answer, question, showVotersMode, isPublic }) => {
     useEffect(() => {
         const fetchResults = async () => {
             try {
-                const res = await fetch('http://localhost:3001/results/results');
+                const res = await fetch('http://localhost:3001/results/results', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        questionId: question.id,
+                        answerId: answer.id
+                    }),
+                });
                 const data = await res.json();
                 setResults(data);
             } catch (error) {
@@ -18,6 +27,28 @@ const Results = ({ answer, question, showVotersMode, isPublic }) => {
         };
         fetchResults();
     }, []);
+
+    /*useEffect(() => {
+        const fetchResultData = async () => {
+            try {
+                const res = await fetch('http://localhost:3001/results/data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        pollId
+                    }),
+                });
+                const data = await res.json();
+                setResults(data);
+                console.log(data);
+            } catch (error) {
+                console.error('Error fetching results in frontend:', error);
+            }
+        };
+        fetchResultData();
+    }, []);*/
 
     // gets all user data to display names
     useEffect(() => {
@@ -34,7 +65,7 @@ const Results = ({ answer, question, showVotersMode, isPublic }) => {
     }, []);
 
     // matches results to question and answers
-    const showResults = (results, question, answer) => {
+    /*const showResults = (results, question, answer) => {
         let counter = 0;    // count how many have voted for option
         let voters = [];    // userIds who have voted for this question and answer
         results.forEach((r) => {
@@ -44,19 +75,20 @@ const Results = ({ answer, question, showVotersMode, isPublic }) => {
             }
         });
         return { counter, voters };
-    };
+    };*/
 
     // returns the usernames who were matched showResults
-    const discloseVoters = (results, question, answer, users) => {
+    /*const discloseVoters = (results, question, answer, users) => {
         const voters = showResults(results, question, answer).voters;
         let voterNames = users.filter(u => voters.includes(u.id)).map(u => u.name);
         return voterNames;
-    };
+    };*/
 
 
 
     return (
         <div>
+        {/*<div>
             <div key={answer.id} className="results-answer">
                 <label>{answer.name}</label>
                 <h4 className='showResults'>{showVotersMode
@@ -64,7 +96,15 @@ const Results = ({ answer, question, showVotersMode, isPublic }) => {
                     : discloseVoters(results, question, answer, users).join(', ')
                 }</h4>
             </div>
+        </div>*/}
+            <div key={answer.id} className="results-answer">
+                <label>{answer.name}</label>
+                <h4 className='showResults'>{showVotersMode
+                    ? results
+                    : results
+                }</h4>
             </div>
+        </div>
     );
 };
 

@@ -1,10 +1,26 @@
-const { fetchResults, fetchPolls } = require('../services/resultsServices');
+const { fetchResults, fetchPolls, fetchResultData } = require('../services/resultsServices');
 
 // resolves api connection with frontend for the display of the results
 async function handleFetchResults(req, res) {
     try {
-        const results = await fetchResults();   // gets results from service
+        const { questionId, answerId } = req.body;
+        if (!questionId || !answerId) {
+            return res.status(400).json({ error: 'Missing questionId or answerId parameter' });
+        }
+
+        const results = await fetchResults(questionId, answerId);   // gets results from service
         res.status(200).json(results);          // sends results to frontend
+    } catch (error) {
+        console.error('Error fetching results in Controller: ', error);
+        res.status(500).json({error: 'Error fetching results in controller'});
+    }
+}
+
+async function handleFetchResultData(req, res) {
+    try {
+        const { pollId } = req.body;
+        const resultData = await fetchResults(pollId);
+        res.status(200).json(resultData);
     } catch (error) {
         console.error('Error fetching results in Controller: ', error);
         res.status(500).json({error: 'Error fetching results in controller'});
@@ -22,4 +38,4 @@ async function handleFetchPolls(req, res) {
     }
 }
 
-module.exports = { handleFetchResults, handleFetchPolls };
+module.exports = { handleFetchResults, handleFetchPolls, handleFetchResultData };
