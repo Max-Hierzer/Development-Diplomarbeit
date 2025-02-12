@@ -165,7 +165,6 @@ function EditPolls({ selectedPoll }) {
 
     return (
         <div>
-        {selectedPoll ? (
             <form onSubmit={handleSubmit}>
             <h1>Edit Poll</h1>
             <input
@@ -275,9 +274,6 @@ function EditPolls({ selectedPoll }) {
                 {submitted ? 'Submitted!' : 'Submit Changes'}
             </button>
             </form>
-        ) : (
-            <p>Please select a poll</p>
-        )}
         <p>{response}</p>
         </div>
     );

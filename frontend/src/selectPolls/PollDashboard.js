@@ -361,7 +361,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
             {/*showContent(roleId)*/}
             {showSelect(displayMode)}
             <div className="poll-content">
-                {displayMode === 1 && (
+                {displayMode === 1 && selectedPoll && (
                     <EditPolls selectedPoll={selectedPoll} refreshPolls={fetchPolls} />
                 )}
                 {displayMode === 2 && selectedPoll && (
@@ -447,7 +447,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                 {displayMode === 0 && (
                     <p>Select an action to proceed.</p>
                 )}
-                {!selectedPoll && displayMode > 1 && displayMode < 5 && (
+                {!selectedPoll && displayMode > 0 && displayMode < 5 && (
                     <p>Please select a poll</p>
                 )}
             </div>
