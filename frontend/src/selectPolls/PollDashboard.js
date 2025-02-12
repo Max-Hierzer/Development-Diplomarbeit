@@ -170,7 +170,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
 
     useEffect(() => {
         fetchPolls();
-    }, [fetchPolls]);
+    }, [fetchPolls, displayMode]);
 
     const handleSetSelectedPoll = (pollId) => {
         fetchPolls();
@@ -292,7 +292,6 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
     }
 
     const showSelect = (displayMode) => {
-        fetchPolls();
         switch (displayMode) {
             case 1:
                 return (<SelectPolls polls={editPolls} handleSetSelectedPoll={handleSetSelectedPoll} selectedPoll={selectedPoll} mode={displayMode} />)
