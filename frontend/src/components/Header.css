@@ -41,23 +41,24 @@
     background-color: var(--primary-hover-color);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 890px) {
     .header-top {
         flex-direction: column;
-        align-items: flex-start;
         position: relative;
-    }
-
-    .TitleName {
-        font-size: 1.5rem;
-        margin-bottom: 10px;
     }
 
     .LogoutButton {
         position: relative;
-        right: auto;
+        right: 45%;
         margin-top: 10px;
         width: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .TitleName {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
     }
 }
 
