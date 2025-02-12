@@ -1,10 +1,10 @@
   .results-answer {
-    margin-left: 20px;
+    margin-left: 3%;
     display: flex;                /* Use flexbox for horizontal alignment */
     align-items: center;          /* Align items vertically */
     margin-bottom: 20px;          /* Space between each answer */
     gap: 20px;
-    width: 91%;                  /* Ensures it stretches properly */
+    width: 94%;                  /* Ensures it stretches properly */
     border-style: solid;
     border-width: 1px;
     border-radius: 5px;
@@ -17,7 +17,6 @@
     max-width: 350px;
     flex-grow: 1; /* Ensures label fills remaining space */
     text-align: left;
-    padding-left: 5px; /* Add slight spacing between input and text */
   }
 
 .showResults {
