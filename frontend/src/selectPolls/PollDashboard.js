@@ -173,6 +173,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
     }, [fetchPolls]);
 
     const handleSetSelectedPoll = (pollId) => {
+        fetchPolls();
         const selected = polls.find((poll) => poll.id.toString() === pollId);
         setSelectedPoll(selected || null);
         setIsAnonymous(selected?.anonymous || null);
@@ -291,6 +292,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
     }
 
     const showSelect = (displayMode) => {
+        fetchPolls();
         switch (displayMode) {
             case 1:
                 return (<SelectPolls polls={editPolls} handleSetSelectedPoll={handleSetSelectedPoll} selectedPoll={selectedPoll} mode={displayMode} />)
