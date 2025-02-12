@@ -73,6 +73,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                     },
                     body: JSON.stringify({
                         userId,
+                        pollId: selectedPoll.id,
                         answers: selectedAnswers,
                     }),
                 });
@@ -405,36 +406,10 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                     </>
                 )}
                 {displayMode === 3 && selectedPoll && (
-                    <>
-                        <h2><span>{selectedPoll.name}</span></h2>
-                        {selectedPoll.description && (
-                            <div>
-                                <h4 className='description-header'>Beschreibung: </h4>
-                                <h5 className='description'>{selectedPoll.description}</h5>
-                            </div>
-                        )}
-                        <br />
-                        {selectedPoll.Questions &&
-                            selectedPoll.Questions.map((question) => (
-                                <div key={question.id} className="question">
-                                    <h3 className="question-header">
-                                        <span className="question-text">{question.name}</span>
-                                        <span className="question-type">{question.QuestionType.name}</span>
-                                    </h3>
-                                    {question.Answers &&
-                                        question.Answers.map((answer) => (
-                                            <Results
-                                                key={answer.id}
-                                                answer={answer}
-                                                question={question}
-                                                showVotersMode={showVotersMode}
-                                                isPublic={selectedPoll.public}
-                                            />
-                                        ))}
-                                </div>
-                            ))}
-                        {showButton()}
-                    </>
+                    <Results
+                        poll={selectedPoll}
+                        showVotersMode={showVotersMode}
+                    />
                 )}
                 {displayMode === 4 && selectedPoll && (
                     <MyPoll pollId={selectedPoll.id} pollName={selectedPoll.name} isPublic={selectedPoll.public} isAnonymous={selectedPoll.anonymous} />

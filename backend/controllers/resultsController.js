@@ -3,12 +3,12 @@ const { fetchResults, fetchPolls, fetchResultData } = require('../services/resul
 // resolves api connection with frontend for the display of the results
 async function handleFetchResults(req, res) {
     try {
-        const { questionId, answerId } = req.body;
-        if (!questionId || !answerId) {
-            return res.status(400).json({ error: 'Missing questionId or answerId parameter' });
+        const { questionId, answerId, pollId } = req.body;
+        if (!questionId || !answerId ||!pollId) {
+            return res.status(400).json({ error: 'Missing pollId or questionId or answerId' });
         }
 
-        const results = await fetchResults(questionId, answerId);   // gets results from service
+        const results = await fetchResults(questionId, answerId, pollId);   // gets results from service
         res.status(200).json(results);          // sends results to frontend
     } catch (error) {
         console.error('Error fetching results in Controller: ', error);

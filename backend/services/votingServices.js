@@ -2,7 +2,7 @@
 const { UserAnswers, Users, Answers, Questions, PublicUserData, UserPolls } = require('../models/index');
 
 // writing vote in UserAnswers
-async function submitVote(userId, answers) {
+async function submitVote(userId, pollId, answers) {
     try {
         for (const [questionId, data] of Object.entries(answers)) { // checking if user has already voted
             const { answer: answerIds, importance } = data;
@@ -24,8 +24,7 @@ async function submitVote(userId, answers) {
             } 
         }
 
-        //const userAnswers = Object.entries(answers).map(([questionId, data]) =>     // ONLY WORKS FOR SINGLE CHOICE!!! maps all questions with given answer
-
+        await UserPolls.create({ userId, pollId });
 
         return { message: "Vote(s) successfully recorded."};
     } catch (error) {
