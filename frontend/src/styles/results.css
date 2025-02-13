@@ -1,10 +1,18 @@
+  .results-container {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+  }
+
   .results-answer {
     margin-left: 3%;
     display: flex;                /* Use flexbox for horizontal alignment */
     align-items: center;          /* Align items vertically */
     margin-bottom: 20px;          /* Space between each answer */
     gap: 20px;
-    width: 94%;                  /* Ensures it stretches properly */
+    width: 94%;                   /* Ensures it stretches properly */
     border-style: solid;
     border-width: 1px;
     border-radius: 5px;
@@ -15,14 +23,14 @@
 
   .results-answer label {
     max-width: 350px;
-    flex-grow: 1; /* Ensures label fills remaining space */
+    flex-grow: 1;                 /* Ensures label fills remaining space */
     text-align: left;
   }
 
-.showResults {
+  .showResults {
     width: 30%;
     margin-left: auto;
     margin-right: 2%;
     text-align: right;
-}
+  }
 
