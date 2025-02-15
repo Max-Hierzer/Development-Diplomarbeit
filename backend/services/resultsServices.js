@@ -1,34 +1,37 @@
 const { UserAnswers, Polls, Questions, QuestionTypes, Answers, PublicVotes, UserPolls } = require('../models/index');
 
-async function fetchResults(pollId, questionAnswers) {
+async function fetchResults(pollId, questions) {
     try {
         const totalVotes = await UserPolls.count({
             where: { pollId }
         });
 
         const questionVotes = {};
-        const answerVotes = {};
+        const answerPercentages = {};
 
-        for (question of questionAnswers) {
+        for (const question of questions) {
             const questionVotesCount = await UserAnswers.count({
                 where: { questionId: question.id }
             })
             questionVotes[question.id] = questionVotesCount;
 
-            for (answerId of question.AnswerIds) {
+            for (const answer of question.Answers) {
                 const answerVotesCount = await UserAnswers.count({
                     where: {
                         questionId: question.id,
-                        answerId }
+                        answerId: answer.id
+                    }
                 })
-                answerVotes[answerId] = answerVotesCount;
+                const percentage = questionVotesCount > 0 ? ((answerVotesCount / questionVotesCount) * 100).toFixed(2) : "0.00";
+
+                answerPercentages[answer.id] = percentage;
             }
         }
 
         return {
             totalVotes,
             questionVotes,
-            answerVotes
+            answerPercentages
         }
     } catch (error) {
         console.error('Error fetching results in service: ', error);

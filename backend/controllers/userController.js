@@ -13,7 +13,8 @@ async function handleCreateUser(req, res) {
 
 async function handleFetchUsers(req, res) {
     try {
-        const users = await fetchUsers();
+        const { pollId, questions } = req.body;
+        const users = await fetchUsers(pollId, questions);
         res.status(200).json(users);
     } catch (error) {
         console.error('Error fetching users in Controller: ', error);

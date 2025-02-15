@@ -5,15 +5,6 @@ const Results = ({ poll, showVotersMode }) => {
     const [results, setResults] = useState({});
     const [users, setUsers] = useState([]);
 
-    const questionAnswers = [];
-
-    for (const question of poll.Questions) {
-        questionAnswers.push({
-            id: question.id,
-            AnswerIds: question.Answers.map(answer => answer.id)
-        });
-    }
-
     useEffect(() => {
         const fetchResults = async () => {
             try {
@@ -24,12 +15,13 @@ const Results = ({ poll, showVotersMode }) => {
                     },
                     body: JSON.stringify({
                         pollId: poll.id,
-                        questionAnswers: questionAnswers
+                        questions: poll.Questions
                     }),
                 });
 
                 const data = await res.json();
                 setResults(data);
+                console.log("data", data);
             } catch (error) {
                 console.error('Error fetching results in frontend:', error);
             }
@@ -41,7 +33,16 @@ const Results = ({ poll, showVotersMode }) => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const res = await fetch('http://localhost:3001/api/users');
+                const res = await fetch('http://localhost:3001/api/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        pollId: poll.id,
+                        questions: poll.Questions
+                    }),
+                });
                 const data = await res.json();
                 setUsers(data);
             } catch (error) {
@@ -49,7 +50,7 @@ const Results = ({ poll, showVotersMode }) => {
             }
         };
         fetchUsers();
-    }, []);
+    }, [poll.id]);
 
 
     return (
@@ -72,23 +73,17 @@ const Results = ({ poll, showVotersMode }) => {
                     </h3>
                     <h4>Auf diese Frage haben {results.questionVotes?.[question.id] || 0} Leute abgestimmt!</h4>
                     <br />
-                    {question.Answers.map((answer) => {
-                        const answerVotes = results.answerVotes?.[answer.id] || 0;
-                        const questionVotes = results.questionVotes?.[question.id] || 1;
-                        const percentage = ((answerVotes / questionVotes) * 100).toFixed(2);
-
-                        return (
-                            <div key={answer.id} className="results-answer">
-                                <label>{answer.name}</label>
-                                <h4 className='showResults'>
-                                    {showVotersMode
-                                        ? `${percentage || '0.00'} %`
-                                        : `Voters: ${users.map(u => u.name).join(', ')}`
-                                    }
-                                </h4>
-                            </div>
-                        );
-                    })}
+                    {question.Answers.map((answer) => (
+                        <div key={answer.id} className="results-answer">
+                            <label>{answer.name}</label>
+                            <h4 className='showResults'>
+                                {showVotersMode
+                                    ? `${results.answerPercentages?.[answer.id] || '0.00'} %`
+                                    : `Voters: ${users?.[answer.id]?.length > 0 ? users[answer.id].join(', ') : "No Voters"}`
+                                }
+                            </h4>
+                        </div>
+                    ))}
                 </div>
             ))}
         </div>

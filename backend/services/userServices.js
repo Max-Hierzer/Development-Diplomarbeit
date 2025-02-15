@@ -1,4 +1,4 @@
-const { Users, Roles } = require('../models/index');
+const { Users, Roles, UserAnswers } = require('../models/index');
 const bcrypt = require('bcrypt');
 
 // writing new user data in database
@@ -15,14 +15,36 @@ async function createUser(name, email, password, roleId) {
     }
 }
 
-async function fetchUsers() {
+async function fetchUsers(pollId, questions) {
     try {
-        const users = await Users.findAll({
-            attributes: ['id', 'name'],
-        });
-        return users;
+        const userVotes = {};
+
+        for (const question of questions) {
+            for (const answer of question.Answers) {
+                const userIds = await UserAnswers.findAll({
+                    where: { questionId: question.id, answerId: answer.id },
+                    attributes: ['userId']
+                });
+
+                if (!userVotes[answer.id]) {
+                    userVotes[answer.id] = [];
+                }
+
+                for (const user of userIds) {
+                    const username = await Users.findOne({
+                        where: { id: user.userId },
+                        attributes: ['name']
+                    });
+
+                    if (username && username.name) {  // ✅ Ensure valid username
+                        userVotes[answer.id].push(username.name);
+                    }
+                }
+            }
+        }
+        return userVotes;
     } catch (error) {
-        console.error('Error fetching users in service: ', error);
+        console.error('Error fetching users in service:', error);
         throw error;
     }
 }
