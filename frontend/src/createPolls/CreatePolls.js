@@ -3,6 +3,7 @@ import Datetime from 'react-datetime';
 import "react-datetime/css/react-datetime.css";
 import moment from 'moment';
 import PollValidators from './ValidatePoll';
+import '../styles/create.css';
 
 function CreatePoll() {
     const [poll, setPoll] = useState('');
@@ -111,114 +112,111 @@ function CreatePoll() {
 
     return (
         <div>
-        <form onSubmit={handleSubmit}>
-        <h1>Poll</h1>
-        <input
-        type="text"
-        placeholder={`Pollname`}
-        value={poll}
-        onChange={(e) => setPoll(e.target.value)}
-        />
-        <br />
-        <textarea
-        placeholder="Poll Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        rows={5} // Adjust the number of rows for the desired height
-        cols={50} // Adjust the number of columns for the desired width
-        style={{ resize: 'vertical' }} // Optional: Allow resizing vertically only
-        />
-        <br />
-        <br />
-        <h4>Public</h4>
-        <select onChange={(e) => setSelectedPublic(e.target.value)} value={selectedPublic}>
-            <option>No</option>
-            <option>Yes</option>
-        </select>
-        <br />
-        <br />
-        {selectedPublic === "No" && (
-            <div>
-            <h4>Anonymous</h4>
-            <select onChange={(e) => setSelectedAnon(e.target.value)} value={selectedAnon}>
-                <option>Yes</option>
-                <option>No</option>
-            </select>
-            <br />
-            <br />
-            </div>
-        )}
-        <div className="datetime-container">
-            <Datetime
-                key={`publish-${resetKey}`}
-                value={publishDate}
-                onChange={(date) => setPublishDate(date)}
-                dateFormat="DD/MM/YYYY"
-                timeFormat="HH:mm"
-                closeOnSelect={true}
-                inputProps={{ placeholder: "Publish Date" }}
-            />
-        </div>
-        <div className="datetime-container">
-            <Datetime
-                key={`end-${resetKey}`}
-                value={endDate}
-                onChange={(date) => setEndDate(date)}
-                dateFormat="DD/MM/YYYY"
-                timeFormat="HH:mm"
-                closeOnSelect={true}
-                inputProps={{ placeholder: "End Date" }}
-            />
-        </div>
-        <br />
-        <br />
-        {questions.map((question, questionIndex) => (
-            <div key={questionIndex}>
-            <h3>Question</h3>
-            <br />
-            <h4>Type</h4>
-            <select onChange={(e) => handleQuestionTypes(questionIndex, e.target.value)} value={question.type}>
-                <option>Single Choice</option>
-                <option>Multiple Choice</option>
-                <option>Weighted Choice</option>
-            </select>
-            <br />
+        <form onSubmit={handleSubmit} className="create-form">
+            <h1>Poll</h1>
             <input
             type="text"
-            placeholder={`Question ${questionIndex + 1}`}
-            value={question.name}
-            onChange={(e) =>
-                handleQuestionChange(questionIndex, e.target.value)
-            }
-            /><button type="button" onClick={() => deleteQuestion(questionIndex)}>
-            Delete
-            </button>
-            <h4>Answers</h4>
-            {question.answers.map((answer, answerIndex) => (
-                <div key={answerIndex}>
-                <input
-                type="text"
-                placeholder={`Answer ${answerIndex + 1}`}
-                value={answer.name}
-                onChange={(e) =>
-                    handleAnswerChange(questionIndex, answerIndex, e.target.value)
-                }
-                /><button type="button" onClick={() => deleteAnswer(questionIndex, answerIndex)}>
-                Delete
-                </button>
+            placeholder={`Pollname`}
+            value={poll}
+            onChange={(e) => setPoll(e.target.value)}
+            />
+            <br />
+            <textarea
+            placeholder="Poll Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={5} // Adjust the number of rows for the desired height
+            cols={50} // Adjust the number of columns for the desired width
+            style={{ resize: 'vertical' }} // Optional: Allow resizing vertically only
+            className="description"
+            />
+            <br />
+            <br />
+            <h4>Public</h4>
+            <select onChange={(e) => setSelectedPublic(e.target.value)} value={selectedPublic}>
+                <option>No</option>
+                <option>Yes</option>
+            </select>
+            <br />
+            <br />
+            {selectedPublic === "No" && (
+                <div>
+                <h4>Anonymous</h4>
+                <select onChange={(e) => setSelectedAnon(e.target.value)} value={selectedAnon}>
+                    <option>Yes</option>
+                    <option>No</option>
+                </select>
+                <br />
+                <br />
+                </div>
+            )}
+            <div className="datetime-container">
+                <Datetime
+                    key={`publish-${resetKey}`}
+                    value={publishDate}
+                    onChange={(date) => setPublishDate(date)}
+                    dateFormat="DD/MM/YYYY"
+                    timeFormat="HH:mm"
+                    closeOnSelect={true}
+                    inputProps={{ placeholder: "Publish Date" }}
+                />
+                <Datetime
+                    key={`end-${resetKey}`}
+                    value={endDate}
+                    onChange={(date) => setEndDate(date)}
+                    dateFormat="DD/MM/YYYY"
+                    timeFormat="HH:mm"
+                    closeOnSelect={true}
+                    inputProps={{ placeholder: "End Date" }}
+                />
+            </div>
+            <br />
+            <br />
+            {questions.map((question, questionIndex) => (
+                <div key={questionIndex} className="create-question">
+                    <h3>Question</h3>
+                    <br />
+                    <h4>Type</h4>
+                    <select onChange={(e) => handleQuestionTypes(questionIndex, e.target.value)} value={question.type}>
+                        <option>Single Choice</option>
+                        <option>Multiple Choice</option>
+                        <option>Weighted Choice</option>
+                    </select>
+                    <br />
+                    <div className="question-input">
+                        <input
+                        type="text"
+                        placeholder={`Question ${questionIndex + 1}`}
+                        value={question.name}
+                        onChange={(e) =>
+                            handleQuestionChange(questionIndex, e.target.value)
+                        }
+                        /><button type="button" className="delete" onClick={() => deleteQuestion(questionIndex)}>✖</button>
+                    </div>
+                    <h4>Answers</h4>
+                    {question.answers.map((answer, answerIndex) => (
+                        <div key={answerIndex} className="answer-input">
+                            <input
+                            type="text"
+                            placeholder={`Answer ${answerIndex + 1}`}
+                            value={answer.name}
+                            onChange={(e) =>
+                                handleAnswerChange(questionIndex, answerIndex, e.target.value)
+                            }
+                            /><button type="button" className="delete" onClick={() => deleteAnswer(questionIndex, answerIndex)}>✖</button>
+                        </div>
+                    ))}
+                    <button type="button" onClick={() => addAnswer(questionIndex)}>
+                    Add Answer
+                    </button>
                 </div>
             ))}
-            <button type="button" onClick={() => addAnswer(questionIndex)}>
-            Add Answer
+            <button type="button" onClick={addQuestion}>
+            Add Question
             </button>
-            </div>
-        ))}
-        <button type="button" onClick={addQuestion}>
-        Add Question
-        </button>
 
-        <br />
-        <button type="submit">Submit</button>
+            <br />
+            <button type="submit">Submit</button>
         </form>
         <p>{response}</p>
         </div>

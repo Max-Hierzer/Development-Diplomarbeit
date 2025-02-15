@@ -1,0 +1,65 @@
+.create-form {
+    width: 100%;
+}
+
+.create-form input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.create-form input {
+    height: 45px;
+}
+
+.datetime-container {
+    display: flex;
+}
+
+.datetime-container input {
+    width: 90%;
+}
+
+.description {
+    padding: 10px;
+    font-size: 14px;
+}
+
+/*.create-question {
+    border: solid black;
+    border-width: 2px;
+    border-radius: 15px;
+    padding: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}*/
+
+.answer-input, .question-input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.delete {
+    width: 45px;
+    height: 45px;
+    font-size: 30px;
+    color: red;
+    padding: 5px;
+    margin: 10px 0;
+}
+
+
+@media (max-width: 500px) {
+    .datetime-container {
+        flex-direction: column;
+    }
+
+    .datetime-container input{
+        width: 100%;
+    }
+}

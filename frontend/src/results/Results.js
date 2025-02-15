@@ -21,7 +21,6 @@ const Results = ({ poll, showVotersMode }) => {
 
                 const data = await res.json();
                 setResults(data);
-                console.log("data", data);
             } catch (error) {
                 console.error('Error fetching results in frontend:', error);
             }
