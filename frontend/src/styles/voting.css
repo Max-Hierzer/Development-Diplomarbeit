@@ -1,3 +1,11 @@
+  .vote-container {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+  }
+
   .answer {
     margin-left: 5%;
     display: flex;                /* Use flexbox for horizontal alignment */

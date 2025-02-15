@@ -368,48 +368,15 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                 )}
                 {displayMode === 2 && selectedPoll && (
                     <>
-                        <h2><span>{selectedPoll.name}</span></h2>
-                        {selectedPoll.description && (
-                            <div>
-                                <h4 className='description-header'>Beschreibung: </h4>
-                                <h5 className='description'>{selectedPoll.description}</h5>
-                            </div>
-                        )}
-                        <br />
-                        {selectedPoll.Questions &&
-                            selectedPoll.Questions.map((question) => (
-                                <div key={question.id} className="question">
-                                    <h3 className="question-header">
-                                        <span className="question-text">{question.name}</span>
-                                        <span className="question-type">{question.QuestionType.name}</span>
-                                    </h3>
-                                    {question.Answers &&
-                                        question.Answers.map((answer) => (
-                                            <Voting
-                                                key={answer.id}
-                                                question={question}
-                                                answer={answer}
-                                                selectedAnswers={selectedAnswers}
-                                                handleAnswerChange={handleAnswerChange}
-                                            />
-                                        ))}
-
-                                    {question.QuestionType.name === "Weighted Choice" && (
-                                        <ImportanceScale
-                                            questionId={question.id}
-                                            onImportanceChange={handleImportanceChange}
-                                        />
-                                    )}
-                                </div>
-                            ))}
+                        <Voting selectedPoll={selectedPoll} selectedAnswers={selectedAnswers} handleAnswerChange={handleAnswerChange} handleImportanceChange={handleImportanceChange} />
                         {showButton()}
                     </>
                 )}
                 {displayMode === 3 && selectedPoll && (
-                    <Results
-                        poll={selectedPoll}
-                        showVotersMode={showVotersMode}
-                    />
+                    <>
+                        <Results poll={selectedPoll} showVotersMode={showVotersMode} />
+                        {showButton()}
+                    </>
                 )}
                 {displayMode === 4 && selectedPoll && (
                     <MyPoll pollId={selectedPoll.id} pollName={selectedPoll.name} isPublic={selectedPoll.public} isAnonymous={selectedPoll.anonymous} />
