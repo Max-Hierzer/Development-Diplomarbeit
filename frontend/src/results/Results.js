@@ -73,7 +73,10 @@ const Results = ({ poll, showVotersMode }) => {
                     <h4>Auf diese Frage haben {results.questionVotes?.[question.id] || 0} Leute abgestimmt!</h4>
                     <br />
                     {question.Answers.map((answer) => {
-                        const percentage = ((results.answerVotes?.[answer.id] / (results.questionVotes?.[question.id] || 1)) * 100).toFixed(2);
+                        const answerVotes = results.answerVotes?.[answer.id] || 0;
+                        const questionVotes = results.questionVotes?.[question.id] || 1;
+                        const percentage = ((answerVotes / questionVotes) * 100).toFixed(2);
+
                         return (
                             <div key={answer.id} className="results-answer">
                                 <label>{answer.name}</label>
