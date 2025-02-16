@@ -114,3 +114,13 @@ h2 span {
 .select-content {
     max-width: 1000px;
 }
+
+.select-poll {
+    width: 170px;
+    height: 30px;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+

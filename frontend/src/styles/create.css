@@ -28,14 +28,14 @@
     font-size: 14px;
 }
 
-/*.create-question {
+.create-question {
     border: solid black;
     border-width: 2px;
     border-radius: 15px;
     padding: 20px;
     padding-bottom: 10px;
     margin-bottom: 20px;
-}*/
+}
 
 .answer-input, .question-input {
     display: flex;
@@ -51,6 +51,18 @@
     color: red;
     padding: 5px;
     margin: 10px 0;
+}
+
+.select-type, .select-public, .select-anon {
+    height: 30px;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.select-type {
+    margin-bottom: 20px;
 }
 
 

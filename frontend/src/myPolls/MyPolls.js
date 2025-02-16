@@ -10,7 +10,6 @@ function MyPoll({ pollId, pollName, isPublic, isAnonymous}) {
 
     let voteLink = `http://localhost:3000/?${voteHash}`;
     let resultsLink = `http://localhost:3000/?${resultsHash}`;
-    console.log(atob(decodeURIComponent(voteHash)));
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -29,19 +28,21 @@ function MyPoll({ pollId, pollName, isPublic, isAnonymous}) {
 
 
     return (
-        <div>
+        <div className="my-polls">
           <h2 className="pollname">{pollName}</h2>
-          <h3 className="linkhead">Vote Link:</h3>
-          <button onClick={() => copyClipboard(1)}>
-            {copiedText === 1 ? 'Copied!' : 'Copy Link'}
-          </button>
-          <br />
-          <br />
-          <h3 className="linkhead">Results Link:</h3>
-          <button onClick={() => copyClipboard(0)}>
-            {copiedText === 0 ? 'Copied!' : 'Copy Link'}
-          </button><br />
-          <button>Löschen</button>
+          <div className="votelink-container">
+            <h3 className="link-label">Link zur <br /> Abstimmung:</h3>
+            <button onClick={() => copyClipboard(1)} className="copy-button">
+              {copiedText === 1 ? 'Kopiert!' : 'Link koperien'}
+            </button>
+          </div>
+          <div className="resultslink-container">
+            <h3 className="link-label">Link zu den <br /> Ergebnissen:</h3>
+            <button onClick={() => copyClipboard(0)} className="copy-button">
+              {copiedText === 0 ? 'Kopiert!' : 'Link koperien'}
+            </button>
+          </div>
+          <button className="delete-button">Löschen</button>
         </div>
     );
 }

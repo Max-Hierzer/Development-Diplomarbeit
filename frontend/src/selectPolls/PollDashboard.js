@@ -388,10 +388,10 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                     <CreatePoll />
                 )}
                 {displayMode === 0 && (
-                    <p>Select an action to proceed.</p>
+                    <p>Wähle eine Aktion um fortzufahren</p>
                 )}
                 {!selectedPoll && displayMode > 0 && displayMode < 5 && (
-                    <p>Please select a poll</p>
+                    <p>Bitte wählen sie eine Umfrage</p>
                 )}
             </div>
         </div>

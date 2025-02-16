@@ -1,12 +1,51 @@
-.pollname {
-    margin-top: 10px;
-    margin-bottom: 20px;
+.my-polls {
+  max-width: 400px;
 }
 
-.linkhead {
-  margin-top: 10px;
-  margin-bottom: -5px;
-  text-align: left;
-  padding: 2px 4px;
-  background-color: var(--primary-hover-color);
+.pollname {
+    margin-top: 10px;
+    margin-bottom: 30px;
+    font-size: 1.4rem;
 }
+
+.votelink-container, .resultslink-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 5% 0 5%;
+  margin-bottom: 20px;
+  border: solid black;
+  border-width: 2px;
+  border-radius: 5px;
+  padding: 0 5% 0 5%;
+}
+
+.copy-button {
+  width: 100px;
+  margin-top: 10px;
+
+}
+
+.delete-button {
+  margin-top: 30px;
+}
+
+@media (max-width: 410px) {
+  .pollname {
+    font-size: 1.2rem;
+  }
+
+  .votelink-container, .resultslink-container {
+    padding: 0 3% 0 3%;
+  }
+
+  .link-label {
+    font-size: 1rem;
+  }
+
+  .copy-button {
+    padding: 3%;
+    width: 80px;
+  }
+}
+

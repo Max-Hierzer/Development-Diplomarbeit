@@ -15,14 +15,14 @@ function CreatePoll() {
     const [resetKey, setResetKey] = useState(0);
     const [questions, setQuestions] = useState([{ name: '', type: 'Single Choice', answers: [{ name: '' }, { name: '' }] }]);
     const [response, setResponse] = useState(null);
-    const [selectedPublic, setSelectedPublic] = useState('No');
-    const [selectedAnon, setSelectedAnon] = useState('Yes');
+    const [selectedPublic, setSelectedPublic] = useState('Nein');
+    const [selectedAnon, setSelectedAnon] = useState('Ja');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        let isPublic = selectedPublic === "Yes";
-        let isAnon = selectedAnon === "Yes";
+        let isPublic = selectedPublic === "Ja";
+        let isAnon = selectedAnon === "Ja";
 
         const payload = {
             poll: { name: poll, description: description, userId: sessionStorage.getItem('userId'), public: isPublic, anon: isAnon, publishDate: publishDate, endDate: endDate},
@@ -56,8 +56,8 @@ function CreatePoll() {
                 setPublishDate('');
                 setEndDate('');
                 setResetKey(resetKey + 1);
-                setSelectedPublic('No');
-                setSelectedAnon('Yes');
+                setSelectedPublic('Nein');
+                setSelectedAnon('Ja');
             } else {
                 setResponse(`Error: ${data.error || 'Something went wrong'}`);
             }
@@ -113,16 +113,16 @@ function CreatePoll() {
     return (
         <div>
         <form onSubmit={handleSubmit} className="create-form">
-            <h1>Poll</h1>
+            <h1>Umfrage</h1>
             <input
             type="text"
-            placeholder={`Pollname`}
+            placeholder={`Name`}
             value={poll}
             onChange={(e) => setPoll(e.target.value)}
             />
             <br />
             <textarea
-            placeholder="Poll Description"
+            placeholder="Beschreibung"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={5} // Adjust the number of rows for the desired height
@@ -132,19 +132,19 @@ function CreatePoll() {
             />
             <br />
             <br />
-            <h4>Public</h4>
-            <select onChange={(e) => setSelectedPublic(e.target.value)} value={selectedPublic}>
-                <option>No</option>
-                <option>Yes</option>
+            <h4>Öffentlich</h4>
+            <select onChange={(e) => setSelectedPublic(e.target.value)} value={selectedPublic} className="select-public">
+                <option>Nein</option>
+                <option>Ja</option>
             </select>
             <br />
             <br />
-            {selectedPublic === "No" && (
+            {selectedPublic === "Nein" && (
                 <div>
-                <h4>Anonymous</h4>
-                <select onChange={(e) => setSelectedAnon(e.target.value)} value={selectedAnon}>
-                    <option>Yes</option>
-                    <option>No</option>
+                <h4>Anonym</h4>
+                <select onChange={(e) => setSelectedAnon(e.target.value)} value={selectedAnon} className="select-anon">
+                    <option>Ja</option>
+                    <option>Nein</option>
                 </select>
                 <br />
                 <br />
@@ -158,7 +158,7 @@ function CreatePoll() {
                     dateFormat="DD/MM/YYYY"
                     timeFormat="HH:mm"
                     closeOnSelect={true}
-                    inputProps={{ placeholder: "Publish Date" }}
+                    inputProps={{ placeholder: "Startzeitpunkt" }}
                 />
                 <Datetime
                     key={`end-${resetKey}`}
@@ -167,38 +167,36 @@ function CreatePoll() {
                     dateFormat="DD/MM/YYYY"
                     timeFormat="HH:mm"
                     closeOnSelect={true}
-                    inputProps={{ placeholder: "End Date" }}
+                    inputProps={{ placeholder: "Endzeitpunkt" }}
                 />
             </div>
             <br />
             <br />
             {questions.map((question, questionIndex) => (
                 <div key={questionIndex} className="create-question">
-                    <h3>Question</h3>
-                    <br />
-                    <h4>Type</h4>
-                    <select onChange={(e) => handleQuestionTypes(questionIndex, e.target.value)} value={question.type}>
+                    <h4>Fragentyp</h4>
+                    <select onChange={(e) => handleQuestionTypes(questionIndex, e.target.value)} value={question.type} className="select-type">
                         <option>Single Choice</option>
                         <option>Multiple Choice</option>
                         <option>Weighted Choice</option>
                     </select>
-                    <br />
                     <div className="question-input">
                         <input
                         type="text"
-                        placeholder={`Question ${questionIndex + 1}`}
+                        placeholder={`Frage ${questionIndex + 1}`}
                         value={question.name}
                         onChange={(e) =>
                             handleQuestionChange(questionIndex, e.target.value)
                         }
                         /><button type="button" className="delete" onClick={() => deleteQuestion(questionIndex)}>✖</button>
                     </div>
-                    <h4>Answers</h4>
+                    <br />
+                    <h4>Antworten</h4>
                     {question.answers.map((answer, answerIndex) => (
                         <div key={answerIndex} className="answer-input">
                             <input
                             type="text"
-                            placeholder={`Answer ${answerIndex + 1}`}
+                            placeholder={`Antwort ${answerIndex + 1}`}
                             value={answer.name}
                             onChange={(e) =>
                                 handleAnswerChange(questionIndex, answerIndex, e.target.value)
@@ -206,17 +204,13 @@ function CreatePoll() {
                             /><button type="button" className="delete" onClick={() => deleteAnswer(questionIndex, answerIndex)}>✖</button>
                         </div>
                     ))}
-                    <button type="button" onClick={() => addAnswer(questionIndex)}>
-                    Add Answer
-                    </button>
+                    <button type="button" onClick={() => addAnswer(questionIndex)}>Antwort hinzufügen</button>
                 </div>
             ))}
-            <button type="button" onClick={addQuestion}>
-            Add Question
-            </button>
+            <button type="button" onClick={addQuestion}>Frage hinzufügen</button>
 
             <br />
-            <button type="submit">Submit</button>
+            <button type="submit">Erstellen</button>
         </form>
         <p>{response}</p>
         </div>
