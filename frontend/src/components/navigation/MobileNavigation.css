@@ -1,0 +1,40 @@
+.hamburger-menu {
+    position: absolute;
+    right: 2%;
+    top: 2%;
+    cursor: pointer;
+}
+
+.mobile-nav div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    right: 0;
+    width: 100%;
+    background-color: var(--secondary-color);
+}
+
+.mobile-nav ul {
+    margin-left: 30px;
+    list-style-type: none;
+    flex-direction: column;
+    justify-content: space-evenly;
+    text-align: left;
+    width: 100%;
+}
+
+.mobile-nav li {
+    margin-top: 20px 0 20px 0;
+}
+
+.mobile-nav a {
+    font-size: 1.8rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+@media (max-width: 480px) {
+    .mobile-nav a {
+        font-size: 1.6rem;
+    }
+}

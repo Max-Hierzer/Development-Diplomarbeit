@@ -41,7 +41,22 @@
     background-color: var(--primary-hover-color);
 }
 
-@media (max-width: 890px) {
+.mobile-nav {
+    display: none;
+    width: 100%;
+}
+
+
+
+@media (max-width: 970px) {
+    .desktop-nav{
+        display: none;
+    }
+
+    .mobile-nav {
+        display: flex;
+    }
+
     .header-top {
         flex-direction: column;
         position: relative;
@@ -55,16 +70,9 @@
     }
 }
 
-@media (max-width: 768px) {
-    .TitleName {
-        font-size: 1.5rem;
-        margin-bottom: 10px;
-    }
-}
-
 @media (max-width: 480px) {
     .TitleName {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
     }
 
     .LogoutButton {

@@ -1,7 +1,8 @@
 // components/Header.js
 import React from "react";
 import './Header.css';
-import Navigation from './Navigation';
+import DesktopNavigation from './navigation/DesktopNavigation';
+import MobileNavigation from './navigation/MobileNavigation';
 
 function Header({ isLoggedIn, handleLogout, setDisplayMode, setSelectedPoll, userRoleId }) {
     return (
@@ -10,7 +11,8 @@ function Header({ isLoggedIn, handleLogout, setDisplayMode, setSelectedPoll, use
                 <h1 className="TitleName">Umfragetool</h1>
                 {isLoggedIn && <button className="LogoutButton" onClick={handleLogout}>Logout</button>}
             </div>
-            {isLoggedIn && <Navigation setDisplayMode={setDisplayMode} setSelectedPoll={setSelectedPoll} userRoleId={userRoleId} /> }
+            {isLoggedIn && <DesktopNavigation setDisplayMode={setDisplayMode} setSelectedPoll={setSelectedPoll} userRoleId={userRoleId} /> }
+            {isLoggedIn && <MobileNavigation setDisplayMode={setDisplayMode} setSelectedPoll={setSelectedPoll} userRoleId={userRoleId} /> }
         </header>
     );
 }

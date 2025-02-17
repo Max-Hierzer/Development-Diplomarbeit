@@ -1,0 +1,32 @@
+/* Navigation.css */
+
+.nav-button:hover {
+  color: var(--primary-hover-color);
+}
+
+.nav-button {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.navlinks ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: 40px;
+    margin: 20px 0;
+}
+
+.navlinks li {
+    list-style-type: none;
+    display: inline-block;
+    justify-content: space-evenly;
+}
+
+.navlinks a {
+    font-size: 1.3rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--primary-color);
+}
+  
