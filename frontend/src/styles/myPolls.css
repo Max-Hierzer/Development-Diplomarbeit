@@ -1,5 +1,6 @@
 .my-polls {
   max-width: 400px;
+  width: 100%;
 }
 
 .pollname {
@@ -29,6 +30,7 @@
 .delete-button {
   margin-top: 30px;
 }
+
 
 @media (max-width: 410px) {
   .pollname {

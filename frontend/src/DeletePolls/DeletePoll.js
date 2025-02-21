@@ -43,7 +43,7 @@ const DeletePoll = ({ selectedPoll, refreshPolls, setSelectedPoll }) => {
             className='Delete_Button'
             title="Nur Polls löschen, welche noch nicht begonnen wurden"  // Tooltip-Nachricht hier
         >
-            Delete
+            Umfrage löschen
         </button>
     );
 };

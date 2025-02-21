@@ -210,7 +210,7 @@ function CreatePoll() {
             <button type="button" onClick={addQuestion}>Frage hinzufügen</button>
 
             <br />
-            <button type="submit">Erstellen</button>
+            <button type="submit">Umfrage erstellen</button>
         </form>
         <p>{response}</p>
         </div>

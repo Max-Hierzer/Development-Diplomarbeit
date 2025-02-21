@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
+import DeletePoll from '../DeletePolls/DeletePoll'
 import '../styles/myPolls.css';
 
-function MyPoll({ pollId, pollName, isPublic, isAnonymous}) {
+function MyPoll({ poll, refreshPolls, setSelectedPoll }) {
     const [response, setResponse] = useState(null);
     const [copiedText, setCopiedText] = useState(null);
 
-    const voteHash = encodeURIComponent(btoa(`public=${isPublic}&mode=vote&poll=${pollId}&anonymous=${isAnonymous}`));
-    const resultsHash = encodeURIComponent(btoa(`public=${isPublic}&mode=results&poll=${pollId}&anonymous=${isAnonymous}`));
+    const voteHash = encodeURIComponent(btoa(`public=${poll.public}&mode=vote&poll=${poll.id}&anonymous=${poll.anonymous}`));
+    const resultsHash = encodeURIComponent(btoa(`public=${poll.public}&mode=results&poll=${poll.id}&anonymous=${poll.anonymous}`));
 
     let voteLink = `http://localhost:3000/?${voteHash}`;
     let resultsLink = `http://localhost:3000/?${resultsHash}`;
@@ -29,7 +30,7 @@ function MyPoll({ pollId, pollName, isPublic, isAnonymous}) {
 
     return (
         <div className="my-polls">
-          <h2 className="pollname">{pollName}</h2>
+          <h2 className="pollname">{poll.name}</h2>
           <div className="votelink-container">
             <h3 className="link-label">Link zur <br /> Abstimmung:</h3>
             <button onClick={() => copyClipboard(1)} className="copy-button">
@@ -42,7 +43,7 @@ function MyPoll({ pollId, pollName, isPublic, isAnonymous}) {
               {copiedText === 0 ? 'Kopiert!' : 'Link koperien'}
             </button>
           </div>
-          <button className="delete-button">Löschen</button>
+          <DeletePoll selectedPoll={poll} refreshPolls={refreshPolls} setSelectedPoll={setSelectedPoll} />
         </div>
     );
 }

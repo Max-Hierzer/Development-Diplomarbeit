@@ -364,22 +364,37 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
             {showSelect(displayMode)}
             <div className="poll-content">
                 {displayMode === 1 && selectedPoll && (
-                    <EditPolls selectedPoll={selectedPoll} refreshPolls={fetchPolls} />
+                    <EditPolls
+                        selectedPoll={selectedPoll}
+                        refreshPolls={fetchPolls}
+                    />
                 )}
                 {displayMode === 2 && selectedPoll && (
                     <>
-                        <Voting selectedPoll={selectedPoll} selectedAnswers={selectedAnswers} handleAnswerChange={handleAnswerChange} handleImportanceChange={handleImportanceChange} />
+                        <Voting
+                            selectedPoll={selectedPoll}
+                            selectedAnswers={selectedAnswers}
+                            handleAnswerChange={handleAnswerChange}
+                            handleImportanceChange={handleImportanceChange}
+                        />
                         {showButton()}
                     </>
                 )}
                 {displayMode === 3 && selectedPoll && (
                     <>
-                        <Results poll={selectedPoll} showVotersMode={showVotersMode} />
+                        <Results
+                            poll={selectedPoll}
+                            showVotersMode={showVotersMode}
+                        />
                         {showButton()}
                     </>
                 )}
                 {displayMode === 4 && selectedPoll && (
-                    <MyPoll pollId={selectedPoll.id} pollName={selectedPoll.name} isPublic={selectedPoll.public} isAnonymous={selectedPoll.anonymous} />
+                    <MyPoll
+                        poll={selectedPoll}
+                        refreshPolls={fetchPolls}
+                        setSelectedPoll={setSelectedPoll}
+                    />
                 )}
                 {displayMode === 5 && (
                     <Register />
