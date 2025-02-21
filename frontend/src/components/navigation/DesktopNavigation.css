@@ -1,9 +1,5 @@
 /* Navigation.css */
 
-.nav-button:hover {
-  color: var(--primary-hover-color);
-}
-
 .nav-button {
     font-size: 1.2rem;
     font-weight: bold;

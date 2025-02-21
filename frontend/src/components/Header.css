@@ -46,6 +46,11 @@
     width: 100%;
 }
 
+a:hover {
+  color: var(--primary-hover-color);
+  text-decoration: underline;
+}
+
 
 
 @media (max-width: 970px) {
