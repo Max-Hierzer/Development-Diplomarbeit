@@ -1,8 +1,9 @@
-.create-form {
+.create-form, .edit-form {
     width: 100%;
 }
 
-.create-form input, textarea {
+.create-form input, textarea,
+.edit-form input, textarea {
     width: 100%;
     padding: 12px;
     margin: 10px 0;
@@ -11,16 +12,18 @@
     font-size: 16px;
 }
 
-.create-form input {
+.create-form input,
+.edit-form input {
     height: 45px;
 }
 
 .datetime-container {
     display: flex;
+    gap: 10%;
 }
 
 .datetime-container input {
-    width: 90%;
+    width: 100%;
 }
 
 .description {
@@ -72,6 +75,6 @@
     }
 
     .datetime-container input{
-        width: 100%;
+        width: 180px;
     }
 }
