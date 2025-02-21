@@ -359,7 +359,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
     }*/
 
     return (
-        <div className="dashboard-container" style={{ minHeight: '400px', height: 'auto', overflow: 'visible' }}>
+        <div className="dashboard-container">
             {/*showContent(roleId)*/}
             {showSelect(displayMode)}
             <div className="poll-content">

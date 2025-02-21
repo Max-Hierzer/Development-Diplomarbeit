@@ -164,7 +164,7 @@ function EditPolls({ selectedPoll }) {
     };
 
     return (
-        <div>
+        <div className="edit-content">
             <form onSubmit={handleSubmit} className="edit-form">
             <h1>Edit Poll</h1>
             <input
@@ -204,22 +204,28 @@ function EditPolls({ selectedPoll }) {
                 </div>
             )}
             <div className="datetime-container">
-                <Datetime
-                    value={publishDate}
-                    onChange={(date) => setPublishDate(date)}
-                    dateFormat="DD/MM/YYYY"
-                    timeFormat="HH:mm"
-                    closeOnSelect={true}
-                    //inputProps={{ placeholder: "Publish Date" }}
-                />
-                <Datetime
-                    value={endDate}
-                    onChange={(date) => setEndDate(date)}
-                    dateFormat="DD/MM/YYYY"
-                    timeFormat="HH:mm"
-                    closeOnSelect={true}
-                    //inputProps={{ placeholder: "End Date" }}
-                />
+                <div className="start-date">
+                    <h4>Startzeitpunkt</h4>
+                    <Datetime
+                        value={publishDate}
+                        onChange={(date) => setPublishDate(date)}
+                        dateFormat="DD/MM/YYYY"
+                        timeFormat="HH:mm"
+                        closeOnSelect={true}
+                        //inputProps={{ placeholder: "Publish Date" }}
+                    />
+                </div>
+                <div className="end-date">
+                    <h4>Endzeitpunkt</h4>
+                    <Datetime
+                        value={endDate}
+                        onChange={(date) => setEndDate(date)}
+                        dateFormat="DD/MM/YYYY"
+                        timeFormat="HH:mm"
+                        closeOnSelect={true}
+                        //inputProps={{ placeholder: "End Date" }}
+                    />
+                </div>
             </div>
             <br />
             <br />

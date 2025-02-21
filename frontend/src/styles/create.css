@@ -1,3 +1,8 @@
+.create-content, .edit-content {
+    width: 100%;
+    max-width: 700px;
+}
+
 .create-form, .edit-form {
     width: 100%;
 }
@@ -18,13 +23,19 @@
 }
 
 .datetime-container {
+    width: 100%;
     display: flex;
-    gap: 10%;
+    margin-top: 10px;
+    justify-content: space-between;
+    padding: 0 10%;
+    gap: 30px;
 }
 
 .datetime-container input {
     width: 100%;
+    margin-top: 0;
 }
+
 
 .description {
     padding: 10px;
@@ -72,9 +83,12 @@
 @media (max-width: 500px) {
     .datetime-container {
         flex-direction: column;
+        padding: 0;
+        gap: 10px;
     }
 
     .datetime-container input{
-        width: 180px;
+        width: 70%;
+        min-width: 150px;
     }
 }

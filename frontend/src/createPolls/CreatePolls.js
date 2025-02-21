@@ -111,7 +111,7 @@ function CreatePoll() {
 
 
     return (
-        <div>
+        <div className="create-content">
         <form onSubmit={handleSubmit} className="create-form">
             <h1>Umfrage</h1>
             <input
