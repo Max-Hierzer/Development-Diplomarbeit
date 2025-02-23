@@ -77,7 +77,7 @@ main {
 /* Main Content Section */
 .MainContent {
   width: 100%;
-  max-width: 1000px;
+  max-width: 60%;
   min-height: 60vh;
   padding: 20px;
   background-color: white;
@@ -121,7 +121,13 @@ button:hover {
   background-color: var(--primary-color);
 }
 
-/* Responsive Design */
+
+@media (max-width: 1920px) {
+  .MainContent {
+    max-width: 1000px;
+  }
+}
+
 @media (max-width: 768px) {
   button {
     width: 100%;

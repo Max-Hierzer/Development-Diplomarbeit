@@ -262,12 +262,12 @@ function EditPolls({ selectedPoll }) {
                             <button type="button" className="delete" onClick={() => deleteAnswer(questionIndex, answerIndex)}>✖</button>
                         </div>
                     ))}
-                    <button type="button" onClick={() => addAnswer(questionIndex)}>Antwort hinzufügen</button>
+                    <button type="button" className="add" onClick={() => addAnswer(questionIndex)}>Antwort hinzufügen</button>
                 </div>
             ))}
-            <button type="button" onClick={addQuestion}>Frage hinzufügen</button>
+            <button type="button" className="add" onClick={addQuestion}>Frage hinzufügen</button>
             <br />
-            <button type="submit">
+            <button type="submit" className="edit-button">
                 {submitted ? 'Änderungen gespeichert!' : 'Änderungen speichern'}
             </button>
             </form>

@@ -67,6 +67,15 @@
     margin: 10px 0;
 }
 
+.add {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.create-button, .edit-button {
+    margin-top: 20px;
+}
+
 .select-type, .select-public, .select-anon {
     height: 30px;
     border-radius: 5px;
