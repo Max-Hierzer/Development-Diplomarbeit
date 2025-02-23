@@ -10,7 +10,7 @@ const ImportanceScale = ({ questionId, onImportanceChange }) => {
     };
 
     return (
-        <div style={{ textAlign: "center", marginTop: "-10px" }}>
+        <div style={{ textAlign: "center" }}>
             <div style={{
                 display: "flex",
                 justifyContent: "center",

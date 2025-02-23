@@ -1,6 +1,6 @@
 import React from "react";
 
-function NavigationContent({ setDisplayMode, setSelectedPoll, roleId, setIsMenuOpen }) {
+function NavigationContent({ mobile, setDisplayMode, handleLogout, setSelectedPoll, roleId, setIsMenuOpen }) {
 
     const handleModeChange = (mode) => {
         setDisplayMode(mode);
@@ -31,6 +31,11 @@ function NavigationContent({ setDisplayMode, setSelectedPoll, roleId, setIsMenuO
                         <li>
                             <a onClick={() => handleModeChange(4)}>Meine Umfragen</a>
                         </li>
+                        {mobile &&
+                            <li>
+                                <a onClick={handleLogout}>Logout</a>
+                            </li>
+                        }
                     </ul>
                 </nav>
             );
@@ -53,6 +58,10 @@ function NavigationContent({ setDisplayMode, setSelectedPoll, roleId, setIsMenuO
                         <li>
                             <a onClick={() => handleModeChange(4)}>Meine Umfragen</a>
                         </li>
+                        {mobile && <li>
+                                <a onClick={handleLogout}>Logout</a>
+                            </li>
+                        }
                     </ul>
                 </nav>
             );
@@ -67,6 +76,10 @@ function NavigationContent({ setDisplayMode, setSelectedPoll, roleId, setIsMenuO
                         <li>
                             <a onClick={() => handleModeChange(3)}>Ergebnisse</a>
                         </li>
+                        {mobile && <li>
+                                <a onClick={handleLogout}>Logout</a>
+                            </li>
+                        }
                     </ul>
                 </nav>
             );

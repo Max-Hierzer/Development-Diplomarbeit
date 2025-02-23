@@ -30,7 +30,7 @@
     margin: 0;       /* Remove extra margins */
   }
 
-  button {
+  .vote-button {
     margin-top: 20px;
     padding: 10px 20px;
     background-color: var(--primary-color);
@@ -46,7 +46,7 @@
   }
 
   button:hover {
-    background-color: var(--primary-hover-color); /* Slightly darker green on hover */
+    background-color: var(--primary-hover-color);
   }
   
   p {

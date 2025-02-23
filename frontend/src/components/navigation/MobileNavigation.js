@@ -4,7 +4,7 @@ import {MdClose} from 'react-icons/md';
 import NavigationContent from './NavigationContent';
 import './MobileNavigation.css';
 
-function Navigation({ setDisplayMode, setSelectedPoll, userRoleId }) {
+function Navigation({ setDisplayMode, handleLogout, setSelectedPoll, userRoleId }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const roleId = parseInt(userRoleId);
@@ -14,7 +14,13 @@ function Navigation({ setDisplayMode, setSelectedPoll, userRoleId }) {
     return (
         <nav className="mobile-nav">
             {isMenuOpen ? close : hamburger}
-            {isMenuOpen && <NavigationContent setDisplayMode={setDisplayMode} setSelectedPoll={setSelectedPoll} roleId={roleId} setIsMenuOpen={setIsMenuOpen} />}
+            {isMenuOpen && <NavigationContent
+                mobile={true}
+                setDisplayMode={setDisplayMode}
+                handleLogout={handleLogout}
+                setSelectedPoll={setSelectedPoll}
+                roleId={roleId}
+                setIsMenuOpen={setIsMenuOpen} />}
         </nav>
     );
 }

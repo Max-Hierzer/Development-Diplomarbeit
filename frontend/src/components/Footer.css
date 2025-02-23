@@ -2,7 +2,7 @@
 footer {
     background: var(--secondary-color);
     color: black;
-    padding: 40px 8%;
+    padding: 30px 8%;
     margin-top: auto;
     display: flex;
     align-items: center;
@@ -76,7 +76,7 @@ footer {
 @media (max-width: 970px) {
     footer {
         flex-direction: column;
-        padding: 40px 0;
+        padding: 20px 0;
     }
 
     .footer-links {

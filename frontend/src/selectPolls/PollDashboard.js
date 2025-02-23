@@ -255,24 +255,24 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
             case 2:
                 return (
                     <div>
-                        <button onClick={isAnonymous === true ? handleAnonymousVote : handleVote}>
-                            Submit Vote
+                        <button className="vote-button" onClick={isAnonymous === true ? handleAnonymousVote : handleVote}>
+                            Abstimmen
                         </button>
                     </div>
                 );
             case 3:
                 if (selectedPoll.public || selectedPoll.anonymous) return (
-                    <button onClick={handleExportPoll}>
+                    <button className="export-button" onClick={handleExportPoll}>
                         Export Poll
                     </button>
                 )
                 else {
                     return (
                         <div>
-                            <button onClick={showVoters}>
+                            <button className="show-voters-button" onClick={showVoters}>
                                 Show Voters
                             </button>
-                            <button onClick={handleExportPoll}>
+                            <button className="export-button" onClick={handleExportPoll}>
                                 Export Poll
                             </button>
                         </div>

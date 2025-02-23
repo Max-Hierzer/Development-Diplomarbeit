@@ -9,10 +9,20 @@ function Header({ isLoggedIn, handleLogout, setDisplayMode, setSelectedPoll, use
         <header className="header">
             <div className="header-top">
                 <h1 className="TitleName">Umfragetool</h1>
-                {isLoggedIn && <button className="LogoutButton" onClick={handleLogout}>Logout</button>}
             </div>
-            {isLoggedIn && <DesktopNavigation setDisplayMode={setDisplayMode} setSelectedPoll={setSelectedPoll} userRoleId={userRoleId} /> }
-            {isLoggedIn && <MobileNavigation setDisplayMode={setDisplayMode} setSelectedPoll={setSelectedPoll} userRoleId={userRoleId} /> }
+            {isLoggedIn && <button className="LogoutButton" onClick={handleLogout}>Logout</button>}
+            {isLoggedIn && <DesktopNavigation
+                setDisplayMode={setDisplayMode}
+                handleLogout={handleLogout}
+                setSelectedPoll={setSelectedPoll}
+                userRoleId={userRoleId} />
+            }
+            {isLoggedIn && <MobileNavigation
+                setDisplayMode={setDisplayMode}
+                handleLogout={handleLogout}
+                setSelectedPoll={setSelectedPoll}
+                userRoleId={userRoleId} />
+            }
         </header>
     );
 }
