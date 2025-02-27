@@ -1,6 +1,6 @@
 .create-content, .edit-content {
     width: 100%;
-    max-width: 700px;
+    max-width: 80%;
     justify-content: center;
 }
 
@@ -27,10 +27,10 @@
     width: 100%;
     display: flex;
     margin-top: 10px;
-    justify-content: space-between;
     align-items: center;
-    padding: 0 5%;
-    gap: 30px;
+    justify-content: center;
+    padding: 0;
+    gap: 50px;
 }
 
 .datetime-container input {
@@ -92,14 +92,19 @@
 }
 
 
-@media (max-width: 700px) {
+@media (max-width: 810px) {
     .datetime-container {
         flex-direction: column;
         padding: 0;
         gap: 10px;
     }
+    .create-content, .edit-content {
+        max-width: 100%;
+    }
+}
 
-    .datetime-container rdt rdtOpen {
-        margin-left: 100px;
+@media (max-width: 430px) {
+    .datetime-container input {
+        width: 100%;
     }
 }

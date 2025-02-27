@@ -168,7 +168,7 @@ p {
     padding-bottom: 5px;
     margin-bottom: 30px;
     width: 100%;
-    max-width: 700px;
+    max-width: 70%;
 }
 
 .question-header {
@@ -207,4 +207,10 @@ p {
     text-align: left;
     font-weight: normal;
     margin-bottom: 10px;
+}
+
+@media (max-width: 810px) {
+    .question {
+        max-width: 100%;
+    }
 }
