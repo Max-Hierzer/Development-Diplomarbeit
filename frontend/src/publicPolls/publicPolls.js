@@ -36,7 +36,7 @@ const PublicPolls = () => {
     // Validate form fields
     const newFormErrors = {};
     if (!gender) newFormErrors.gender = '*';
-    if (!age || isNaN(age) || parseInt(age) < 0) newFormErrors.age = 'Please enter a valid age.';
+    if (!age || isNaN(age) || parseInt(age) < 0) newFormErrors.age = '*';
     if (!job) newFormErrors.job = '*';
 
     setFormErrors(newFormErrors);
@@ -206,7 +206,6 @@ const PublicPolls = () => {
 
   return (
     <div className="public-container">
-    <div className="poll-content">
     <ReCAPTCHA
     sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
     size="invisible"
@@ -215,53 +214,53 @@ const PublicPolls = () => {
     {poll ? (
       !showVoting ? (
         <div className="publicData">
-        <h1>Please fill out your data</h1>
-        <form onSubmit={handleSubmitData}>
-        <div>
-        <label htmlFor="gender" className="required-label">Gender:</label>
-        <select
-        id="gender"
-        required
-        onChange={(e) => setGender(e.target.value)}
-        className={`required ${formErrors.gender ? 'invalid' : ''}`}
-        >
-        <option value="">Select a gender</option>
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-        <option value="non-binary">Non-binary</option>
-        </select>
-        {formErrors.gender && <span className="error-message">{formErrors.gender}</span>}
-        </div>
-        <div>
-        <label htmlFor="age" className="required-label">Your Age:</label>
-        <input
-        type="text"
-        id="age"
-        required
-        placeholder="Your Age"
-        onChange={(e) => setAge(e.target.value)}
-        className={`required ${formErrors.age ? 'invalid' : ''}`}
-        />
-        {formErrors.age && <span className="error-message">{formErrors.age}</span>}
-        </div>
-        <div>
-        <label htmlFor="job" className="required-label">Your Job:</label>
-        <input
-        type="text"
-        id="job"
-        required
-        placeholder="Your Job"
-        onChange={(e) => setJob(e.target.value)}
-        className={`required ${formErrors.job ? 'invalid' : ''}`}
-        />
-        {formErrors.job && <span className="error-message">{formErrors.job}</span>}
-        </div>
-        <button type="submit">Submit Data</button>
-        </form>
+          <h2>Bitte beantworten sie die folgenden Fragen.</h2>
+          <form onSubmit={handleSubmitData}>
+            <div>
+              <label htmlFor="gender" className="required-label">Wählen Sie Ihr Geschlecht:</label>
+              <select
+                id="gender"
+                required
+                onChange={(e) => setGender(e.target.value)}
+                className={`required ${formErrors.gender ? 'invalid' : ''}`}
+              >
+              <option value="">-</option>
+              <option value="male">männlich</option>
+              <option value="female">weiblich</option>
+              <option value="non-binary">divers</option>
+              </select>
+              {formErrors.gender && <span className="error-message">{formErrors.gender}</span>}
+            </div>
+            <div>
+              <label htmlFor="age" className="required-label">Wie alt sind Sie:</label>
+              <input
+                type="text"
+                id="age"
+                required
+                placeholder="Ihr Alter"
+                onChange={(e) => setAge(e.target.value)}
+                className={`required ${formErrors.age ? 'invalid' : ''}`}
+              />
+              {formErrors.age && <span className="error-message">{formErrors.age}</span>}
+            </div>
+            <div>
+              <label htmlFor="job" className="required-label">Ihr Beruf:</label>
+              <input
+                type="text"
+                id="job"
+                required
+                placeholder="Ihr Beruf"
+                onChange={(e) => setJob(e.target.value)}
+                className={`required ${formErrors.job ? 'invalid' : ''}`}
+              />
+              {formErrors.job && <span className="error-message">{formErrors.job}</span>}
+            </div>
+            <button type="submit">Submit Data</button>
+          </form>
         </div>
       ) : (
         <div className="vote-container">
-        <h2>{poll.name}</h2>
+        <h2><span>{poll.name}</span></h2>
         {poll.description && (
           <div>
           <h4 className="description-header">Beschreibung:</h4>
@@ -309,7 +308,6 @@ const PublicPolls = () => {
     ) : (
       <p>Poll not available</p>
     )}
-    </div>
     </div>
   );
 };
