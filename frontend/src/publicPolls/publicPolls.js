@@ -33,15 +33,19 @@ const PublicPolls = () => {
     event.preventDefault();
     console.log("Form submission triggered");
 
+    // Mark the form as submitted
+    const publicDataElement = document.querySelector('.publicData');
+    publicDataElement.classList.add('submitted');
+
     // Validate form fields
     const newFormErrors = {};
     if (!gender) newFormErrors.gender = '*';
-    if (!age || isNaN(age) || parseInt(age) < 0) newFormErrors.age = '*';
+    if (!age || isNaN(age) || parseInt(age) < 0) newFormErrors.age = 'Bitte geben Sie eine Zahl an.';
     if (!job) newFormErrors.job = '*';
 
     setFormErrors(newFormErrors);
     if (Object.keys(newFormErrors).length > 0) {
-      alert('Please fill out all fields.');
+      alert('Bitte füllen Sie alle Felder aus.');
       return;
     }
 

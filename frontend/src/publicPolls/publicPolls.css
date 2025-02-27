@@ -9,8 +9,8 @@
     text-align: center;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Zentriert den Messenger horizontal */
-    justify-content: center; /* Zentriert den Messenger vertikal */
+    align-items: center;
+    justify-content: center;
 }
 
 @media (max-width: 1920px) {
@@ -30,7 +30,7 @@
     width: 80%;
     max-width: 600px;
     padding: 0;
-    border: 3px solid black; /* Schwarzer Rahmen */
+    border: 3px solid black;
     border-radius: 8px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -84,24 +84,23 @@
 }
 
 
-.required-label::after {
-    content: "*";
-    color: red;
-    margin-left: 5px;
+.publicData.submitted .invalid {
+    border-color: red;
 }
 
-.error-message {
+.publicData .error-message {
+    display: none;
+}
+
+.publicData.submitted .error-message {
+    display: block;
     color: red;
     font-size: 0.8em;
     margin-top: -10px;
     margin-bottom: 10px;
 }
 
-.invalid {
-    border-color: red;
-}
 
-/* Voting styles (reusing from your voting.css) */
 .vote-container {
     width: 100%;
     align-items: center;
@@ -162,7 +161,6 @@ p {
     margin-bottom: 1rem;
 }
 
-/* Reusing question styles from dashboard.css */
 .question {
     border-style: solid;
     border-radius: 8px;
