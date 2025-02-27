@@ -55,7 +55,7 @@ const Results = ({ poll, showVotersMode }) => {
     return (
         <div className="results-container">
             <h2 className="poll-header">{poll.name}</h2>
-            <h3>In dieser Umfrage haben {results.totalVotes || 0} Leute abgestimmt!</h3>
+            <h3>In dieser Umfrage {results.totalVotes == 1 ? "hat" : "haben"} {results.totalVotes || 0} {results.totalVotes == 1 ? "Person" : "Personen"} abgestimmt!</h3>
             <br />
             {poll.description && (
                 <div>
@@ -70,7 +70,7 @@ const Results = ({ poll, showVotersMode }) => {
                         <span className="question-text">{question.name}</span>
                         <span className="question-type">{question.QuestionType.name}</span>
                     </h3>
-                    <h4>Auf diese Frage haben {results.questionVotes?.[question.id] || 0} Leute abgestimmt!</h4>
+                    <h4>Auf diese Frage {results.questionVotes?.[question.id] == 1 ? "hat" : "haben"} {results.questionVotes?.[question.id] || 0} {results.questionVotes?.[question.id] == 1 ? "Person" : "Personen"} abgestimmt!</h4>
                     <br />
                     {question.Answers.map((answer) => (
                         <div key={answer.id} className="results-answer">
