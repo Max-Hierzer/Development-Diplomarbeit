@@ -1,11 +1,3 @@
-.public-container{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
 .public-container {
     width: 100%;
     max-width: 60%;
@@ -19,6 +11,18 @@
     flex-direction: column;
     align-items: center; /* Zentriert den Messenger horizontal */
     justify-content: center; /* Zentriert den Messenger vertikal */
+}
+
+@media (max-width: 1920px) {
+    .public-container {
+        max-width: 1000px;
+    }
+}
+
+@media (max-width: 768px) {
+    button {
+        width: 100%;
+    }
 }
 
 
