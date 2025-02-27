@@ -4,11 +4,11 @@ import '../styles/voting.css';
 const Voting = ({ selectedPoll, selectedAnswers, handleAnswerChange, handleImportanceChange }) => {
     return (
         <div className="vote-container">
-            <h2><span>{selectedPoll.name}</span></h2>
+            <h2 className="poll-header">{selectedPoll.name}</h2>
             {selectedPoll.description && (
-                <div>
+                <div className="display-description">
                     <h4 className='description-header'>Beschreibung: </h4>
-                    <h5 className='description'>{selectedPoll.description}</h5>
+                    <h5 className='description-text'>{selectedPoll.description}</h5>
                 </div>
             )}
             <br />

@@ -58,12 +58,12 @@ const Results = ({ poll, showVotersMode }) => {
             <h3>In dieser Umfrage {results.totalVotes == 1 ? "hat" : "haben"} {results.totalVotes || 0} {results.totalVotes == 1 ? "Person" : "Personen"} abgestimmt!</h3>
             <br />
             {poll.description && (
-                <div>
-                    <h4 className='description-header'>Description:</h4>
-                    <h5 className='description'>{poll.description}</h5>
+                <div className="display-description">
+                    <h4 className='description-header'>Beschreibung:</h4>
+                    <h5 className='description-text'>{poll.description}</h5>
                 </div>
             )}
-
+            <br />
             {poll.Questions.map((question) => (
                 <div key={question.id} className="question">
                     <h3 className="question-header">

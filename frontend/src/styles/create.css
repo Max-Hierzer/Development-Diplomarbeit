@@ -1,6 +1,7 @@
 .create-content, .edit-content {
     width: 100%;
     max-width: 700px;
+    justify-content: center;
 }
 
 .create-form, .edit-form {
@@ -27,15 +28,15 @@
     display: flex;
     margin-top: 10px;
     justify-content: space-between;
-    padding: 0 10%;
+    align-items: center;
+    padding: 0 5%;
     gap: 30px;
 }
 
 .datetime-container input {
-    width: 100%;
+    width: 250px;
     margin-top: 0;
 }
-
 
 .description {
     padding: 10px;
@@ -63,7 +64,9 @@
     height: 45px;
     font-size: 30px;
     color: red;
-    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin: 10px 0;
 }
 
@@ -89,15 +92,14 @@
 }
 
 
-@media (max-width: 500px) {
+@media (max-width: 700px) {
     .datetime-container {
         flex-direction: column;
         padding: 0;
         gap: 10px;
     }
 
-    .datetime-container input{
-        width: 70%;
-        min-width: 150px;
+    .datetime-container rdt rdtOpen {
+        margin-left: 100px;
     }
 }

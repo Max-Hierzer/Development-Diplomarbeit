@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Datetime from 'react-datetime';
 import "react-datetime/css/react-datetime.css";
 import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import "../styles/create.css";
 
 function EditPolls({ selectedPoll }) {
@@ -245,7 +247,9 @@ function EditPolls({ selectedPoll }) {
                         value={question.name}
                         onChange={(e) => handleQuestionChange(questionIndex, e.target.value)}
                         />
-                        <button type="button" className="delete" onClick={() => deleteQuestion(questionIndex)}>✖</button>
+                        <button type="button" className="delete" onClick={() => deleteQuestion(questionIndex)}>
+                            <FontAwesomeIcon icon={faTimes} />
+                        </button>
                     </div>
                     <br />
                     <h4>Antworten</h4>
@@ -259,7 +263,9 @@ function EditPolls({ selectedPoll }) {
                                 handleAnswerChange(questionIndex, answerIndex, e.target.value)
                             }
                             />
-                            <button type="button" className="delete" onClick={() => deleteAnswer(questionIndex, answerIndex)}>✖</button>
+                            <button type="button" className="delete" onClick={() => deleteAnswer(questionIndex, answerIndex)}>
+                                <FontAwesomeIcon icon={faTimes} />
+                            </button>
                         </div>
                     ))}
                     <button type="button" className="add" onClick={() => addAnswer(questionIndex)}>Antwort hinzufügen</button>
