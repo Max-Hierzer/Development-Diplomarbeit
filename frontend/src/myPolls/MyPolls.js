@@ -34,13 +34,13 @@ function MyPoll({ poll, refreshPolls, setSelectedPoll }) {
           <div className="votelink-container">
             <h3 className="link-label">Link zur <br /> Abstimmung:</h3>
             <button onClick={() => copyClipboard(1)} className="copy-button">
-              {copiedText === 1 ? 'Kopiert!' : 'Link koperien'}
+              {copiedText === 1 ? 'Kopiert!' : 'Link kopieren'}
             </button>
           </div>
           <div className="resultslink-container">
             <h3 className="link-label">Link zu den <br /> Ergebnissen:</h3>
             <button onClick={() => copyClipboard(0)} className="copy-button">
-              {copiedText === 0 ? 'Kopiert!' : 'Link koperien'}
+              {copiedText === 0 ? 'Kopiert!' : 'Link kopieren'}
             </button>
           </div>
           <DeletePoll selectedPoll={poll} refreshPolls={refreshPolls} setSelectedPoll={setSelectedPoll} />
