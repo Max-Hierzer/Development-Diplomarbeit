@@ -205,100 +205,111 @@ const PublicPolls = () => {
   };
 
   return (
-    <div className="publicPoll">
-      {/* Render the reCAPTCHA component always so it is not unmounted.
-          It is set to invisible so it won’t show in your UI. */}
-      <ReCAPTCHA
-        sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY} // Replace with your actual site key.
-        size="invisible"
-        ref={recaptchaRef}
-      />
-
-      {poll ? (
-        !showVoting ? (
-          <div className="publicData">
-            <h1>Please fill out your data</h1>
-            <form onSubmit={handleSubmitData}>
-              <div>
-                <label htmlFor="gender" className="required-label">Gender:</label>
-                <select
-                  id="gender"
-                  required
-                  onChange={(e) => setGender(e.target.value)}
-                  className={`required${formErrors.gender ? ' invalid' : ''}`}
-                >
-                  <option value="">Select a gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="non-binary">Non-binary</option>
-                </select>
-                {formErrors.gender && <span className="error-message">{formErrors.gender}</span>}
-              </div>
-
-              <div>
-                <label htmlFor="age" className="required-label">Your Age:</label>
-                <input
-                  type="text"
-                  id="age"
-                  required
-                  placeholder="Your Age"
-                  onChange={(e) => setAge(e.target.value)}
-                  className={`required${formErrors.age ? ' invalid' : ''}`}
-                />
-                {formErrors.age && <span className="error-message">{formErrors.age}</span>}
-              </div>
-
-              <div>
-                <label htmlFor="job" className="required-label">Your Job:</label>
-                <input
-                  type="text"
-                  id="job"
-                  required
-                  placeholder="Your Job"
-                  onChange={(e) => setJob(e.target.value)}
-                  className={`required${formErrors.job ? ' invalid' : ''}`}
-                />
-                {formErrors.job && <span className="error-message">{formErrors.job}</span>}
-              </div>
-
-              <button type="submit">Submit</button>
-            </form>
+    <div className="public-container">
+    <div className="poll-content">
+    <ReCAPTCHA
+    sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+    size="invisible"
+    ref={recaptchaRef}
+    />
+    {poll ? (
+      !showVoting ? (
+        <div className="publicData">
+        <h1>Please fill out your data</h1>
+        <form onSubmit={handleSubmitData}>
+        <div>
+        <label htmlFor="gender" className="required-label">Gender:</label>
+        <select
+        id="gender"
+        required
+        onChange={(e) => setGender(e.target.value)}
+        className={`required ${formErrors.gender ? 'invalid' : ''}`}
+        >
+        <option value="">Select a gender</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="non-binary">Non-binary</option>
+        </select>
+        {formErrors.gender && <span className="error-message">{formErrors.gender}</span>}
+        </div>
+        <div>
+        <label htmlFor="age" className="required-label">Your Age:</label>
+        <input
+        type="text"
+        id="age"
+        required
+        placeholder="Your Age"
+        onChange={(e) => setAge(e.target.value)}
+        className={`required ${formErrors.age ? 'invalid' : ''}`}
+        />
+        {formErrors.age && <span className="error-message">{formErrors.age}</span>}
+        </div>
+        <div>
+        <label htmlFor="job" className="required-label">Your Job:</label>
+        <input
+        type="text"
+        id="job"
+        required
+        placeholder="Your Job"
+        onChange={(e) => setJob(e.target.value)}
+        className={`required ${formErrors.job ? 'invalid' : ''}`}
+        />
+        {formErrors.job && <span className="error-message">{formErrors.job}</span>}
+        </div>
+        <button type="submit">Submit Data</button>
+        </form>
+        </div>
+      ) : (
+        <div className="vote-container">
+        <h2>{poll.name}</h2>
+        {poll.description && (
+          <div>
+          <h4 className="description-header">Beschreibung:</h4>
+          <h5 className="description">{poll.description}</h5>
           </div>
-        ) : (
-          <div className="publicVote">
-            <h2>{poll.name}</h2>
-            <h4 className="Beschreibung">Beschreibung:</h4>
-            <h5 className="Beschreibung">{poll.description}</h5>
-            <br />
-            {poll.Questions &&
-              poll.Questions.map((question) => (
-                <div key={question.id} className="question">
-                  <h3>{question.name}</h3>
-                  {question.Answers &&
-                    question.Answers.map((answer) => (
-                      <Voting
-                        key={answer.id}
-                        question={question}
-                        answer={answer}
-                        selectedAnswers={selectedAnswers}
-                        handleAnswerChange={handleAnswerChange}
-                      />
-                    ))}
-
-                  {question.QuestionType.name === "Weighted Choice" && (
-                    <ImportanceScale
-                      questionId={question.id}
-                      onImportanceChange={handleImportanceChange}
-                    />
-                  )}
+        )}
+        <br />
+        {poll.Questions &&
+          poll.Questions.map((question) => (
+            <div key={question.id} className="question">
+            <h3 className="question-header">
+            <span className="question-text">{question.name}</span>
+            <span className="question-type">{question.QuestionType.name}</span>
+            </h3>
+            {question.Answers &&
+              question.Answers.map((answer) => (
+                <div key={answer.id} className="answer">
+                <input
+                type={question.QuestionType.name === "Multiple Choice" ? "checkbox" : "radio"}
+                name={`question-${question.id}`}
+                value={answer.id}
+                checked={
+                  question.QuestionType.name === "Multiple Choice"
+                  ? !!selectedAnswers[question.id]?.answer?.includes(answer.id)
+                  : selectedAnswers[question.id]?.answer?.[0] === answer.id
+                }
+                onChange={(event) =>
+                  handleAnswerChange(question.id, answer.id, question.QuestionType.name === "Multiple Choice", event.target.checked)
+                }
+                />
+                <label>{answer.name}</label>
                 </div>
               ))}
-            <button onClick={handleVoteSubmit}>Submit Vote</button>
+              {question.QuestionType.name === "Weighted Choice" && (
+                <ImportanceScale
+                questionId={question.id}
+                onImportanceChange={handleImportanceChange}
+                />
+              )}
+              </div>
+          ))}
+          <button className="vote-button" onClick={handleVoteSubmit}>Submit Vote</button>
           </div>
-        )
-      ) : (
-        "Poll not available"
-      )}
+      )
+    ) : (
+      <p>Poll not available</p>
+    )}
+    </div>
     </div>
   );
 };

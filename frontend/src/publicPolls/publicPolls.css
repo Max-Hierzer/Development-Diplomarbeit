@@ -1,26 +1,212 @@
-.publicPoll{
-    background-color: white;
+.public-container, .poll-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-.required {
+.public-container {
+    height: 100%;
+    overflow: hidden;
+}
+
+.poll-content {
+    flex: none;
+    min-height: 400px;
+    height: auto;
+    overflow: visible;
+    padding: 1rem;
+    margin: 1rem;
+    background-color: #f9f9f9;
     border: 1px solid #ccc;
-    padding: 8px;
+    border-radius: 5px;
+    color: black;
+}
+
+.publicData {
+    width: 80%;
+    max-width: 600px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.publicData h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.publicData form {
+    display: flex;
+    flex-direction: column;
+}
+
+.publicData label {
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.publicData input[type="text"],
+.publicData select {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
     font-size: 16px;
 }
 
-.requiredinvalid {
-    border: 1px solid #f00;
-    padding: 8px;
+.publicData button {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
     font-size: 16px;
 }
 
-.required-label {
-    font-weight: bold;
-    margin-right: 5px;
+.publicData button:hover {
+    background-color: var(--primary-hover-color);
+}
+
+.required-label::after {
+    content: "*";
+    color: red;
+    margin-left: 5px;
 }
 
 .error-message {
     color: red;
-    font-size: 12px;
-    margin-top: 5px;
+    font-size: 0.8em;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+.invalid {
+    border-color: red;
+}
+
+/* Voting styles (reusing from your voting.css) */
+.vote-container {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.answer {
+    margin-left: 5%;
+    display: flex;
+    align-items: center;
+    gap: 5%;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+.answer label {
+    flex-grow: 1;
+    text-align: left;
+    padding-left: 5px;
+    margin-right: 50px;
+}
+
+.answer input[type="radio"],
+.answer input[type="checkbox"] {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin: 0;
+}
+
+.vote-button {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.Submit_Vote {
+    margin: auto;
+}
+
+button:hover {
+    background-color: var(--primary-hover-color);
+}
+
+p {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #ff4d4d;
+}
+
+.Submit_Vote {
+    margin-bottom: 1rem;
+}
+
+/* Reusing question styles from dashboard.css */
+.question {
+    border-style: solid;
+    border-radius: 8px;
+    border-width: 3px;
+    padding-bottom: 5px;
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 700px;
+}
+
+.question-header {
+    background-color: var(--primary-hover-color);
+    padding: 8px 5px;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    border-radius: 5px 5px 0 0;
+}
+
+.question-text {
+    text-align: left;
+    margin-left: 15px;
+}
+
+.question-type {
+    text-align: right;
+    margin-right: 0px;
+    font-size: 0.7rem;
+    background-color: #A8B3C5;
+    padding: 2px;
+    padding-bottom: 1px;
+    border-radius: 4px;
+    display: inline-block;
+    height: fit-content;
+}
+
+.description-header {
+    text-align: left;
+    margin-bottom: 1px;
+}
+
+.description {
+    text-align: left;
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+
+
+h2 {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--primary-hover-color);
+    color: black;
 }
