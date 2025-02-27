@@ -70,7 +70,7 @@ const Results = ({ poll, showVotersMode }) => {
                         <span className="question-text">{question.name}</span>
                         <span className="question-type">{question.QuestionType.name}</span>
                     </h3>
-                    <h4>Auf diese Frage {results.questionVotes?.[question.id] == 1 ? "hat" : "haben"} {results.questionVotes?.[question.id] || 0} {results.questionVotes?.[question.id] == 1 ? "Person" : "Personen"} abgestimmt!</h4>
+                    {/*<h4>Auf diese Frage {results.questionVotes?.[question.id] == 1 ? "hat" : "haben"} {results.questionVotes?.[question.id] || 0} {results.questionVotes?.[question.id] == 1 ? "Person" : "Personen"} abgestimmt!</h4>*/}
                     <br />
                     {question.Answers.map((answer) => (
                         <div key={answer.id} className="results-answer">
