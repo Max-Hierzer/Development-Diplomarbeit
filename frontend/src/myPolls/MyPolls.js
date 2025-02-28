@@ -1,10 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DeletePoll from '../DeletePolls/DeletePoll'
 import '../styles/myPolls.css';
 
 function MyPoll({ poll, refreshPolls, setSelectedPoll }) {
     const [response, setResponse] = useState(null);
     const [copiedText, setCopiedText] = useState(null);
+    const [votes, setVotes] = useState({});
+
+    useEffect(() => {
+        const fetchResults = async () => {
+            try {
+                const res = await fetch('http://localhost:3001/results/results', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        pollId: poll.id,
+                        questions: poll.Questions
+                    }),
+                });
+
+                const data = await res.json();
+                setVotes(data);
+            } catch (error) {
+                console.error('Error fetching results in frontend:', error);
+            }
+        };
+
+        fetchResults();
+    }, [poll.id]);
 
     const voteHash = encodeURIComponent(btoa(`public=${poll.public}&mode=vote&poll=${poll.id}&anonymous=${poll.anonymous}`));
     const resultsHash = encodeURIComponent(btoa(`public=${poll.public}&mode=results&poll=${poll.id}&anonymous=${poll.anonymous}`));
@@ -43,7 +68,7 @@ function MyPoll({ poll, refreshPolls, setSelectedPoll }) {
               {copiedText === 0 ? 'Kopiert!' : 'Link kopieren'}
             </button>
           </div>
-          <DeletePoll selectedPoll={poll} refreshPolls={refreshPolls} setSelectedPoll={setSelectedPoll} />
+          <DeletePoll selectedPoll={poll} refreshPolls={refreshPolls} setSelectedPoll={setSelectedPoll} totalVotes={votes.totalVotes} />
         </div>
     );
 }

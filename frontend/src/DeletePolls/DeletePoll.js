@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DeletePoll = ({ selectedPoll, refreshPolls, setSelectedPoll }) => {
+const DeletePoll = ({ selectedPoll, refreshPolls, setSelectedPoll, totalVotes }) => {
     const handleDelete = async () => {
         if (!selectedPoll.id) {
             alert('Please select a poll to delete.');
@@ -37,14 +37,24 @@ const DeletePoll = ({ selectedPoll, refreshPolls, setSelectedPoll }) => {
     };
     
     return (
-        <button 
-            onClick={handleDelete} 
+    <div>
+    {totalVotes > 0 ? (
+        <button
+            onClick={handleDelete}
             disabled={!selectedPoll}
-            className='Delete_Button'
-            title="Nur Polls löschen, welche noch nicht begonnen wurden"  // Tooltip-Nachricht hier
+            className={'delete-button'}
         >
             Umfrage löschen
         </button>
+    ) : (
+        <button
+            className={'disabled-button'}
+            title={'Nur Polls löschen, welche noch nicht begonnen wurden'}  // Tooltip-Nachricht hier
+        >
+            Umfrage löschen
+        </button>
+    )}
+    </div>
     );
 };
 

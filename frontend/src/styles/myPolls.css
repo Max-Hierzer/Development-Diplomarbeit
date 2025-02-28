@@ -32,6 +32,16 @@
   margin-top: 30px;
 }
 
+.disabled-button {
+  margin-top: 30px;
+  background-color: grey;
+}
+
+.disabled-button:hover {
+  cursor: default;
+  background-color: grey;
+}
+
 
 @media (max-width: 410px) {
   .pollname {
