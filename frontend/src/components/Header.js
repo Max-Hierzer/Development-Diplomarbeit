@@ -5,11 +5,14 @@ import DesktopNavigation from './navigation/DesktopNavigation';
 import MobileNavigation from './navigation/MobileNavigation';
 
 function Header({ isLoggedIn, handleLogout, setDisplayMode, setSelectedPoll, userRoleId }) {
+    const userName = sessionStorage.getItem('userName');
+
     return (
         <header className="header">
             <div className="header-top">
                 <h1 className="TitleName">Umfragetool</h1>
             </div>
+            <p className="user-text">Hallo, {sessionStorage.getItem('userName')}!</p>
             {isLoggedIn && <button className="LogoutButton" onClick={handleLogout}>Logout</button>}
             {isLoggedIn && <DesktopNavigation
                 setDisplayMode={setDisplayMode}

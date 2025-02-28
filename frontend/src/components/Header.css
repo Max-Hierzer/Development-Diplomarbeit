@@ -52,6 +52,15 @@ a:hover {
   text-decoration: underline;
 }
 
+.user-text {
+    position: absolute;
+    left: 2%;
+    top: 1%;
+    width: 20%;
+    color: black;
+
+}
+
 
 
 @media (max-width: 970px) {
