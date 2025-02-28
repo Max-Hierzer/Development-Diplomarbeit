@@ -54,9 +54,10 @@ a:hover {
 
 .user-text {
     position: absolute;
-    left: 2%;
+    left: 20px;
     top: 1%;
     width: 20%;
+    text-align: left;
     color: black;
 
 }

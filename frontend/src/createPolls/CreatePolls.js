@@ -115,15 +115,19 @@ function CreatePoll() {
     return (
         <div className="create-content">
         <form onSubmit={handleSubmit} className="create-form">
-            <h1>Umfrage</h1>
+            <h1>Erstellen</h1>
+            <label htmlFor="name" className="hidden-label">Umfragetitel</label>
             <input
+            id="name"
             type="text"
             placeholder={`Name`}
             value={poll}
             onChange={(e) => setPoll(e.target.value)}
             />
             <br />
+            <label htmlFor="beschreibung" className="hidden-label">Beschreibung</label>
             <textarea
+            id="beschreibung"
             placeholder="Beschreibung"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -135,7 +139,8 @@ function CreatePoll() {
             <br />
             <br />
             <h4>Öffentlich</h4>
-            <select onChange={(e) => setSelectedPublic(e.target.value)} value={selectedPublic} className="select-public">
+            <label htmlFor="public" className="hidden-label">Soll die Umfrage öffentlich sein?</label>
+            <select id="public" onChange={(e) => setSelectedPublic(e.target.value)} value={selectedPublic} className="select-public">
                 <option>Nein</option>
                 <option>Ja</option>
             </select>
@@ -144,7 +149,8 @@ function CreatePoll() {
             {selectedPublic === "Nein" && (
                 <div>
                 <h4>Anonym</h4>
-                <select onChange={(e) => setSelectedAnon(e.target.value)} value={selectedAnon} className="select-anon">
+                <label htmlFor="anon" className="hidden-label">Soll die Umfrage anonym sein?</label>
+                <select id="anon" onChange={(e) => setSelectedAnon(e.target.value)} value={selectedAnon} className="select-anon">
                     <option>Ja</option>
                     <option>Nein</option>
                 </select>
@@ -153,7 +159,9 @@ function CreatePoll() {
                 </div>
             )}
             <div className="datetime-container">
+                <label htmlFor="start-time" className="hidden-label">Wann soll die Umfrage starten?</label>
                 <Datetime
+                    id="start-time"
                     key={`publish-${resetKey}`}
                     value={publishDate}
                     onChange={(date) => setPublishDate(date)}
@@ -162,7 +170,9 @@ function CreatePoll() {
                     closeOnSelect={true}
                     inputProps={{ placeholder: "Startzeitpunkt" }}
                 />
+                <label htmlFor="end-time" className="hidden-label">Wann soll die Umfrage enden?</label>
                 <Datetime
+                    id="end-time"
                     key={`end-${resetKey}`}
                     value={endDate}
                     onChange={(date) => setEndDate(date)}
@@ -177,13 +187,16 @@ function CreatePoll() {
             {questions.map((question, questionIndex) => (
                 <div key={questionIndex} className="create-question">
                     <h4>Fragentyp</h4>
-                    <select onChange={(e) => handleQuestionTypes(questionIndex, e.target.value)} value={question.type} className="select-type">
+                    <label htmlFor="question-type" className="hidden-label">Was für einen Typ soll Frage {questionIndex + 1} haben?</label>
+                    <select id="question-type" onChange={(e) => handleQuestionTypes(questionIndex, e.target.value)} value={question.type} className="select-type">
                         <option>Single Choice</option>
                         <option>Multiple Choice</option>
                         <option>Weighted Choice</option>
                     </select>
+                    <label htmlFor="question-text" className="hidden-label">Wie soll Frage {questionIndex + 1} lauten?</label>
                     <div className="question-input">
                         <input
+                        id="question-text"
                         type="text"
                         placeholder={`Frage ${questionIndex + 1}`}
                         value={question.name}
@@ -198,7 +211,9 @@ function CreatePoll() {
                     <h4>Antworten</h4>
                     {question.answers.map((answer, answerIndex) => (
                         <div key={answerIndex} className="answer-input">
+                            <label htmlFor="answer-text" className="hidden-label">Wie soll Antwort {answerIndex + 1} zu {questionIndex + 1} lauten?</label>
                             <input
+                            id="answer-text"
                             type="text"
                             placeholder={`Antwort ${answerIndex + 1}`}
                             value={answer.name}
