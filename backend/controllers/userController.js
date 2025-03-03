@@ -1,4 +1,4 @@
-const { createUser, fetchUsers, fetchLogin } = require('../services/userServices');
+const { createUser, fetchUsers, fetchLogin, sendEmail } = require('../services/userServices');
 
 // resolves api connection with frontend for the registration of user
 async function handleCreateUser(req, res) {
@@ -29,7 +29,7 @@ async function handleFetchLogin(req, res) {
         const loginData = await fetchLogin(username, password);
 
         if (!loginData.success) {
-            return res.status(401).json({ message: loginData.message });
+            return res.status(401).json({ message: loginDatsendEmaila.message });
         }
 
         res.status(200).json(loginData);                                // passes the data to frontend
@@ -39,8 +39,29 @@ async function handleFetchLogin(req, res) {
     }
 }
 
+async function handleSendEmail(req, res) {
+    try {
+        const { firstName, lastName, email } = req.body;
+        if (!email || !firstName || !lastName) {
+            return res.status(400).json({ error: "Keine E-Mail-Adresse angegeben" });
+        }
+
+        const emailData = await sendEmail(firstName, lastName, email);
+
+        if (!emailData.success) {
+            return res.status(401).json({ message: emailData.message });
+        }
+
+        res.status(200).json(emailData);                                // passes the data to frontend
+    } catch (error) {
+        console.error('Error fetching userData:', error);
+        res.status(500).json({error: 'Error fetching userData in controller'});
+    }
+}
+
 module.exports = {
     handleCreateUser: handleCreateUser,
     handleFetchUsers: handleFetchUsers,
-    handleFetchLogin: handleFetchLogin
+    handleFetchLogin: handleFetchLogin,
+    handleSendEmail: handleSendEmail
 }

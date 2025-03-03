@@ -25,7 +25,6 @@ function Register() {
                 console.error('Error fetching roles:', error);
             }
         };
-
         fetchRoles();
     }, []);
 
@@ -54,22 +53,36 @@ function Register() {
         }
     };
 
+        /*window.Email.send({
+            SecureToken: "2e2c8c80-ea78-456d-b286-cf0266c8d45b", // Use SecureToken for security
+            To: email,
+            From: "lmp.test.polls@gmail.com",
+            Subject: "Sending Email using JavaScript",
+            Body: "Well, that was easy!!",
+            Attachments: [
+                {
+                    name: "File_Name_with_Extension",
+                    path: "Full Path of the file",
+                },
+            ],
+        })*/
+
     const handleSubmit = async (event) => {
         event.preventDefault(); // Prevent page refresh on form submit
 
         try {
-            const res = await fetch('http://localhost:3001/api/user', {
+            const res = await fetch('http://localhost:3001/api/email', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name, email, password, roleId }) // Send user data to backend
+                body: JSON.stringify({ firstName, lastName, email }) // Send user data to backend
             });
 
             const data = await res.json();
 
             if (res.ok) {
-                setResponse(`User created with ID: ${data.id}`); // Success message
+                setResponse(`Email sent!`);
             } else {
                 setResponse(`Error: ${data.error}`); // Error message
             }
@@ -101,14 +114,14 @@ function Register() {
                         type="text"
                         placeholder={`Vorname`}
                         value={firstName}
-                        onChange={(e) => setName(e.target.value)}
+                        onChange={(e) => setFirstName(e.target.value)}
                         required
                     />
                     <input
                         type="text"
                         placeholder={`Nachname`}
                         value={lastName}
-                        onChange={(e) => setName(e.target.value)}
+                        onChange={(e) => setLastName(e.target.value)}
                         required
                     />
                     <input
@@ -139,7 +152,9 @@ function Register() {
                         <p>Beschreibung:</p>
                         {selectedRoleDescription}
                     </div>
+                    <button type="submit">Register</button>
                 </form>
+                {response && <p>{response}</p>}
             </div>
             ) : (
             <div>

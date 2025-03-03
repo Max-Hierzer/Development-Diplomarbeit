@@ -51,6 +51,7 @@ function App() {
   useEffect(() => {
     const linkParam = window.location.search.substring(1);
     if (linkParam) {
+
       const unhashed = atob(decodeURIComponent(linkParam));
       const params = new URLSearchParams(unhashed);
       const publicValue = params.get('public');

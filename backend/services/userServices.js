@@ -1,5 +1,7 @@
 const { Users, Roles, UserAnswers } = require('../models/index');
 const bcrypt = require('bcrypt');
+const nodemailer = require("nodemailer");
+require('dotenv').config();
 
 // writing new user data in database
 async function createUser(name, email, password, roleId) {
@@ -80,8 +82,55 @@ async function fetchLogin(username, password) {
     }
 }
 
+async function sendEmail(firstName, lastName, email) {
+    let transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            user: process.env.USER_EMAIL,
+            pass: process.env.USER_PASS,
+        },
+    });
+
+    const hash = encodeURIComponent(btoa(`public=${poll.public}&mode=vote&poll=${poll.id}&anonymous=${poll.anonymous}`));
+
+    const registrationUrl = "http://localhost:3000" + hash;
+    const roleName = "temp";
+
+    let mailOptions = {
+        from: `"LMP" <${process.env.USER_EMAIL}>`,
+        to: email,
+        subject: "Deine Einladung zur Registrierung beim LMP Umfragetool",
+        text: `Hallo ${firstName} ${lastName},\n\n
+du wurdest von einem Administrator eingeladen, dich beim LMP Umfragetool zu registrieren.
+Über den folgenden Link kannst du dein Passwort setzen und deine Registrierung abschließen:\n\n
+🔗 ${registrationUrl}\n\n
+Deine zugewiesene Rolle: ${roleName}\n\n
+Falls du diese Einladung nicht erwartet hast, kannst du diese E-Mail ignorieren.
+Bei Fragen kannst du uns unter lmp.support@example.com erreichen.\n\n
+Viele Grüße,\n
+Das LMP-Team`
+    };
+
+    try {
+        let info = await transporter.sendMail(mailOptions);
+
+        if (!info) {
+            return { message: "Error while sending email." };
+        }
+
+        console.log("E-Mail gesendet: " + info.response);
+
+        return {
+            success: true
+        };
+    } catch (error) {
+        console.error("Fehler beim Senden der E-Mail:", error);
+}
+}
+
 module.exports = {
     createUser: createUser,
     fetchUsers: fetchUsers,
-    fetchLogin: fetchLogin
+    fetchLogin: fetchLogin,
+    sendEmail: sendEmail
 };

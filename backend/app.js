@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { sequelize, testConnection } = require('./models'); // Import sequelize and testConnection
-const { postUser, getUsers, getLogin } = require('./routes/userRoutes');
+const { postUser, getUsers, getLogin, postEmail } = require('./routes/userRoutes');
 const { postMessages, getMessages } = require('./routes/messageRoutes');
 const { postPoll } = require('./routes/pollRoutes');
 const { postQuestion, getQuestions } = require('./routes/questionRoutes');
@@ -20,12 +20,14 @@ sequelize.sync({ alter: true })
     console.log("Database & tables created!");
 });
 
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/api', postUser);
 app.use('/api', getUsers);
 app.use('/api', getLogin);
+app.use('/api', postEmail);
 app.use('/api', getMessages);
 app.use('/api', postMessages);
 app.use('/api', postPoll);
