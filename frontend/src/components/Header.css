@@ -52,17 +52,6 @@ a:hover {
   text-decoration: underline;
 }
 
-.user-text {
-    position: absolute;
-    left: 20px;
-    top: 1%;
-    width: 20%;
-    text-align: left;
-    color: black;
-
-}
-
-
 
 @media (max-width: 970px) {
     .desktop-nav{

@@ -78,9 +78,9 @@ function App() {
               </div>
             </div>
           ) : (
-
             // Render the main content if the user is logged in
             <div className='MainContent'>
+            <p className="user-text">Hallo, {userName}!</p>
                 <PollDashboard userId={userId} userName={userName} userRoleId={userRoleId} setDisplayMode={setDisplayMode} displayMode={displayMode} setSelectedPoll={setSelectedPoll} selectedPoll={selectedPoll} />
                 {/* <div className='Messenger'>
                   <h1>{isInputMode ? 'Submit a Message' : 'Messages'}</h1>

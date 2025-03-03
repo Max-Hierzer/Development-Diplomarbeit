@@ -12,7 +12,6 @@ function Header({ isLoggedIn, handleLogout, setDisplayMode, setSelectedPoll, use
             <div className="header-top">
                 <h1 className="TitleName">Umfragetool</h1>
             </div>
-            <p className="user-text">Hallo, {sessionStorage.getItem('userName')}!</p>
             {isLoggedIn && <button className="LogoutButton" onClick={handleLogout}>Logout</button>}
             {isLoggedIn && <DesktopNavigation
                 setDisplayMode={setDisplayMode}

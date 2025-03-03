@@ -38,9 +38,18 @@
     background-color: var(--primary-hover-color);
 }
 
+.registerForm select {
+    text-align: center;
+}
+
 .error-message {
     color: red;
     font-size: 14px;
     margin-top: 10px;
     text-align: center;
+}
+
+.role-description p {
+    color: black;
+    font-weight: bold;
 }
