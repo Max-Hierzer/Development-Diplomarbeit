@@ -20,7 +20,8 @@ module.exports = (sequelize) => {
             public: { type: DataTypes.BOOLEAN, allowNull: false},
             anonymous: { type: DataTypes.BOOLEAN, allowNull: false},
             publish_date: { type: DataTypes.DATE, allowNull: false },
-            end_date: { type: DataTypes.DATE, allowNull: false }
+            end_date: { type: DataTypes.DATE, allowNull: false },
+            imageUrl: { type: DataTypes.STRING, allowNull: true }
         },
         {
             sequelize,

@@ -19,6 +19,31 @@ function CreatePoll() {
     const [response, setResponse] = useState(null);
     const [selectedPublic, setSelectedPublic] = useState('Nein');
     const [selectedAnon, setSelectedAnon] = useState('Ja');
+    const [image, setImage] = useState(null); // For storing the image file
+    const [imageUrl, setImageUrl] = useState(''); // For storing the uploaded image URL
+
+    const handleImageUpload = async (event) => {
+        const formData = new FormData();
+        formData.append("image", event.target.files[0]);
+
+        try {
+            const res = await fetch('http://localhost:3001/api/upload-image', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                setImageUrl(data.imageUrl); // Set the image URL from the server response
+            } else {
+                setResponse('Error uploading image');
+            }
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            setResponse('Error uploading image');
+        }
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -27,7 +52,16 @@ function CreatePoll() {
         let isAnon = selectedAnon === "Ja";
 
         const payload = {
-            poll: { name: poll, description: description, userId: sessionStorage.getItem('userId'), public: isPublic, anon: isAnon, publishDate: publishDate, endDate: endDate},
+            poll: { 
+                name: poll, 
+                description: description, 
+                userId: sessionStorage.getItem('userId'), 
+                public: isPublic, 
+                anon: isAnon, 
+                publishDate: publishDate, 
+                endDate: endDate,
+                imageUrl: imageUrl // Include image URL in the payload
+            },
             questions
         };
 
@@ -60,6 +94,8 @@ function CreatePoll() {
                 setResetKey(resetKey + 1);
                 setSelectedPublic('Nein');
                 setSelectedAnon('Ja');
+                setImage(null); // Clear the image state after submission
+                setImageUrl(''); // Clear the image URL
             } else {
                 setResponse(`Error: ${data.error || 'Something went wrong'}`);
             }
@@ -110,7 +146,6 @@ function CreatePoll() {
         newType[questionIndex].type = value;
         setQuestions(newType);
     }
-
 
     return (
         <div className="create-content">
@@ -184,6 +219,17 @@ function CreatePoll() {
             </div>
             <br />
             <br />
+            
+            {/* Image Upload Section */}
+            <label htmlFor="image-upload" className="hidden-label">Fügen Sie ein Bild hinzu</label>
+            <input
+                type="file"
+                id="image-upload"
+                onChange={handleImageUpload}
+            />
+            <br />
+            <br />
+
             {questions.map((question, questionIndex) => (
                 <div key={questionIndex} className="create-question">
                     <h4>Fragentyp</h4>
