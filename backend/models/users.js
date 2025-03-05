@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
             Users.belongsTo(models.Roles, { foreignKey: 'roleId' });
             Users.hasMany(models.UserAnswers, { foreignKey: 'userId' });    // 1 user has many UserAnswers
             Users.hasMany(models.UserPolls, { foreignKey: 'userId' });
+            Users.hasMany(models.UserGroups, { foreignkey: 'userId' });
         }
     }
     // define attributes

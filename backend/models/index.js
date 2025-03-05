@@ -20,17 +20,23 @@ const Roles = require('./roles')(sequelize, DataTypes);
 const PublicUserData = require('./publicUserData')(sequelize, DataTypes);
 const QuestionTypes = require('./questionTypes')(sequelize, DataTypes);
 const UserPolls = require('./userPolls')(sequelize, DataTypes);
+const Groups = require('./groups')(sequelize, DataTypes);
+const UserGroups = require('./userGroups')(sequelize, DataTypes);
+const PollGroups = require('./pollGroups')(sequelize, DataTypes);
+
 
 // set up relations
-Users.associate({ UserAnswers, Roles, UserPolls });
+Users.associate({ UserAnswers, Roles, UserPolls, UserGroups });
 UserAnswers.associate({ Users, Answers, Questions });
 Answers.associate({ UserAnswers, Answers, Questions });
 Questions.associate({ UserAnswers, Questions, Answers, Polls, QuestionTypes });
-Polls.associate({ Questions, PublicUserData, UserPolls });
+Polls.associate({ Questions, PublicUserData, UserPolls, PollGroups });
 Roles.associate({ Users }); 
 PublicUserData.associate({ Polls });
 QuestionTypes.associate({ Questions });
 UserPolls.associate({ Polls, Users });
+Groups.associate({ PollGroups, UserGroups });
+UserGroups.associate({ Users, Groups });
+PollGroups.associate({ Polls, Groups });
 
-
-module.exports = { sequelize, Users, UserAnswers, Answers, Questions, Polls, Roles, PublicUserData, QuestionTypes, UserPolls };
+module.exports = { sequelize, Users, UserAnswers, Answers, Questions, Polls, Roles, PublicUserData, QuestionTypes, UserPolls, Groups, PollGroups, UserGroups };
