@@ -4,10 +4,6 @@ frontend/build
 *.kate-swp
 backend/uploads/*
 
-<<<<<<< HEAD
-*.env
-=======
 *.env
 backend/env
 frontend/env
->>>>>>> publicPoll
