@@ -1,7 +1,5 @@
-// models/userAnswers.js
 const { Model, DataTypes } = require('sequelize');
 
-// define UserAnswers
 module.exports = (sequelize) => {
     class UserGroups extends Model {
         static associate(models) {
