@@ -302,6 +302,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                 return (<SelectPolls polls={resultsPolls} handleSetSelectedPoll={handleSetSelectedPoll} selectedPoll={selectedPoll} mode={displayMode} />)
             case 4:
                 return (<SelectPolls polls={userPolls} handleSetSelectedPoll={handleSetSelectedPoll} selectedPoll={selectedPoll} mode={displayMode} />)
+            case 7: return (<h1>Gruppen</h1>)
             default:
                 return ('')
         }
