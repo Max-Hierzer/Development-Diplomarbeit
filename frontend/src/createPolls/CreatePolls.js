@@ -22,34 +22,20 @@ function CreatePoll() {
     const [image, setImage] = useState(null); // For storing the image file
     const [imageUrl, setImageUrl] = useState(''); // For storing the uploaded image URL
 
-    const handleImageUpload = async (event) => {
-        const formData = new FormData();
-        formData.append("image", event.target.files[0]);
 
-        try {
-            const res = await fetch('http://localhost:3001/api/upload-image', {
-                method: 'POST',
-                body: formData,
-            });
-
-            const data = await res.json();
-
-            if (res.ok) {
-                setImageUrl(data.imageUrl); // Set the image URL from the server response
-            } else {
-                setResponse('Error uploading image');
-            }
-        } catch (error) {
-            console.error('Error uploading image:', error);
-            setResponse('Error uploading image');
-        }
-    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         let isPublic = selectedPublic === "Ja";
         let isAnon = selectedAnon === "Ja";
+
+        let uploadedImageUrl = await uploadImage();
+
+        if (image && !uploadedImageUrl) {
+            setResponse("Fehler beim Hochladen des Bildes. Bitte erneut versuchen.");
+            return;
+        }
 
         const payload = {
             poll: { 
@@ -60,7 +46,7 @@ function CreatePoll() {
                 anon: isAnon, 
                 publishDate: publishDate, 
                 endDate: endDate,
-                imageUrl: imageUrl // Include image URL in the payload
+                imageUrl: uploadedImageUrl // Include image URL in the payload
             },
             questions
         };
@@ -147,6 +133,41 @@ function CreatePoll() {
         setQuestions(newType);
     }
 
+    const handleImageSelection = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setImage(file);
+        }
+    };
+
+    const uploadImage = async () => {
+        console.log(image);
+        if (!image) return null;
+
+        const formData = new FormData();
+        formData.append("image", image);
+
+        try {
+            const res = await fetch('http://localhost:3001/api/upload-image', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                console.log("Bild erfolgreich hochgeladen:", data.imageUrl);
+                return data.imageUrl;
+            } else {
+                console.error("Fehler beim Hochladen des Bildes:", data.error);
+                return null;
+            }
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            return null;
+        }
+    };
+
     return (
         <div className="create-content">
         <form onSubmit={handleSubmit} className="create-form">
@@ -225,7 +246,7 @@ function CreatePoll() {
             <input
                 type="file"
                 id="image-upload"
-                onChange={handleImageUpload}
+                onChange={handleImageSelection}
             />
             <br />
             <br />
