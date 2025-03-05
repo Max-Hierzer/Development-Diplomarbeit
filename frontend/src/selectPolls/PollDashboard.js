@@ -139,7 +139,6 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
             const userId = parseInt(sessionStorage.getItem('userId'));
             const response = await fetch('http://localhost:3001/results/polls');
             const data = await response.json();
-
             setPolls(data);
             setMaxId(maxIdValue);
             if (selectedPoll?.id && !data.find((poll) => poll.id === selectedPoll.id)) {

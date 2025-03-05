@@ -2,9 +2,19 @@ import ImportanceScale from '../voting/ImportanceScale';
 import '../styles/voting.css';
 
 const Voting = ({ selectedPoll, selectedAnswers, handleAnswerChange, handleImportanceChange }) => {
+    console.log("Pollname: ", selectedPoll.name, "Pollimage: ", selectedPoll.imageUrl)
     return (
         <div className="vote-container">
             <h2 className="poll-header">{selectedPoll.name}</h2>
+            {selectedPoll.imageUrl && (
+                <div className="image-container">
+                <img
+                    src={`http://localhost:3001${selectedPoll.imageUrl}`}
+                    alt="Umfragebild"
+                    className="poll-image"
+                />
+                </div>
+            )}
             {selectedPoll.description && (
                 <div className="display-description">
                     <h4 className='description-header'>Beschreibung: </h4>
