@@ -3,19 +3,33 @@ import '../styles/groups.css';
 
 const Groups = ({  }) => {
     const [createGroup, setCreateGroup] = useState(0);
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        console.log("created Poll");
+    }
     return (
         <div className="groups-container">
-            {createGroup ? (
-                <>
-                <button onClick={() => setCreateGroup(0)}>Gruppen Bearbeiten</button>
-                <h2>Gruppe Erstellen</h2>
-                </>
-                ) : (
-                <>
-                <button onClick={() => setCreateGroup(1)}>Gruppe Erstellen</button>
-                <h2>Gruppen Bearbeiten</h2>
-                </>
-                )}
+            <button onClick={() => setCreateGroup(0)}>Gruppen Bearbeiten</button>
+            <form onSubmit={handleSubmit} className="group-form">
+                <h1>Gruppe erstellen</h1>
+                <label htmlFor="name" className="hidden-label">Gruppenname</label>
+                <input
+                id="name"
+                type="text"
+                placeholder={`Name`}
+                />
+                <br />
+                <label htmlFor="beschreibung" className="hidden-label">Beschreibung</label>
+                <textarea
+                id="beschreibung"
+                placeholder="Beschreibung"
+                rows={5} // Adjust the number of rows for the desired height
+                cols={50} // Adjust the number of columns for the desired width
+                style={{ resize: 'vertical' }} // Optional: Allow resizing vertically only
+                className="description"
+                />
+                <button type="submit" className="create-button">Gruppe erstellen</button>
+            </form>
         </div>
     );
 };
