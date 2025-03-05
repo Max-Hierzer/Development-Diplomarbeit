@@ -31,6 +31,9 @@ function NavigationContent({ mobile, setDisplayMode, handleLogout, setSelectedPo
                         <li>
                             <a onClick={() => handleModeChange(4)}>Meine Umfragen</a>
                         </li>
+                        <li>
+                            <a onClick={() => handleModeChange(7)}>Gruppen</a>
+                        </li>
                         {mobile &&
                             <li>
                                 <a onClick={handleLogout}>Logout</a>

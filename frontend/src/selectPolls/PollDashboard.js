@@ -8,6 +8,7 @@ import DeletePoll from '../DeletePolls/DeletePoll';
 import EditPolls from '../editPolls/editPolls';
 import Register from '../usermanagment/Register';
 import CreatePoll from '../createPolls/CreatePolls';
+import Groups from '../groups/groups';
 import MyPoll from '../myPolls/MyPolls'
 import SHA256 from 'crypto-js/sha256';
 import Cookies from 'js-cookie';
@@ -400,6 +401,9 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                 )}
                 {displayMode === 6 && (
                     <CreatePoll />
+                )}
+                {displayMode === 7 && (
+                    <Groups />
                 )}
                 {displayMode === 0 && (
                     <p>Wähle eine Aktion um fortzufahren</p>
