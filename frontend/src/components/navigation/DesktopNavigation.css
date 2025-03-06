@@ -13,7 +13,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-    gap: 40px;
+    gap: 35px;
     margin: 20px 0;
 }
 

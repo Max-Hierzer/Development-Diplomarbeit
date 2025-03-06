@@ -21,6 +21,7 @@ function App() {
   const [isPublic, setIsPublic] = useState(null);
   const [displayMode, setDisplayMode] = useState(0);
   const [selectedPoll, setSelectedPoll] = useState(null);
+  const [newUserRegistration, setNewUserRegistration] = useState(null);
 
   useEffect(() => {
     // Save login state to sessionStorage whenever it changes
@@ -51,14 +52,18 @@ function App() {
   useEffect(() => {
     const linkParam = window.location.search.substring(1);
     if (linkParam) {
-
       const unhashed = atob(decodeURIComponent(linkParam));
       const params = new URLSearchParams(unhashed);
-      const publicValue = params.get('public');
-      if (publicValue === "true") {
-        setIsPublic(1);
+      const newUser = params.get('newUser');
+      if (newUser) {
+        setNewUserRegistration(1);
       } else {
-        setIsPublic(0);
+        const publicValue = params.get('public');
+        if (publicValue === "true") {
+          setIsPublic(1);
+        } else {
+          setIsPublic(0);
+        }
       }
     }
   }, []);
