@@ -22,6 +22,7 @@ function App() {
   const [displayMode, setDisplayMode] = useState(0);
   const [selectedPoll, setSelectedPoll] = useState(null);
   const [newUserRegistration, setNewUserRegistration] = useState(null);
+  const [newUserLink, setNewUserLink] = useState(null);
 
   useEffect(() => {
     // Save login state to sessionStorage whenever it changes
@@ -55,8 +56,10 @@ function App() {
       const unhashed = atob(decodeURIComponent(linkParam));
       const params = new URLSearchParams(unhashed);
       const newUser = params.get('newUser');
-      if (newUser) {
+      const link = params.get('link');
+      if (newUser === "true" || link) {
         setNewUserRegistration(1);
+        setNewUserLink(link);
       } else {
         const publicValue = params.get('public');
         if (publicValue === "true") {
@@ -73,38 +76,41 @@ function App() {
     <div className="App">
       <Header isLoggedIn={isLoggedIn} handleLogout={handleLogout} setDisplayMode={setDisplayMode} setSelectedPoll={setSelectedPoll} userRoleId={userRoleId} />
       <main>
-        {!isPublic ?
-          !isLoggedIn ? (
-            // Render the login component if the user is not logged in
-            <div className='Usermanagement'>
-              <div>
-                <h1>Wilkommen zu unserem Umfragetool</h1>
-                <Login loginChange={handleLoginChange} />
-                <h2>Bitte melden Sie sich an um fortzufahren</h2>
+        {!newUserRegistration ? (
+          !isPublic ? (
+            !isLoggedIn ? (
+              // Render the login component if the user is not logged in
+              <div className='Usermanagement'>
+                <div>
+                  <h1>Wilkommen zu unserem Umfragetool</h1>
+                  <Login loginChange={handleLoginChange} />
+                  <h2>Bitte melden Sie sich an um fortzufahren</h2>
+                </div>
               </div>
-            </div>
-          ) : (
-            // Render the main content if the user is logged in
-            <div className='MainContent'>
-            <p className="user-text">Hallo, {userName}!</p>
-                <PollDashboard userId={userId} userName={userName} userRoleId={userRoleId} setDisplayMode={setDisplayMode} displayMode={displayMode} setSelectedPoll={setSelectedPoll} selectedPoll={selectedPoll} />
-                {/* <div className='Messenger'>
-                  <h1>{isInputMode ? 'Submit a Message' : 'Messages'}</h1>
+            ) : (
+              // Render the main content if the user is logged in
+              <div className='MainContent'>
+              <p className="user-text">Hallo, {userName}!</p>
+                  <PollDashboard userId={userId} userName={userName} userRoleId={userRoleId} setDisplayMode={setDisplayMode} displayMode={displayMode} setSelectedPoll={setSelectedPoll} selectedPoll={selectedPoll} />
+                  {/* <div className='Messenger'>
+                    <h1>{isInputMode ? 'Submit a Message' : 'Messages'}</h1>
 
-                  <button onClick={() => setIsInputMode(!isInputMode)}>
-                    Switch to {isInputMode ? 'View Messages' : 'Submit a Message'}
-                  </button>
-                  {isInputMode ? (
-                    <InputMessage />
-                  ) : (
-                    <WriteMessages />
-                  )}
-                </div> */}
-            </div>
-          ) :
-          (
-            <PublicPolls />
-          )
+                    <button onClick={() => setIsInputMode(!isInputMode)}>
+                      Switch to {isInputMode ? 'View Messages' : 'Submit a Message'}
+                    </button>
+                    {isInputMode ? (
+                      <InputMessage />
+                    ) : (
+                      <WriteMessages />
+                    )}
+                  </div> */}
+              </div>
+            )) : (
+              <PublicPolls />
+            )
+        ) : (
+          <newUser link={newUserLink}/>
+        )
         }
       </main>
       <Footer />
