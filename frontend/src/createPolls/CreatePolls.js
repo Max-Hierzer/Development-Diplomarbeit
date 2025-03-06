@@ -22,7 +22,28 @@ function CreatePoll() {
     const [image, setImage] = useState(null); // For storing the image file
     const [imageUrl, setImageUrl] = useState(''); // For storing the uploaded image URL
 
+    const handleImageUpload = async (event) => {
+        const formData = new FormData();
+        formData.append("image", event.target.files[0]);
 
+        try {
+            const res = await fetch('http://localhost:3001/api/upload-image', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                setImageUrl(data.imageUrl); // Set the image URL from the server response
+            } else {
+                setResponse('Error uploading image');
+            }
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            setResponse('Error uploading image');
+        }
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -30,23 +51,16 @@ function CreatePoll() {
         let isPublic = selectedPublic === "Ja";
         let isAnon = selectedAnon === "Ja";
 
-        let uploadedImageUrl = await uploadImage();
-
-        if (image && !uploadedImageUrl) {
-            setResponse("Fehler beim Hochladen des Bildes. Bitte erneut versuchen.");
-            return;
-        }
-
         const payload = {
-            poll: { 
-                name: poll, 
-                description: description, 
-                userId: sessionStorage.getItem('userId'), 
-                public: isPublic, 
-                anon: isAnon, 
-                publishDate: publishDate, 
+            poll: {
+                name: poll,
+                description: description,
+                userId: sessionStorage.getItem('userId'),
+                public: isPublic,
+                anon: isAnon,
+                publishDate: publishDate,
                 endDate: endDate,
-                imageUrl: uploadedImageUrl // Include image URL in the payload
+                imageUrl: imageUrl // Include image URL in the payload
             },
             questions
         };
@@ -133,174 +147,139 @@ function CreatePoll() {
         setQuestions(newType);
     }
 
-    const handleImageSelection = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            setImage(file);
-        }
-    };
-
-    const uploadImage = async () => {
-        console.log(image);
-        if (!image) return null;
-
-        const formData = new FormData();
-        formData.append("image", image);
-
-        try {
-            const res = await fetch('http://localhost:3001/api/upload-image', {
-                method: 'POST',
-                body: formData,
-            });
-
-            const data = await res.json();
-
-            if (res.ok) {
-                console.log("Bild erfolgreich hochgeladen:", data.imageUrl);
-                return data.imageUrl;
-            } else {
-                console.error("Fehler beim Hochladen des Bildes:", data.error);
-                return null;
-            }
-        } catch (error) {
-            console.error('Error uploading image:', error);
-            return null;
-        }
-    };
-
     return (
         <div className="create-content">
-        <form onSubmit={handleSubmit} className="create-form">
-            <h1>Erstellen</h1>
-            <label htmlFor="name" className="hidden-label">Umfragetitel</label>
-            <input
-            id="name"
-            type="text"
-            placeholder={`Name`}
-            value={poll}
-            onChange={(e) => setPoll(e.target.value)}
-            />
-            <br />
-            <label htmlFor="beschreibung" className="hidden-label">Beschreibung</label>
-            <textarea
-            id="beschreibung"
-            placeholder="Beschreibung"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={5} // Adjust the number of rows for the desired height
-            cols={50} // Adjust the number of columns for the desired width
-            style={{ resize: 'vertical' }} // Optional: Allow resizing vertically only
-            className="description"
-            />
-            <br />
-            <br />
-            <h4>Öffentlich</h4>
-            <label htmlFor="public" className="hidden-label">Soll die Umfrage öffentlich sein?</label>
-            <select id="public" onChange={(e) => setSelectedPublic(e.target.value)} value={selectedPublic} className="select-public">
-                <option>Nein</option>
-                <option>Ja</option>
-            </select>
-            <br />
-            <br />
-            {selectedPublic === "Nein" && (
-                <div>
-                <h4>Anonym</h4>
-                <label htmlFor="anon" className="hidden-label">Soll die Umfrage anonym sein?</label>
-                <select id="anon" onChange={(e) => setSelectedAnon(e.target.value)} value={selectedAnon} className="select-anon">
-                    <option>Ja</option>
+            <form onSubmit={handleSubmit} className="create-form">
+                <h1>Erstellen</h1>
+                <label htmlFor="name" className="hidden-label">Umfragetitel</label>
+                <input
+                    id="name"
+                    type="text"
+                    placeholder={`Name`}
+                    value={poll}
+                    onChange={(e) => setPoll(e.target.value)}
+                />
+                <br />
+                <label htmlFor="beschreibung" className="hidden-label">Beschreibung</label>
+                <textarea
+                    id="beschreibung"
+                    placeholder="Beschreibung"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    rows={5} // Adjust the number of rows for the desired height
+                    cols={50} // Adjust the number of columns for the desired width
+                    style={{ resize: 'vertical' }} // Optional: Allow resizing vertically only
+                    className="description"
+                />
+                <br />
+                <br />
+                <h4>Öffentlich</h4>
+                <label htmlFor="public" className="hidden-label">Soll die Umfrage öffentlich sein?</label>
+                <select id="public" onChange={(e) => setSelectedPublic(e.target.value)} value={selectedPublic} className="select-public">
                     <option>Nein</option>
+                    <option>Ja</option>
                 </select>
                 <br />
                 <br />
-                </div>
-            )}
-            <div className="datetime-container">
-                <label htmlFor="start-time" className="hidden-label">Wann soll die Umfrage starten?</label>
-                <Datetime
-                    id="start-time"
-                    key={`publish-${resetKey}`}
-                    value={publishDate}
-                    onChange={(date) => setPublishDate(date)}
-                    dateFormat="DD/MM/YYYY"
-                    timeFormat="HH:mm"
-                    closeOnSelect={true}
-                    inputProps={{ placeholder: "Startzeitpunkt" }}
-                />
-                <label htmlFor="end-time" className="hidden-label">Wann soll die Umfrage enden?</label>
-                <Datetime
-                    id="end-time"
-                    key={`end-${resetKey}`}
-                    value={endDate}
-                    onChange={(date) => setEndDate(date)}
-                    dateFormat="DD/MM/YYYY"
-                    timeFormat="HH:mm"
-                    closeOnSelect={true}
-                    inputProps={{ placeholder: "Endzeitpunkt" }}
-                />
-            </div>
-            <br />
-            <br />
-            
-            {/* Image Upload Section */}
-            <label htmlFor="image-upload" className="hidden-label">Fügen Sie ein Bild hinzu</label>
-            <input
-                type="file"
-                id="image-upload"
-                onChange={handleImageSelection}
-            />
-            <br />
-            <br />
-
-            {questions.map((question, questionIndex) => (
-                <div key={questionIndex} className="create-question">
-                    <h4>Fragentyp</h4>
-                    <label htmlFor="question-type" className="hidden-label">Was für einen Typ soll Frage {questionIndex + 1} haben?</label>
-                    <select id="question-type" onChange={(e) => handleQuestionTypes(questionIndex, e.target.value)} value={question.type} className="select-type">
-                        <option>Single Choice</option>
-                        <option>Multiple Choice</option>
-                        <option>Weighted Choice</option>
-                    </select>
-                    <label htmlFor="question-text" className="hidden-label">Wie soll Frage {questionIndex + 1} lauten?</label>
-                    <div className="question-input">
-                        <input
-                        id="question-text"
-                        type="text"
-                        placeholder={`Frage ${questionIndex + 1}`}
-                        value={question.name}
-                        onChange={(e) =>
-                            handleQuestionChange(questionIndex, e.target.value)
-                        }
-                        /><button type="button" className="delete" onClick={() => deleteQuestion(questionIndex)}>
-                            <FontAwesomeIcon icon={faTimes} />
-                        </button>
+                {selectedPublic === "Nein" && (
+                    <div>
+                        <h4>Anonym</h4>
+                        <label htmlFor="anon" className="hidden-label">Soll die Umfrage anonym sein?</label>
+                        <select id="anon" onChange={(e) => setSelectedAnon(e.target.value)} value={selectedAnon} className="select-anon">
+                            <option>Ja</option>
+                            <option>Nein</option>
+                        </select>
+                        <br />
+                        <br />
                     </div>
-                    <br />
-                    <h4>Antworten</h4>
-                    {question.answers.map((answer, answerIndex) => (
-                        <div key={answerIndex} className="answer-input">
-                            <label htmlFor="answer-text" className="hidden-label">Wie soll Antwort {answerIndex + 1} zu {questionIndex + 1} lauten?</label>
+                )}
+                <div className="datetime-container">
+                    <label htmlFor="start-time" className="hidden-label">Wann soll die Umfrage starten?</label>
+                    <Datetime
+                        id="start-time"
+                        key={`publish-${resetKey}`}
+                        value={publishDate}
+                        onChange={(date) => setPublishDate(date)}
+                        dateFormat="DD/MM/YYYY"
+                        timeFormat="HH:mm"
+                        closeOnSelect={true}
+                        inputProps={{ placeholder: "Startzeitpunkt" }}
+                    />
+                    <label htmlFor="end-time" className="hidden-label">Wann soll die Umfrage enden?</label>
+                    <Datetime
+                        id="end-time"
+                        key={`end-${resetKey}`}
+                        value={endDate}
+                        onChange={(date) => setEndDate(date)}
+                        dateFormat="DD/MM/YYYY"
+                        timeFormat="HH:mm"
+                        closeOnSelect={true}
+                        inputProps={{ placeholder: "Endzeitpunkt" }}
+                    />
+                </div>
+                <br />
+                <br />
+
+                {/* Image Upload Section */}
+                <label htmlFor="image-upload" className="hidden-label">Fügen Sie ein Bild hinzu</label>
+                <input
+                    type="file"
+                    id="image-upload"
+                    onChange={handleImageUpload}
+                />
+                <br />
+                <br />
+
+                {questions.map((question, questionIndex) => (
+                    <div key={questionIndex} className="create-question">
+                        <h4>Fragentyp</h4>
+                        <label htmlFor="question-type" className="hidden-label">Was für einen Typ soll Frage {questionIndex + 1} haben?</label>
+                        <select id="question-type" onChange={(e) => handleQuestionTypes(questionIndex, e.target.value)} value={question.type} className="select-type">
+                            <option>Single Choice</option>
+                            <option>Multiple Choice</option>
+                            <option>Weighted Choice</option>
+                        </select>
+                        <label htmlFor="question-text" className="hidden-label">Wie soll Frage {questionIndex + 1} lauten?</label>
+                        <div className="question-input">
                             <input
-                            id="answer-text"
-                            type="text"
-                            placeholder={`Antwort ${answerIndex + 1}`}
-                            value={answer.name}
-                            onChange={(e) =>
-                                handleAnswerChange(questionIndex, answerIndex, e.target.value)
-                            }
-                            /><button type="button" className="delete" onClick={() => deleteAnswer(questionIndex, answerIndex)}>
+                                id="question-text"
+                                type="text"
+                                placeholder={`Frage ${questionIndex + 1}`}
+                                value={question.name}
+                                onChange={(e) =>
+                                    handleQuestionChange(questionIndex, e.target.value)
+                                }
+                            /><button type="button" className="delete" onClick={() => deleteQuestion(questionIndex)}>
                                 <FontAwesomeIcon icon={faTimes} />
                             </button>
                         </div>
-                    ))}
-                    <button type="button" className="add" onClick={() => addAnswer(questionIndex)}>Antwort hinzufügen</button>
-                </div>
-            ))}
-            <button type="button" className="add" onClick={addQuestion}>Frage hinzufügen</button>
+                        <br />
+                        <h4>Antworten</h4>
+                        {question.answers.map((answer, answerIndex) => (
+                            <div key={answerIndex} className="answer-input">
+                                <label htmlFor="answer-text" className="hidden-label">Wie soll Antwort {answerIndex + 1} zu {questionIndex + 1} lauten?</label>
+                                <input
+                                    id="answer-text"
+                                    type="text"
+                                    placeholder={`Antwort ${answerIndex + 1}`}
+                                    value={answer.name}
+                                    onChange={(e) =>
+                                        handleAnswerChange(questionIndex, answerIndex, e.target.value)
+                                    }
+                                /><button type="button" className="delete" onClick={() => deleteAnswer(questionIndex, answerIndex)}>
+                                    <FontAwesomeIcon icon={faTimes} />
+                                </button>
+                            </div>
+                        ))}
+                        <button type="button" className="add" onClick={() => addAnswer(questionIndex)}>Antwort hinzufügen</button>
+                    </div>
+                ))}
+                <button type="button" className="add" onClick={addQuestion}>Frage hinzufügen</button>
 
-            <br />
-            <button type="submit" className="create-button">Umfrage erstellen</button>
-        </form>
-        <p>{response}</p>
+                <br />
+                <button type="submit" className="create-button">Umfrage erstellen</button>
+            </form>
+            <p>{response}</p>
         </div>
     );
 }

@@ -6,6 +6,21 @@
     flex-direction: column;
   }
 
+  .image-container {
+    display: flex;
+    justify-content: center; /* Zentriert das Bild */
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.poll-image {
+    max-width: 90%; /* Bild nicht breiter als 90% der Frage-Container */
+    max-height: 300px; /* Maximale Höhe, um übergroße Bilder zu verhindern */
+    height: auto; /* Behält das Seitenverhältnis bei */
+    object-fit: contain; /* Verhindert Verzerrungen */
+    border-radius: 8px; /* Abgerundete Ecken für ein schönes Design */
+}
+
   .answer {
     margin-left: 5%;
     display: flex;                /* Use flexbox for horizontal alignment */
