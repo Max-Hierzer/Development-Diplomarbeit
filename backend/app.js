@@ -7,7 +7,7 @@ const { postPoll } = require('./routes/pollRoutes');
 const { postQuestion, getQuestions } = require('./routes/questionRoutes');
 const { postAnswer, getAnswers } = require('./routes/answerRoutes');
 const { getResults, getPolls, getResultData } = require('./routes/resultsRoutes');
-const { getGroups, getGroupUsers, editGroups } = require('./routes/groupRoutes');
+const { getGroups, getAllUsers, getGroupUsers, editGroups, addUsers, removeUser } = require('./routes/groupRoutes');
 const votingRoutes = require('./routes/votingRoutes');
 const deletionRoutes = require('./routes/deletionRoutes');
 const editRoutes = require('./routes/editRoutes');
@@ -51,6 +51,10 @@ app.use('/uploads', express.static('uploads'));
 app.use('/groups', getGroups);
 app.use('/groups', getGroupUsers);
 app.use('/groups', editGroups);
+app.use('/groups', getAllUsers);
+app.use('/groups', addUsers);
+app.use('/groups', removeUser);
+
 
 
 
