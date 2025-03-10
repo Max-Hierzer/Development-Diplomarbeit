@@ -1,4 +1,4 @@
-const { fetchGroups, fetchUsers, fetchGroupUsers, editGroups, addUsersToGroup, removeUser } = require('../services/groupServices');
+const { fetchGroups, fetchUsers, fetchGroupUsers, editGroups, addUsersToGroup, removeUser, createGroup } = require('../services/groupServices');
 
 async function handleFetchGroups(req, res) {
     try {
@@ -63,6 +63,15 @@ async function handleRemoveUser(req, res) {
     }
 }
 
+async function handleCreateGroup(req, res) {
+    try {
+        const newGroup = await createGroup(req.body);
+        res.status(201).json(newGroup);
+    } catch (error) {
+        console.error('Error creating group in controller:', error);
+        res.status(500).json({ error: 'Error creating group', details: error.message });
+    }
+}
 
 
 module.exports = {
@@ -71,5 +80,6 @@ module.exports = {
     handleFetchGroupUsers,
     handleEditGroups,
     handleAddUsersToGroup,
-    handleRemoveUser
+    handleRemoveUser,
+    handleCreateGroup
 }

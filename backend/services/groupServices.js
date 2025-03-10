@@ -114,6 +114,20 @@ async function removeUser(groupId, userId) {
     }
 }
 
+async function createGroup(data) {
+    try {
+        const newGroup = await Groups.create({
+            name: data.name,
+            description: data.description,
+        });
+
+        return newGroup;
+    } catch (error) {
+        console.error('Error creating group:', error);
+        throw error;
+    }
+}
+
 
 
 module.exports = {
@@ -122,5 +136,6 @@ module.exports = {
     fetchGroupUsers,
     editGroups,
     addUsersToGroup,
-    removeUser
+    removeUser,
+    createGroup
 };

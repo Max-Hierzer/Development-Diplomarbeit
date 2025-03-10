@@ -18,10 +18,11 @@ const Groups = () => {
 
     // Fetch group users when a group is selected
     useEffect(() => {
-        if (selectedGroup) {
+        if (selectedGroup && selectedGroup.id) {
             handleFetchUsers(selectedGroup.id);
         }
     }, [selectedGroup]);
+
 
     // Fetch groups from the server
     const handleFetchGroups = async () => {
@@ -169,35 +170,105 @@ const Groups = () => {
     !groupUsers.some(groupUser => groupUser.id === user.id)
     );
 
+    const handleCreateGroup = async (event) => {
+        event.preventDefault();
+
+        try {
+            const response = await fetch('http://localhost:3001/groups/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: selectedGroup?.name,
+                    description: selectedGroup?.description,
+                }),
+            });
+
+            if (response.ok) {
+                const newGroup = await response.json();
+                console.log('Group created successfully:', newGroup);
+                setSelectedGroup(newGroup);
+
+                // Add selected users to the new group
+                if (selectedUsers.length > 0) {
+                    const userIds = selectedUsers.map(user => user.value);
+                    await fetch('http://localhost:3001/groups/users/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ groupId: newGroup.id, userIds }),
+                    });
+
+                    console.log('Users added successfully');
+                }
+
+                setCreateGroup(2); // Show success message
+                handleFetchGroups(); // Refresh groups
+            } else {
+                console.log('Failed to create group');
+            }
+        } catch (error) {
+            console.error('Error creating group:', error);
+        }
+    };
+
+
     return (
         <div className="groups-container">
         {createGroup ? (
             <>
-            <button onClick={() => setCreateGroup(0)}>Gruppen Bearbeiten</button>
-            <form className="group-form">
+            <button onClick={() => {
+                setCreateGroup(0); // Switch to edit mode
+                setSelectedGroup(null); // Clear selected group
+                setSelectedUsers([]); // Clear selected users
+            }}>
+            Gruppen Bearbeiten
+            </button>
+
+            <form className="group-form" onSubmit={handleCreateGroup}>
             <h1>Gruppe erstellen</h1>
-            <label htmlFor="name" className="hidden-label">Gruppenname</label>
             <input
-            id="name"
             type="text"
-            placeholder={`Name`}
+            placeholder="Gruppenname"
+            value={selectedGroup?.name || ''}
+            onChange={(e) => handleGroupChange('name', e.target.value)}
             />
-            <br />
-            <label htmlFor="beschreibung" className="hidden-label">Beschreibung</label>
             <textarea
-            id="beschreibung"
             placeholder="Beschreibung"
             rows={5}
             cols={50}
             style={{ resize: 'vertical' }}
             className="description"
+            value={selectedGroup?.description || ''}
+            onChange={(e) => handleGroupChange('description', e.target.value)}
             />
+
+            <h3>Füge Benutzer zur Gruppe hinzu</h3>
+            <Select
+            isMulti
+            value={selectedUsers}
+            options={allUsers.map(user => ({ value: user.id, label: user.name }))}
+            onChange={(selectedOptions) => setSelectedUsers(selectedOptions)}
+            placeholder="Suche nach Benutzern"
+            />
+
             <button type="submit" className="create-button">Gruppe erstellen</button>
             </form>
+
+            {createGroup === 2 && <p>Gruppe erfolgreich erstellt!</p>}
             </>
         ) : (
             <>
-            <button onClick={() => setCreateGroup(1)}>Gruppen Erstellen</button>
+            <button onClick={() => {
+                setCreateGroup(1); // Switch to create mode
+                setSelectedGroup({ name: '', description: '' }); // Reset group state
+                setSelectedUsers([]); // Clear selected users
+            }}>
+            Gruppen Erstellen
+            </button>
+
             <h2>Wähle eine Gruppe</h2>
             <select onChange={handleSelectGroup} defaultValue="">
             <option value="" disabled>Gruppe auswählen</option>
