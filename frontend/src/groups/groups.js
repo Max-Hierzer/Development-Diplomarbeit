@@ -3,10 +3,34 @@ import '../styles/groups.css';
 
 const Groups = ({  }) => {
     const [createGroup, setCreateGroup] = useState(0);
+    const [groups, setGroups] = useState([]);
+
+    useEffect(() => {
+        handleFetchGroups();
+    }, []);
+
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log("created Poll");
     }
+
+
+    const handleFetchGroups = async () => {
+        try {
+            const response = await fetch(`http://localhost:3001/groups`);
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                setGroups(data);
+            }
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+
+    console.log(groups)
+
     return (
         <div className="groups-container">
             <button onClick={() => setCreateGroup(0)}>Gruppen Bearbeiten</button>
