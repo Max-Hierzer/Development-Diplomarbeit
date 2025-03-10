@@ -7,7 +7,7 @@ const { postPoll } = require('./routes/pollRoutes');
 const { postQuestion, getQuestions } = require('./routes/questionRoutes');
 const { postAnswer, getAnswers } = require('./routes/answerRoutes');
 const { getResults, getPolls, getResultData } = require('./routes/resultsRoutes');
-const { getGroups, editGroups } = require('./routes/groupRoutes');
+const { getGroups, getGroupUsers, editGroups } = require('./routes/groupRoutes');
 const votingRoutes = require('./routes/votingRoutes');
 const deletionRoutes = require('./routes/deletionRoutes');
 const editRoutes = require('./routes/editRoutes');
@@ -49,6 +49,7 @@ app.use('/api', csvExportRoutes);
 app.use('/api', imageRoutes);
 app.use('/uploads', express.static('uploads'));
 app.use('/groups', getGroups);
+app.use('/groups', getGroupUsers);
 app.use('/groups', editGroups);
 
 

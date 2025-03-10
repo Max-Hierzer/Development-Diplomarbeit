@@ -12,6 +12,32 @@ async function fetchGroups() {
     }
 }
 
+async function fetchUsers() {
+    try {
+        const users = await Users.findAll();
+        return users;
+    }
+}
+
+async function fetchGroupUsers(groupId) {
+    try {
+        const groupUsers = await UserGroups.findAll({
+            where: { groupId: groupId },
+            include: [
+                {
+                    model: Users,
+                }
+            ]
+        });
+        const users = groupUsers.map(ug => ug.User);
+
+        return users;
+    } catch (error) {
+        console.error('Error fetching group users:', error);
+        throw error;
+    }
+}
+
 async function editGroups(data) {
         const group = await Groups.findByPk(data.id);
         if (!group) throw new Error('Group not found');
@@ -23,5 +49,6 @@ async function editGroups(data) {
 
 module.exports = {
     fetchGroups,
+    fetchGroupUsers,
     editGroups
 };

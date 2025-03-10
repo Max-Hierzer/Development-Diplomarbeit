@@ -5,6 +5,7 @@ const Groups = ({  }) => {
     const [createGroup, setCreateGroup] = useState(0);
     const [allGroups, setAllGroups] = useState([]);
     const [selectedGroup, setSelectedGroup] = useState(null);
+    const [groupUsers, setGroupUsers] = useState([]);
 
     useEffect(() => {
         handleFetchGroups();
@@ -27,6 +28,26 @@ const Groups = ({  }) => {
             console.error(error);
         }
     }
+
+    useEffect(() => {
+        const handleFetchUsers = async () => {
+            try {
+                const response = await fetch(`http://localhost:3001/groups/users/${selectedGroup.id}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setGroupUsers(data);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        if (selectedGroup) {
+            handleFetchUsers();
+        }
+    }, [selectedGroup]);
+
+    console.log(groupUsers)
 
     const handleSelectGroup = (event) => {
         const groupId = event.target.value;
