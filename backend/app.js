@@ -7,7 +7,7 @@ const { postPoll } = require('./routes/pollRoutes');
 const { postQuestion, getQuestions } = require('./routes/questionRoutes');
 const { postAnswer, getAnswers } = require('./routes/answerRoutes');
 const { getResults, getPolls, getResultData } = require('./routes/resultsRoutes');
-const { getGroups } = require('./routes/groupRoutes');
+const { getGroups, editGroups } = require('./routes/groupRoutes');
 const votingRoutes = require('./routes/votingRoutes');
 const deletionRoutes = require('./routes/deletionRoutes');
 const editRoutes = require('./routes/editRoutes');
@@ -49,6 +49,8 @@ app.use('/api', csvExportRoutes);
 app.use('/api', imageRoutes);
 app.use('/uploads', express.static('uploads'));
 app.use('/groups', getGroups);
+app.use('/groups', editGroups);
+
 
 
 app.post('/verify-recaptcha', async (req, res) => {

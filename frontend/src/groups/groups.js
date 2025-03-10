@@ -15,7 +15,6 @@ const Groups = ({  }) => {
         console.log("created Poll");
     }
 
-
     const handleFetchGroups = async () => {
         try {
             const response = await fetch(`http://localhost:3001/groups`);
@@ -32,8 +31,41 @@ const Groups = ({  }) => {
     const handleSelectGroup = (event) => {
         const groupId = event.target.value;
         const group = allGroups.find(g => g.id === parseInt(groupId));
-        setSelectedGroup(group);
+        if (group) {
+            setSelectedGroup(group);
+        }
+    };
+
+
+    const handleGroupChange = (field, value) => {
+        setSelectedGroup(prev => ({
+            ...prev,
+            [field]: value
+        }));
     }
+
+    const handleEditGroup = async (event) => {
+        event.preventDefault();
+        try {
+            const res = await fetch(`http://localhost:3001/groups/edit`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(selectedGroup),
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                console.log("Group updated successfully");
+            } else {
+                console.log("Failed to update group:", data);
+            }
+        } catch (error) {
+            console.error('Error updating group:', error);
+        }
+    };
+
 
     return (
         <div className="groups-container">
@@ -73,11 +105,32 @@ const Groups = ({  }) => {
                 </option>
             ))}
             </select>
-            {selectedGroup && (
+            {selectedGroup ? (
                 <div className="group-details">
-                <h3>{selectedGroup.name}</h3>
-                <p>{selectedGroup.description}</p>
+                <h3>Gruppenname</h3>
+                <label htmlFor="editName" className="hidden-label">Gruppenname bearbeiten</label>
+                <input
+                    id="editName"
+                    type="text"
+                    value={selectedGroup.name || ''} // fallback value in case it's undefined
+                    onChange={(e) => handleGroupChange('name', e.target.value)}
+                />
+                <br/>
+                <h3>Gruppen Beschreibung</h3>
+                <label htmlFor="editDescription" className="hidden-label">Beschreibung bearbeiten</label>
+                <textarea
+                    id="editDescription"
+                    rows={5}
+                    cols={50}
+                    style={{ resize: 'vertical' }}
+                    className="description"
+                    value={selectedGroup.description || ''} // fallback value in case it's undefined
+                    onChange={(e) => handleGroupChange('description', e.target.value)}
+                />
+                <button onClick={(e) => handleEditGroup(e)}>Änderungen speichern</button>
                 </div>
+            ) : (
+                <div>Select a group to edit.</div> // Handle case where no group is selected yet
             )}
             </>
             )}

@@ -1,8 +1,9 @@
 const express = require('express');
-const { handleFetchGroups } = require('../controllers/groupController');
+const { handleFetchGroups, handleEditGroups } = require('../controllers/groupController');
 
 const router = express.Router();
 
 const getGroups = router.get('/', handleFetchGroups);
+const editGroups = router.put('/edit', handleEditGroups)
 
-module.exports = { getGroups };
+module.exports = { getGroups, editGroups };

@@ -1,4 +1,4 @@
-const { fetchGroups } = require('../services/groupServices');
+const { fetchGroups, editGroups } = require('../services/groupServices');
 
 async function handleFetchGroups(req, res) {
     try {
@@ -10,6 +10,16 @@ async function handleFetchGroups(req, res) {
     }
 }
 
+async function handleEditGroups(req, res) {
+    try {
+        const updatedGroup = await editGroups(req.body);
+        res.json(updatedGroup);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
 module.exports = {
-    handleFetchGroups
+    handleFetchGroups,
+    handleEditGroups
 }
