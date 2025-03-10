@@ -3,7 +3,8 @@ import '../styles/groups.css';
 
 const Groups = ({  }) => {
     const [createGroup, setCreateGroup] = useState(0);
-    const [groups, setGroups] = useState([]);
+    const [allGroups, setAllGroups] = useState([]);
+    const [selectedGroup, setSelectedGroup] = useState(null);
 
     useEffect(() => {
         handleFetchGroups();
@@ -20,8 +21,7 @@ const Groups = ({  }) => {
             const response = await fetch(`http://localhost:3001/groups`);
             if (response.ok) {
                 const data = await response.json();
-                console.log(data);
-                setGroups(data);
+                setAllGroups(data);
             }
         }
         catch (error) {
@@ -29,10 +29,16 @@ const Groups = ({  }) => {
         }
     }
 
-    console.log(groups)
+    const handleSelectGroup = (event) => {
+        const groupId = event.target.value;
+        const group = allGroups.find(g => g.id === parseInt(groupId));
+        setSelectedGroup(group);
+    }
 
     return (
         <div className="groups-container">
+            {createGroup ? (
+            <>
             <button onClick={() => setCreateGroup(0)}>Gruppen Bearbeiten</button>
             <form onSubmit={handleSubmit} className="group-form">
                 <h1>Gruppe erstellen</h1>
@@ -47,13 +53,34 @@ const Groups = ({  }) => {
                 <textarea
                 id="beschreibung"
                 placeholder="Beschreibung"
-                rows={5} // Adjust the number of rows for the desired height
-                cols={50} // Adjust the number of columns for the desired width
-                style={{ resize: 'vertical' }} // Optional: Allow resizing vertically only
+                rows={5}
+                cols={50}
+                style={{ resize: 'vertical' }}
                 className="description"
                 />
                 <button type="submit" className="create-button">Gruppe erstellen</button>
             </form>
+            </>
+            ) : (
+            <>
+            <button onClick={() => setCreateGroup(1)}>Gruppen Erstellen</button>
+            <h2>Wähle eine Gruppe</h2>
+            <select onChange={handleSelectGroup} defaultValue="">
+            <option value="" disabled>Gruppe auswählen</option>
+            {allGroups.map(group => (
+                <option key={group.id} value={group.id}>
+                {group.name}
+                </option>
+            ))}
+            </select>
+            {selectedGroup && (
+                <div className="group-details">
+                <h3>{selectedGroup.name}</h3>
+                <p>{selectedGroup.description}</p>
+                </div>
+            )}
+            </>
+            )}
         </div>
     );
 };
