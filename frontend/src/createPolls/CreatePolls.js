@@ -19,12 +19,19 @@ function CreatePoll() {
     const [response, setResponse] = useState(null);
     const [selectedPublic, setSelectedPublic] = useState('Nein');
     const [selectedAnon, setSelectedAnon] = useState('Ja');
-    const [image, setImage] = useState(null); // For storing the image file
-    const [imageUrl, setImageUrl] = useState(''); // For storing the uploaded image URL
+    const [image, setImage] = useState(null);
+    const [imageUrl, setImageUrl] = useState('');
 
     const handleImageUpload = async (event) => {
+        const file = event.target.files[0];
+
+        if (!file) return; 
+
+        const previewUrl = URL.createObjectURL(file);
+        setImage(previewUrl);
+
         const formData = new FormData();
-        formData.append("image", event.target.files[0]);
+        formData.append("image", file);
 
         try {
             const res = await fetch('http://localhost:3001/api/upload-image', {
@@ -35,7 +42,7 @@ function CreatePoll() {
             const data = await res.json();
 
             if (res.ok) {
-                setImageUrl(data.imageUrl); // Set the image URL from the server response
+                setImageUrl(data.imageUrl); 
             } else {
                 setResponse('Error uploading image');
             }
@@ -44,6 +51,8 @@ function CreatePoll() {
             setResponse('Error uploading image');
         }
     };
+
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -219,15 +228,20 @@ function CreatePoll() {
                 </div>
                 <br />
                 <br />
-
-                {/* Image Upload Section */}
                 <label htmlFor="image-upload" className="hidden-label">Fügen Sie ein Bild hinzu</label>
                 <input
                     type="file"
                     id="image-upload"
                     onChange={handleImageUpload}
+                    accept="image/*" 
                 />
                 <br />
+
+                {image && (
+                    <div className="image-preview">
+                        <img src={image} alt="Preview" style={{ width: '200px', height: 'auto', marginTop: '10px', borderRadius: '10px' }} />
+                    </div>
+                )}
                 <br />
 
                 {questions.map((question, questionIndex) => (
