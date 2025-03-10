@@ -8,7 +8,6 @@ module.exports = (sequelize) => {
             Polls.hasMany(models.Questions, { foreignKey: 'pollId' }); // 1 poll has many questions
             Polls.hasMany(models.PublicUserData, { foreignKey: 'pollId' });
             Polls.hasMany(models.UserPolls, { foreignKey: 'pollId' });
-            Polls.hasMany(models.PollGroups, { foreigKey: 'pollId' });
         }
     }
 

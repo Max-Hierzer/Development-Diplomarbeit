@@ -4,13 +4,13 @@ module.exports = (sequelize) => {
     class UserGroups extends Model {
         static associate(models) {
             UserGroups.belongsTo(models.Users, { foreignKey: 'userId' });
-            UserGroups.belongsTo(models.Groups, { foreignKey: 'groupsId' });
+            UserGroups.belongsTo(models.Groups, { foreignKey: 'groupId' });
         }
     }
 
     UserGroups.init(
         {
-            groupsId: { type: DataTypes.INTEGER, allowNull: false},
+            groupId: { type: DataTypes.INTEGER, allowNull: false},
             userId: { type: DataTypes.INTEGER, allowNull: false},
 
         },
@@ -19,7 +19,7 @@ module.exports = (sequelize) => {
             indexes: [
                 {
                     unique: true,
-                    fields: ['userId', 'groupsId']
+                    fields: ['userId', 'groupId']
                 }
             ] },
 
