@@ -58,6 +58,7 @@ exports.exportPollResults = async (req, res) => {
 
         // Generate CSV
         const json2csvParser = new Parser();
+
         const csv = json2csvParser.parse(csvData);
 
         res.header('Content-Type', 'text/csv');

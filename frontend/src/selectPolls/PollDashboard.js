@@ -34,7 +34,8 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
 
     const handleExportPoll = async () => {
         try {
-            const response = await fetch(`http://localhost:3001/api/export/${selectedPoll.id}`);
+            const response = await fetch(`http://localhost:3001/api/export/${selectedPoll.id}`, { method: 'GET' });
+
             if (response.ok) {
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);

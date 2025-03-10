@@ -2,6 +2,7 @@ const { UserAnswers, Polls, Questions, QuestionTypes, Answers, PublicVotes, User
 
 async function fetchResults(pollId, questions) {
     try {
+        console.log(pollId);
         const totalVotes = await UserPolls.count({
             where: { pollId }
         });
