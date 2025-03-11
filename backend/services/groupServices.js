@@ -128,7 +128,24 @@ async function createGroup(data) {
     }
 }
 
-
+async function deleteGroup(groupId) {
+    try {
+        // Check if the group exists
+        const group = await Groups.findByPk(groupId);
+        if (!group) {
+            throw new Error('Group not found');
+        }
+        const userGroup = await UserGroups.findByPk(groupId);
+        if (userGroup) {
+            await UserGroups.destroy( {where: {groupId}} );
+        }
+        await Groups.destroy( {where: {id: groupId}} );
+        return { message: 'Group deleted successfully' };
+    } catch (error) {
+        console.error('Error removing user from group:', error);
+        throw error;
+    }
+}
 
 module.exports = {
     fetchGroups,
@@ -137,5 +154,6 @@ module.exports = {
     editGroups,
     addUsersToGroup,
     removeUser,
-    createGroup
+    createGroup,
+    deleteGroup
 };

@@ -1,4 +1,4 @@
-const { fetchGroups, fetchUsers, fetchGroupUsers, editGroups, addUsersToGroup, removeUser, createGroup } = require('../services/groupServices');
+const { fetchGroups, fetchUsers, fetchGroupUsers, editGroups, addUsersToGroup, removeUser, createGroup, deleteGroup } = require('../services/groupServices');
 
 async function handleFetchGroups(req, res) {
     try {
@@ -73,6 +73,17 @@ async function handleCreateGroup(req, res) {
     }
 }
 
+async function handleDelete(req, res) {
+    const { groupId } = req.body;
+    try {
+        const result = await deleteGroup(groupId);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error('Error deleting group:', error);
+        res.status(500).json({ error: 'Error deleting group', details: error.message });
+    }
+}
+
 
 module.exports = {
     handleFetchGroups,
@@ -81,5 +92,6 @@ module.exports = {
     handleEditGroups,
     handleAddUsersToGroup,
     handleRemoveUser,
-    handleCreateGroup
+    handleCreateGroup,
+    handleDelete
 }

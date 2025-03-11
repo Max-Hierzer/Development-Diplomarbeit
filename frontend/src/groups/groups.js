@@ -10,7 +10,6 @@ const Groups = () => {
     const [allUsers, setAllUsers] = useState([]);
     const [selectedUsers, setSelectedUsers] = useState([]); // Store selected users temporarily
 
-    console.log(groupUsers)
     // Fetch all groups and all users
     useEffect(() => {
         handleFetchGroups();
@@ -246,6 +245,33 @@ const Groups = () => {
     };
 
 
+    const handleDeleteGroup = async (event) => {
+        event.preventDefault();
+        if (!selectedGroup) return;
+
+        try {
+            const response = await fetch(`http://localhost:3001/groups/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    groupId: selectedGroup.id
+                }),
+            });
+
+            if (response.ok) {
+                console.log("Group deleted successfully")
+                setAllGroups((prevGroups) => prevGroups.filter(group => group.id !== selectedGroup.id));
+                setSelectedGroup(null)
+            } else {
+                console.error('Failed to delete group');
+            }
+        } catch (error) {
+            console.error('Error removing user from group:', error);
+        }
+    }
+
     return (
         <div className="groups-container">
         {createGroup ? (
@@ -372,6 +398,8 @@ const Groups = () => {
                 <button onClick={handleEditGroup}>Änderungen speichern</button>
                 <br/>
                 <button onClick={handleExport}>Benutzer exportieren</button>
+                <br/>
+                <button onClick={handleDeleteGroup}>Gruppe löschen</button>
                 </div>
             )}
             </>

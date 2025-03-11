@@ -1,5 +1,5 @@
 const express = require('express');
-const { handleFetchGroups, handleFetchUsers, handleFetchGroupUsers, handleEditGroups, handleAddUsersToGroup, handleRemoveUser, handleCreateGroup } = require('../controllers/groupController');
+const { handleFetchGroups, handleFetchUsers, handleFetchGroupUsers, handleEditGroups, handleAddUsersToGroup, handleRemoveUser, handleCreateGroup, handleDelete } = require('../controllers/groupController');
 
 const router = express.Router();
 
@@ -10,5 +10,6 @@ const editGroups = router.put('/edit', handleEditGroups)
 const addUsers = router.post('/users/add', handleAddUsersToGroup)
 const removeUser = router.delete('/users/remove', handleRemoveUser)
 const createGroup = router.post('/create', handleCreateGroup);
+const deleteGroup = router.delete('/delete', handleDelete);
 
-module.exports = { getGroups, getAllUsers, getGroupUsers, editGroups, addUsers, removeUser, createGroup };
+module.exports = { getGroups, getAllUsers, getGroupUsers, editGroups, addUsers, removeUser, createGroup, deleteGroup };
