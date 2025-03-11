@@ -79,7 +79,7 @@
     margin-top: 20px;
 }
 
-.select-type, .select-public, .select-anon {
+.select-type, .select-public, .select-anon, .select-groups {
     height: 30px;
     border-radius: 5px;
     font-size: 15px;

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Datetime from 'react-datetime';
 import "react-datetime/css/react-datetime.css";
 import moment from 'moment';
 import PollValidators from './ValidatePoll';
+import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import '../styles/create.css';
@@ -21,6 +22,8 @@ function CreatePoll() {
     const [selectedAnon, setSelectedAnon] = useState('Ja');
     const [image, setImage] = useState(null);
     const [imageUrl, setImageUrl] = useState('');
+    const [groups, setGroups] = useState([]);
+    const [selectedGroups, setSelectedGroups] = useState([]);
 
     const handleImageUpload = async (event) => {
         const file = event.target.files[0];
@@ -69,9 +72,10 @@ function CreatePoll() {
                 anon: isAnon,
                 publishDate: publishDate,
                 endDate: endDate,
-                imageUrl: imageUrl // Include image URL in the payload
+                imageUrl: imageUrl, // Include image URL in the payload
             },
-            questions
+            questions,
+            selectedGroups
         };
 
         console.log(JSON.stringify(payload, null, 2));
@@ -105,6 +109,7 @@ function CreatePoll() {
                 setSelectedAnon('Ja');
                 setImage(null); // Clear the image state after submission
                 setImageUrl(''); // Clear the image URL
+                setSelectedGroups([]);
             } else {
                 setResponse(`Error: ${data.error || 'Something went wrong'}`);
             }
@@ -156,6 +161,22 @@ function CreatePoll() {
         setQuestions(newType);
     }
 
+
+    useEffect(() => {
+        const fetchGroups = async () => {
+            try {
+                const response = await fetch('http://localhost:3001/groups');
+                if (response.ok) {
+                    const data = await response.json();
+                    setGroups(data);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        fetchGroups();
+    }, []);
+
     return (
         <div className="create-content">
             <form onSubmit={handleSubmit} className="create-form">
@@ -198,6 +219,17 @@ function CreatePoll() {
                             <option>Ja</option>
                             <option>Nein</option>
                         </select>
+                        <br />
+                        <br />
+                        <h4>Gruppen hinzufügen</h4>
+                        <Select
+                            className="select-groups"
+                            isMulti
+                            value={selectedGroups}
+                            options={groups.map(group => ({ value: group.id, label: group.name }))}
+                            onChange={(selectedOptions) => setSelectedGroups(selectedOptions)}
+                            placeholder="Suche nach Gruppen"
+                        />
                         <br />
                         <br />
                     </div>

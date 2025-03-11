@@ -3,7 +3,7 @@ const { createPoll } = require('../services/pollServices');
 async function handleCreatePoll(req, res) {
     try {
         console.log('Request Body:', req.body);
-        const { poll, questions } = req.body;
+        const { poll, questions, selectedGroups } = req.body;
         console.log('Image URL from request:', poll.imageUrl);
 
         const imageUrl = poll.imageUrl || null;
@@ -39,7 +39,7 @@ async function handleCreatePoll(req, res) {
             }
         }
 
-        const newPoll = await createPoll(poll, questions, imageUrl);
+        const newPoll = await createPoll(poll, questions, imageUrl, selectedGroups);
         res.status(201).json(newPoll);
     } catch (error) {
         console.error('Error creating poll:', error);

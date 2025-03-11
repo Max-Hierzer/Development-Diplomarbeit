@@ -2,8 +2,9 @@ const { Polls: Poll } = require('../models');
 const { Questions: Question } = require('../models');
 const { QuestionTypes: QuestionType } = require('../models');
 const { Answers: Answer } = require('../models');
+const { PollGroups, Groups } = require('../models');
 
-async function createPoll(poll, questions, imageUrl) {
+async function createPoll(poll, questions, imageUrl, groups) {
     try {
         console.log('Poll in createPoll:', poll);
         console.log('Questions in createPoll:', questions);
@@ -21,13 +22,11 @@ async function createPoll(poll, questions, imageUrl) {
             end_date: pollEndDate,
             imageUrl: imageUrl
         });
-        console.log(createdPoll.id)
         const createdQuestions = [];
         for (const question of questions) {
             const questionType = await QuestionType.findOne({
                 where: { name: question.type },
             });
-            console.log(typeof(questionType.id))
             const createdQuestion = await Question.create({
                 name: question.name,
                 pollId: createdPoll.id,
@@ -47,9 +46,27 @@ async function createPoll(poll, questions, imageUrl) {
             createdQuestions.push(createdQuestion);
         }
 
+        // Add groups to the poll (ensure no duplicates)
+        const promises = groups.map(async (group) => {
+            const g = await Groups.findByPk(group.value);
+            if (!g) {
+                throw new Error(`Group with ID ${g.value} not found`);
+            }
+            const existingPollGroup = await PollGroups.findOne({
+                where: { groupId: group.value, pollId: createdPoll.id }
+            });
+            if (!existingPollGroup) {
+                await PollGroups.create({ groupId: group.value, pollId: createdPoll.id });
+            }
+        });
+
+        // Wait for all promises to complete
+        pollgroups = await Promise.all(promises);
+
         return {
             poll: createdPoll,
             questions: createdQuestions,
+            groups: pollgroups
         };
     } catch (error) {
         console.error('Error creating poll in service:', error);
