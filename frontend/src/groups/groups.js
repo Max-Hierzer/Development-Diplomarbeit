@@ -10,6 +10,7 @@ const Groups = () => {
     const [allUsers, setAllUsers] = useState([]);
     const [selectedUsers, setSelectedUsers] = useState([]); // Store selected users temporarily
 
+    console.log(groupUsers)
     // Fetch all groups and all users
     useEffect(() => {
         handleFetchGroups();
@@ -214,6 +215,36 @@ const Groups = () => {
         }
     };
 
+    const handleExport = () => {
+        if (!groupUsers || groupUsers.length === 0) {
+            alert("No users to export!");
+            return;
+        }
+
+        // Convert users to CSV format
+        const csvContent = [
+            ['ID', 'Name', 'Email'], // CSV header
+            ...groupUsers.map(user => [user.id, user.name, user.email]) // User rows
+        ]
+        .map(row => row.join(','))
+        .join('\n');
+
+        // Create a Blob with CSV data
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+
+        // Create an anchor tag to trigger the download
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${selectedGroup?.name || 'group'}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        // Clean up the object URL
+        window.URL.revokeObjectURL(url);
+    };
+
 
     return (
         <div className="groups-container">
@@ -270,14 +301,17 @@ const Groups = () => {
             </button>
 
             <h2>Wähle eine Gruppe</h2>
-            <select onChange={handleSelectGroup} defaultValue="">
-            <option value="" disabled>Gruppe auswählen</option>
-            {allGroups.map(group => (
-                <option key={group.id} value={group.id}>
-                {group.name}
-                </option>
-            ))}
-            </select>
+            <Select
+            value={selectedGroup} // Bind the selected users here
+            options={allGroups.map(group => ({
+                value: group.id,
+                label: group.name
+            }))}
+            onChange={(selectedOptions) => {const group = allGroups.find(g => g.id === selectedOptions.value);
+                setSelectedGroup(group);
+            }}
+            placeholder="Suche nach einer Gruppe"
+            />
 
             {selectedGroup && (
                 <div>
@@ -336,6 +370,8 @@ const Groups = () => {
                 />
 
                 <button onClick={handleEditGroup}>Änderungen speichern</button>
+                <br/>
+                <button onClick={handleExport}>Benutzer exportieren</button>
                 </div>
             )}
             </>
