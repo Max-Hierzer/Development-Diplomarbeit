@@ -4,14 +4,15 @@ import '../styles/register.css';
 const NewUser = ({ token }) => {
     const [username, setUsername] = useState('');
     const [inputPassword, setInputPassword] = useState('');
-    const [inputPassword2, setInputPassword2] = useState('');
+    const [validationPassword, setValidationPassword] = useState('');
     const [users, setUsers] = useState('');
+    const [errorMessage, setErrorMessage] = useState(null);
     const [response, setResponse] = useState(null);
 
     const createUser = async (event) => {
         event.preventDefault();
         try {
-            if (inputPassword === inputPassword2) {
+            if (inputPassword && username && inputPassword === validationPassword) {
                 const res = await fetch('http://localhost:3001/api/user', {
                     method: 'PUT',
                     headers: {
@@ -27,46 +28,56 @@ const NewUser = ({ token }) => {
                 setUsers(data);
 
                 if (res.ok) {
+                    setErrorMessage(null);
                     setResponse("Registrieung erfolgreich abgeschlossen!");
                     setTimeout(() => {
                         window.location.href = '/';
-                    }, 3000);
+                    }, 5000);
                 } else {
-                    setResponse(data.message || "Fehler beim Anlegen des Users!");
+                    setResponse(null);
+                    setErrorMessage(data.error || "Fehler beim Anlegen des Users!");
                 }
             } else {
-                setResponse("Die Passwörter stimmen nicht überein!");
+                setResponse(null);
+                if (!username || !inputPassword || !validationPassword) {
+                    setErrorMessage("Alle Felder müssen ausgefüllt werden!");
+                } else {
+                    setErrorMessage("Passwörter stimmen nicht überein!");
+                }
             }
         } catch (error) {
-            (console.log('Wrong username or Password'));
+            setResponse(null);
+            setErrorMessage("Fehler beim Anlegen des Users!");
         }
     }
 
     return (
-        <div>
-            <form onSubmit={createUser} className='registerForm'>
-                    <label>Username</label>
+        <div className="new-user">
+            <form onSubmit={createUser}
+            className='registerForm'>
+                <h2>Registrierung abschließen</h2>
+                    <h4>Username</h4>
                     <input
                         type="text"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                     />
-                    <label>Passwort</label>
+                    <h4>Passwort</h4>
                     <input
                         type="password"
                         value={inputPassword}
                         onChange={(e) => setInputPassword(e.target.value)}
                     />
-                    <label>Passwort erneut eingeben</label>
+                    <h4>Passwort erneut eingeben</h4>
                     <input
                         type="password"
-                        value={inputPassword2}
-                        onChange={(e) => setInputPassword2(e.target.value)}
+                        value={validationPassword}
+                        onChange={(e) => setValidationPassword(e.target.value)}
                     />
-                <button type="submit">Registrierung abschließen</button>
+                <button type="submit">Abschicken</button>
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
+                {response && <p className="response">{response}</p>}
             </form>
-
-            {response && <p className="response">{response}</p>}
         </div>
     );
 }

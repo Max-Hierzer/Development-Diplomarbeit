@@ -130,6 +130,14 @@ button:hover {
     color: black;
 }
 
+.error-message, .response {
+  padding-top: 20px;
+}
+
+.response {
+  color: black;
+}
+
 
 @media (max-width: 1920px) {
   .MainContent {

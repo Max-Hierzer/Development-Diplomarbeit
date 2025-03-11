@@ -1,5 +1,9 @@
 /* register.css */
 
+.new-user {
+    text-align: center;
+}
+
 .registerForm {
     background-color: #fff;
     padding: 30px;
@@ -39,13 +43,6 @@
 }
 
 .registerForm select {
-    text-align: center;
-}
-
-.error-message {
-    color: red;
-    font-size: 14px;
-    margin-top: 10px;
     text-align: center;
 }
 

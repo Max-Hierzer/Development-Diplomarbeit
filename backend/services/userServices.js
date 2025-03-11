@@ -14,7 +14,7 @@ async function createUser(token, name, password) {
         });
 
         if (!user) {
-            return res.status(404).json({ error: 'Invalid token' });
+            return res.status(404).json({ message: 'Token existiert nicht' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -126,8 +126,18 @@ Das LMP-Team`
     };
 
     try {
-        const info = await transporter.sendMail(mailOptions);
+        const checkEmail = await Users.findOne({
+            where: {
+                email
+            }
+        });
+
+        if (checkEmail) {
+            return { message: "Email existiert bereits." };
+        }
+
         const user = await Users.create({ email, roleId, token });
+        const info = await transporter.sendMail(mailOptions);
 
         if (!info || !user) {
             return { message: "Fehler beim Senden der E-Mail." };
@@ -138,7 +148,7 @@ Das LMP-Team`
         };
     } catch (error) {
         console.error("Fehler beim Senden der E-Mail:", error);
-}
+    }
 }
 
 module.exports = {
