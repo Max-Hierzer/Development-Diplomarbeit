@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Datetime from 'react-datetime';
 import "react-datetime/css/react-datetime.css";
 import moment from 'moment';
+import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import "../styles/create.css";
@@ -16,6 +17,9 @@ function EditPolls({ selectedPoll }) {
     const [isPublic, setIsPublic] = useState('');
     const [isAnon, setIsAnon] = useState('');
     const [submitted, setSubmitted] = useState(null);
+    const [allGroups, setAllGroups] = useState([]);
+    const [pollGroups, setPollGroups] = useState([]);
+    const [selectedGroups, setSelectedGroups] = useState([]);
 
     // Initialize state with `selectedPoll`
     useEffect(() => {
@@ -148,6 +152,32 @@ function EditPolls({ selectedPoll }) {
                 });
                 const data = await res.json();
 
+                const groupIds = selectedGroups.map(group => group.value);
+                const addGroupsResponse = await fetch('http://localhost:3001/groups/polls/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        pollId: selectedPoll.id,
+                        groupIds: groupIds
+                    }),
+                });
+
+                if (addGroupsResponse.ok) {
+                    console.log('Groups added successfully');
+                    // Update the group users list with the newly added users
+                    setPollGroups(prevGroups => [
+                        ...prevGroups,
+                        ...selectedGroups.map(group => ({
+                            id: group.value,
+                            name: group.label
+                        }))
+                    ]);
+                    setSelectedGroups([]); // Clear the selected users after adding them
+                } else {
+                    console.log('Failed to add users');
+                }
                 if (res.ok) {
                     setSubmitted(1);
                     setTimeout(() => setSubmitted(null), 1000);
@@ -164,6 +194,43 @@ function EditPolls({ selectedPoll }) {
             setResponse('Poll has already started.')
         }
     };
+
+    useEffect(() => {
+        const handleFetchGroups = async () => {
+            try {
+                const response = await fetch('http://localhost:3001/groups');
+                if (response.ok) {
+                    const data = await response.json();
+                    setAllGroups(data);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        handleFetchGroups();
+    }, []);
+
+    useEffect(() => {
+        const handleFetchPollGroups = async (pollId) => {
+            try {
+                const response = await fetch(`http://localhost:3001/groups/polls/${pollId}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setPollGroups(data);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        handleFetchPollGroups(selectedPoll.id);
+    }, [selectedPoll]);
+
+    const availableGroups = allGroups.filter(group =>
+    !pollGroups.some(pollGroup => pollGroup.id === group.id)
+    );
+
+    console.log(pollGroups)
+    console.log(availableGroups)
 
     return (
         <div className="edit-content">
@@ -201,6 +268,17 @@ function EditPolls({ selectedPoll }) {
                     <option>Ja</option>
                     <option>Nein</option>
                 </select>
+                <br />
+                <br />
+                <h4>Gruppen hinzufügen</h4>
+                <Select
+                    className="select-groups"
+                    isMulti
+                    value={selectedGroups}
+                    options={availableGroups.map(group => ({ value: group.id, label: group.name }))}
+                    onChange={(selectedOptions) => setSelectedGroups(selectedOptions)}
+                    placeholder="Suche nach Gruppen"
+                />
                 <br />
                 <br />
                 </div>

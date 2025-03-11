@@ -328,7 +328,7 @@ const Groups = () => {
 
             <h2>Wähle eine Gruppe</h2>
             <Select
-            value={selectedGroup} // Bind the selected users here
+            value={selectedGroup ? { value: selectedGroup.id, label: selectedGroup.name } : null}
             options={allGroups.map(group => ({
                 value: group.id,
                 label: group.name

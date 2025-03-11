@@ -1,4 +1,4 @@
-const { fetchGroups, fetchUsers, fetchGroupUsers, editGroups, addUsersToGroup, removeUser, createGroup, deleteGroup } = require('../services/groupServices');
+const { fetchGroups, fetchUsers, fetchGroupUsers, editGroups, addUsersToGroup, removeUser, createGroup, deleteGroup, fetchPollGroups, addPollGroups } = require('../services/groupServices');
 
 async function handleFetchGroups(req, res) {
     try {
@@ -84,6 +84,27 @@ async function handleDelete(req, res) {
     }
 }
 
+async function handleFetchPollGroups(req, res) {
+    try {
+        const groups = await fetchPollGroups(req.params.id);
+        res.status(200).json(groups);
+    } catch (error) {
+        console.error('Error fetching users in Controller: ', error)
+        res.status(500).json({error: 'Error fetching users: ', error})
+    }
+}
+
+async function handleAddPollGroups(req, res) {
+    const { groupIds, pollId } = req.body;
+    try {
+        const result = await addPollGroups(groupIds, pollId);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error('Error adding group to poll:', error);
+        res.status(500).json({ error: 'Error adding group to poll', details: error.message });
+    }
+}
+
 
 module.exports = {
     handleFetchGroups,
@@ -93,5 +114,7 @@ module.exports = {
     handleAddUsersToGroup,
     handleRemoveUser,
     handleCreateGroup,
-    handleDelete
+    handleDelete,
+    handleFetchPollGroups,
+    handleAddPollGroups
 }

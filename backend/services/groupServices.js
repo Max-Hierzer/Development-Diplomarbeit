@@ -1,4 +1,4 @@
-const { Groups, Users, UserGroups } = require('../models');
+const { Groups, Users, UserGroups, PollGroups, Polls } = require('../models');
 
 
 //Fetch all groups
@@ -147,6 +147,61 @@ async function deleteGroup(groupId) {
     }
 }
 
+async function fetchPollGroups(pollId) {
+    try {
+        const pollGroups = await PollGroups.findAll({
+            where: { pollId: pollId },
+            include: [
+                {
+                    model: Groups,
+                }
+            ]
+        });
+        const groups = pollGroups.map(pg => pg.Group);
+
+        return groups;
+    } catch (error) {
+        console.error('Error fetching group users:', error);
+        throw error;
+    }
+}
+
+async function addPollGroups(groupIds, pollId) {
+    try {
+        // Validate the group exists
+        const poll = await Polls.findByPk(pollId);
+        if (!poll) {
+            throw new Error('Poll not found');
+        }
+
+        // Add users to the group (ensure no duplicates)
+        const promises = groupIds.map(async (groupId) => {
+            const group = await Groups.findByPk(groupId);
+            if (!group) {
+                throw new Error(`Group with ID ${groupId} not found`);
+            }
+
+            // Check if the user is already in the group
+            const existingPollGroup = await PollGroups.findOne({
+                where: { groupId, pollId }
+            });
+            if (!existingPollGroup) {
+                // Add the user to the group
+                await PollGroups.create({ groupId, pollId });
+            }
+        });
+
+        // Wait for all promises to complete
+        await Promise.all(promises);
+
+        return { message: 'Groups added to poll successfully' };
+    } catch (error) {
+        console.error('Error adding group to poll:', error);
+        throw error;
+    }
+}
+
+
 module.exports = {
     fetchGroups,
     fetchUsers,
@@ -155,5 +210,7 @@ module.exports = {
     addUsersToGroup,
     removeUser,
     createGroup,
-    deleteGroup
+    deleteGroup,
+    fetchPollGroups,
+    addPollGroups
 };
