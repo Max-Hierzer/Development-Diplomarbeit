@@ -1,21 +1,24 @@
 // controllers/csvExportController.js
-const { Polls, Questions, Answers } = require('../models');
-const resultsService = require('../services/resultsServices'); // Assuming fetchResults and fetchPolls are in this service
+const { Polls, Questions, Answers, QuestionTypes } = require('../models');
+const resultsService = require('../services/resultsServices');
 const { Parser } = require('json2csv');
 
-// Controller to export poll data as CSV
 exports.exportPollResults = async (req, res) => {
     const { pollId } = req.params;
 
     try {
-        // Fetch poll data with related questions and answers
         const poll = await Polls.findByPk(pollId, {
             attributes: ['name', 'description'],
             include: [
                 {
                     model: Questions,
-                    attributes: ['name'],
+                    attributes: ['id', 'name'],
                     include: [
+                        {
+                            model: QuestionTypes,
+                            as: 'QuestionType',
+                            attributes: ['name'],
+                        },
                         {
                             model: Answers,
                             attributes: ['id', 'name'],
@@ -29,36 +32,73 @@ exports.exportPollResults = async (req, res) => {
             return res.status(404).json({ success: false, message: 'Poll not found' });
         }
 
-        // Fetch vote results
-        const voteResults = await resultsService.fetchResults();
+        const voteResults = await resultsService.fetchCSVResults();
+        const voteDetails = {}; // { questionId: { answerId: { count, weightSum } } }
+        const userVotes = {};   // { userId: { questionId: true } } 
 
-        // Count votes per answer
-        const voteCounts = {};
         voteResults.forEach((vote) => {
-            const answerId = vote.answerId;
-            if (!voteCounts[answerId]) {
-                voteCounts[answerId] = 0;
+            const { answerId, questionId, userId, weight } = vote;
+
+            // Find question type
+            const question = poll.Questions.find(q => q.id === questionId);
+            const questionType = question?.QuestionType?.name || 'Unknown';
+
+            if (!voteDetails[questionId]) {
+                voteDetails[questionId] = {};
             }
-            voteCounts[answerId]++;
+
+            if (!voteDetails[questionId][answerId]) {
+                voteDetails[questionId][answerId] = { count: 0, weightSum: 0 };
+            }
+
+            // Handle Single Choice correctly
+            if (questionType === 'Single Choice') {
+                if (!userVotes[userId]) {
+                    userVotes[userId] = {};
+                }
+                if (!userVotes[userId][questionId]) {
+                    voteDetails[questionId][answerId].count += 1;
+                    userVotes[userId][questionId] = true; // Mark as voted
+                }
+            } else {
+                // For multiple choice and weighted choice
+                voteDetails[questionId][answerId].count += 1;
+            }
+
+            // Handle Weighted Choice correctly
+            if (questionType === 'Weighted Choice' && weight) {
+                voteDetails[questionId][answerId].weightSum += weight;
+            }
         });
 
-        // Prepare data for CSV
+        // Prepare CSV data
         const csvData = [];
         poll.Questions.forEach((question) => {
+            const questionType = question.QuestionType ? question.QuestionType.name : 'Unknown';
+
             question.Answers.forEach((answer) => {
+                const details = voteDetails[question.id]?.[answer.id] || { count: 0, weightSum: 0 };
+
+                // Compute average weight only for Weighted Choice questions
+                const averageWeight =
+                    questionType === 'Weighted Choice'
+                        ? (details.count > 0 ? (details.weightSum / details.count).toFixed(2) : 0)
+                        : '';
+
                 csvData.push({
                     Poll: poll.name,
                     Description: poll.description,
                     Question: question.name,
+                    QuestionType: questionType,
                     Answer: answer.name,
-                    Votes: voteCounts[answer.id] || 0, // Default to 0 if no votes
+                    VoteCount: details.count,
+                    'Average Weight': averageWeight,
                 });
             });
         });
 
         // Generate CSV
         const json2csvParser = new Parser();
-
         const csv = json2csvParser.parse(csvData);
 
         res.header('Content-Type', 'text/csv');

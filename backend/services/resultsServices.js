@@ -2,7 +2,6 @@ const { UserAnswers, Polls, Questions, QuestionTypes, Answers, PublicVotes, User
 
 async function fetchResults(pollId, questions) {
     try {
-        console.log(pollId);
         const totalVotes = await UserPolls.count({
             where: { pollId }
         });
@@ -37,6 +36,17 @@ async function fetchResults(pollId, questions) {
     } catch (error) {
         console.error('Error fetching results in service: ', error);
         throw error;
+    }
+}
+
+async function fetchCSVResults() {
+    try {
+        const results = await UserAnswers.findAll({
+            attributes: ['userId','answerId', 'questionId', 'weight'],
+        });
+        return results;
+    } catch (error) {
+        console.error('Error fetching results in service: ', error);
     }
 }
 
@@ -87,4 +97,4 @@ async function fetchPolls() {
     }
 }
 
-module.exports = { fetchResults, fetchPolls, fetchResultData };
+module.exports = { fetchResults, fetchPolls, fetchResultData, fetchCSVResults };
