@@ -1,4 +1,4 @@
-const { fetchGroups, fetchUsers, fetchGroupUsers, editGroups, addUsersToGroup, createGroup, deleteGroup, fetchPollGroups, addPollGroups, deleteGroupUsers } = require('../services/groupServices');
+const { fetchGroups, fetchUsers, fetchGroupUsers, editGroups, addUsersToGroup, createGroup, deleteGroup, fetchPollGroups, addPollGroups, deleteGroupUsers, delPollGroups } = require('../services/groupServices');
 
 async function handleFetchGroups(req, res) {
     try {
@@ -105,6 +105,17 @@ async function handleDeleteGroupUsers(req, res) {
     }
 }
 
+async function handleDelPollGroups(req, res) {
+    const { groupIds, pollId } = req.body;
+    try {
+        const result = await delPollGroups(groupIds, pollId);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error('Error deleting group from poll:', error);
+        res.status(500).json({ error: 'Error deleting group from poll', details: error.message });
+    }
+}
+
 module.exports = {
     handleFetchGroups,
     handleFetchUsers,
@@ -115,5 +126,6 @@ module.exports = {
     handleDelete,
     handleFetchPollGroups,
     handleAddPollGroups,
-    handleDeleteGroupUsers
+    handleDeleteGroupUsers,
+    handleDelPollGroups
 }

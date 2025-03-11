@@ -7,7 +7,7 @@ const { postPoll } = require('./routes/pollRoutes');
 const { postQuestion, getQuestions } = require('./routes/questionRoutes');
 const { postAnswer, getAnswers } = require('./routes/answerRoutes');
 const { getResults, getPolls, getResultData } = require('./routes/resultsRoutes');
-const { getGroups, getAllUsers, getGroupUsers, editGroups, addUsers, createGroup, deleteGroup, getPollGroups, addPollGroups, deleteGroupUsers } = require('./routes/groupRoutes');
+const { getGroups, getAllUsers, getGroupUsers, editGroups, addUsers, createGroup, deleteGroup, getPollGroups, addPollGroups, deleteGroupUsers, delPollGroups } = require('./routes/groupRoutes');
 const votingRoutes = require('./routes/votingRoutes');
 const deletionRoutes = require('./routes/deletionRoutes');
 const editRoutes = require('./routes/editRoutes');
@@ -58,7 +58,7 @@ app.use('/groups', deleteGroup);
 app.use('/groups', getPollGroups);
 app.use('/groups', addPollGroups);
 app.use('/groups', deleteGroupUsers);
-
+app.use('/groups', delPollGroups);
 
 
 app.post('/verify-recaptcha', async (req, res) => {

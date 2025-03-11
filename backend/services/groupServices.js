@@ -207,6 +207,41 @@ async function deleteGroupUsers(groupId, userIds) {
     }
 }
 
+async function delPollGroups(groupIds, pollId) {
+    try {
+        // Validate the group exists
+        const poll = await Polls.findByPk(pollId);
+        if (!poll) {
+            throw new Error('Poll not found');
+        }
+
+        // Add users to the group (ensure no duplicates)
+        const promises = groupIds.map(async (groupId) => {
+            const group = await Groups.findByPk(groupId);
+            if (!group) {
+                throw new Error(`Group with ID ${groupId} not found`);
+            }
+
+            // Check if the user is already in the group
+            const existingPollGroup = await PollGroups.findOne({
+                where: { groupId, pollId }
+            });
+            if (existingPollGroup) {
+                // Add the user to the group
+                await PollGroups.destroy( {where: { groupId: groupId, pollId: pollId }} );
+            }
+        });
+
+        // Wait for all promises to complete
+        await Promise.all(promises);
+
+        return { message: 'Groups deleted successfully' };
+    } catch (error) {
+        console.error('Error deleting groups:', error);
+        throw error;
+    }
+}
+
 module.exports = {
     fetchGroups,
     fetchUsers,
@@ -217,5 +252,6 @@ module.exports = {
     deleteGroup,
     fetchPollGroups,
     addPollGroups,
-    deleteGroupUsers
+    deleteGroupUsers,
+    delPollGroups
 };

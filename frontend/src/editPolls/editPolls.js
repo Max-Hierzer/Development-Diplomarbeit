@@ -20,6 +20,8 @@ function EditPolls({ selectedPoll }) {
     const [allGroups, setAllGroups] = useState([]);
     const [pollGroups, setPollGroups] = useState([]);
     const [selectedGroups, setSelectedGroups] = useState([]);
+    const [selectedGroupsDel, setSelectedGroupsDel] = useState([]);
+
 
     // Initialize state with `selectedPoll`
     useEffect(() => {
@@ -151,33 +153,57 @@ function EditPolls({ selectedPoll }) {
                     body: JSON.stringify(payload),
                 });
                 const data = await res.json();
+                if (selectedGroups.length > 0) {
+                    const groupIds = selectedGroups.map(group => group.value);
+                    const addGroupsResponse = await fetch('http://localhost:3001/groups/polls', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            pollId: selectedPoll.id,
+                            groupIds: groupIds
+                        }),
+                    });
 
-                const groupIds = selectedGroups.map(group => group.value);
-                const addGroupsResponse = await fetch('http://localhost:3001/groups/polls/add', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        pollId: selectedPoll.id,
-                        groupIds: groupIds
-                    }),
-                });
 
-                if (addGroupsResponse.ok) {
-                    console.log('Groups added successfully');
-                    // Update the group users list with the newly added users
-                    setPollGroups(prevGroups => [
-                        ...prevGroups,
-                        ...selectedGroups.map(group => ({
-                            id: group.value,
-                            name: group.label
-                        }))
-                    ]);
-                    setSelectedGroups([]); // Clear the selected users after adding them
-                } else {
-                    console.log('Failed to add users');
+                    if (addGroupsResponse.ok) {
+                        console.log('Groups added successfully');
+                        // Update the group users list with the newly added users
+                        setPollGroups(prevGroups => [
+                            ...prevGroups,
+                            ...selectedGroups.map(group => ({
+                                id: group.value,
+                                name: group.label
+                            }))
+                        ]);
+                        setSelectedGroups([]); // Clear the selected users after adding them
+                    } else {
+                        console.log('Failed to add users');
+                    }
                 }
+                if (selectedGroupsDel.length > 0) {
+                    const groupIdsDel = selectedGroupsDel.map(user => user.value);
+                    const delGroupsResponse = await fetch(`http://localhost:3001/groups/polls`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            pollId: selectedPoll.id,
+                            groupIds: groupIdsDel,
+                        }),
+                    });
+
+                    if (delGroupsResponse.ok) {
+                        console.log('User removed from group successfully');
+                        setPollGroups(prevGroups => prevGroups.filter(group => !groupIdsDel.includes(group.id)));
+                        setSelectedGroupsDel([]);
+                    } else {
+                        console.error('Failed to remove user from group');
+                    }
+                }
+
                 if (res.ok) {
                     setSubmitted(1);
                     setTimeout(() => setSubmitted(null), 1000);
@@ -229,9 +255,6 @@ function EditPolls({ selectedPoll }) {
     !pollGroups.some(pollGroup => pollGroup.id === group.id)
     );
 
-    console.log(pollGroups)
-    console.log(availableGroups)
-
     return (
         <div className="edit-content">
             <form onSubmit={handleSubmit} className="edit-form">
@@ -277,6 +300,18 @@ function EditPolls({ selectedPoll }) {
                     value={selectedGroups}
                     options={availableGroups.map(group => ({ value: group.id, label: group.name }))}
                     onChange={(selectedOptions) => setSelectedGroups(selectedOptions)}
+                    placeholder="Suche nach Gruppen"
+                />
+                <br/>
+                <br/>
+
+                <h4>Gruppen entfernen</h4>
+                <Select
+                    className="select-groups"
+                    isMulti
+                    value={selectedGroupsDel}
+                    options={pollGroups.map(group => ({ value: group.id, label: group.name }))}
+                    onChange={(selectedOptions) => setSelectedGroupsDel(selectedOptions)}
                     placeholder="Suche nach Gruppen"
                 />
                 <br />

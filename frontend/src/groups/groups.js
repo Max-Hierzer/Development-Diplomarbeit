@@ -254,7 +254,7 @@ const Groups = () => {
         if (!selectedGroup) return;
 
         try {
-            const response = await fetch(`http://localhost:3001/groups/delete`, {
+            const response = await fetch(`http://localhost:3001/groups/polls`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -273,7 +273,7 @@ const Groups = () => {
                 console.error('Failed to delete group');
             }
         } catch (error) {
-            console.error('Error removing user from group:', error);
+            console.error('Error removing group from poll:', error);
         }
     }
 
