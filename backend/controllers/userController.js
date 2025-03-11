@@ -3,8 +3,8 @@ const { createUser, fetchUsers, fetchLogin, sendEmail } = require('../services/u
 // resolves api connection with frontend for the registration of user
 async function handleCreateUser(req, res) {
     try {
-        const { name, email, password, roleId } = req.body;                 // gives the data names
-        const newUser = await createUser(name, email, password, roleId);    // passes new users data to service
+        const { token, name, password } = req.body;                 // gives the data names
+        const newUser = await createUser(token, name, password);    // passes new users data to service
         res.status(201).json(newUser);                              // response
     } catch (error) {
         res.status(500).json({error: 'Error creating user in controller' });
@@ -41,12 +41,12 @@ async function handleFetchLogin(req, res) {
 
 async function handleSendEmail(req, res) {
     try {
-        const { firstName, lastName, email } = req.body;
+        const { firstName, lastName, email, roleId } = req.body;
         if (!email || !firstName || !lastName) {
             return res.status(400).json({ error: "Keine E-Mail-Adresse angegeben" });
         }
 
-        const emailData = await sendEmail(firstName, lastName, email);
+        const emailData = await sendEmail(firstName, lastName, email, roleId);
 
         if (!emailData.success) {
             return res.status(401).json({ message: emailData.message });

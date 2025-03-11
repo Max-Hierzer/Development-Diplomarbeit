@@ -1,36 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/register.css';
 
-const newUser = ({ link }) => {
+const NewUser = ({ token }) => {
+    const [username, setUsername] = useState('');
     const [inputPassword, setInputPassword] = useState('');
     const [inputPassword2, setInputPassword2] = useState('');
-    const [users, setUsers] = usestate('');
-    const [errorMessage, setErrorMessage] = useState('');
+    const [users, setUsers] = useState('');
+    const [response, setResponse] = useState(null);
 
     const createUser = async (event) => {
         event.preventDefault();
         try {
             if (inputPassword === inputPassword2) {
                 const res = await fetch('http://localhost:3001/api/user', {
-                    method: 'POST',
+                    method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        link: link,
+                        token: token,
+                        name: username,
                         password: inputPassword
                     }),
                 });
                 const data = await res.json();
                 setUsers(data);
 
-                if (res.ok && data.success) {
-                    return;
+                if (res.ok) {
+                    setResponse("Registrieung erfolgreich abgeschlossen!");
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 3000);
                 } else {
-                    setErrorMessage(data.message || "Fehler beim Anlegen des Users!");
+                    setResponse(data.message || "Fehler beim Anlegen des Users!");
                 }
             } else {
-                setErrorMessage("Die Passwörter stimmen nicht überein!");
+                setResponse("Die Passwörter stimmen nicht überein!");
             }
         } catch (error) {
             (console.log('Wrong username or Password'));
@@ -40,6 +45,12 @@ const newUser = ({ link }) => {
     return (
         <div>
             <form onSubmit={createUser} className='registerForm'>
+                    <label>Username</label>
+                    <input
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
                     <label>Passwort</label>
                     <input
                         type="password"
@@ -52,12 +63,12 @@ const newUser = ({ link }) => {
                         value={inputPassword2}
                         onChange={(e) => setInputPassword2(e.target.value)}
                     />
-                <button type="submit">Anmelden</button>
+                <button type="submit">Registrierung abschließen</button>
             </form>
 
-            {errorMessage && <p className="error-message">{errorMessage}</p>}
+            {response && <p className="response">{response}</p>}
         </div>
     );
 }
 
-export default newUser;
+export default NewUser;

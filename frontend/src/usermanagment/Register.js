@@ -53,20 +53,6 @@ function Register() {
         }
     };
 
-        /*window.Email.send({
-            SecureToken: "2e2c8c80-ea78-456d-b286-cf0266c8d45b", // Use SecureToken for security
-            To: email,
-            From: "lmp.test.polls@gmail.com",
-            Subject: "Sending Email using JavaScript",
-            Body: "Well, that was easy!!",
-            Attachments: [
-                {
-                    name: "File_Name_with_Extension",
-                    path: "Full Path of the file",
-                },
-            ],
-        })*/
-
     const handleSubmit = async (event) => {
         event.preventDefault(); // Prevent page refresh on form submit
 
@@ -76,7 +62,7 @@ function Register() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ firstName, lastName, email }) // Send user data to backend
+                body: JSON.stringify({ firstName, lastName, email, roleId }) // Send user data to backend
             });
 
             const data = await res.json();

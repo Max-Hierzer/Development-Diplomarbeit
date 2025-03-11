@@ -4,6 +4,7 @@ import './styles/App.css';
 import WriteMessages from './messages/WriteMessage';
 import InputMessage from './messages/InputMessage';
 import Login from './usermanagment/Login';
+import NewUser from './usermanagment/NewUser';
 import PollDashboard from './selectPolls/PollDashboard';
 import PublicPolls from './publicPolls/publicPolls';
 import Header from './components/Header';
@@ -22,7 +23,7 @@ function App() {
   const [displayMode, setDisplayMode] = useState(0);
   const [selectedPoll, setSelectedPoll] = useState(null);
   const [newUserRegistration, setNewUserRegistration] = useState(null);
-  const [newUserLink, setNewUserLink] = useState(null);
+  const [newUserToken, setNewUserToken] = useState(null);
 
   useEffect(() => {
     // Save login state to sessionStorage whenever it changes
@@ -55,11 +56,10 @@ function App() {
     if (linkParam) {
       const unhashed = atob(decodeURIComponent(linkParam));
       const params = new URLSearchParams(unhashed);
-      const newUser = params.get('newUser');
-      const link = params.get('link');
-      if (newUser === "true" || link) {
+      const token = params.get('token');
+      if (token) {
         setNewUserRegistration(1);
-        setNewUserLink(link);
+        setNewUserToken(token);
       } else {
         const publicValue = params.get('public');
         if (publicValue === "true") {
@@ -109,7 +109,7 @@ function App() {
               <PublicPolls />
             )
         ) : (
-          <newUser link={newUserLink}/>
+          <NewUser token={newUserToken}/>
         )
         }
       </main>
