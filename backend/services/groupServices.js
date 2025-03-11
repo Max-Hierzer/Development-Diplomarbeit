@@ -85,35 +85,6 @@ async function addUsersToGroup(groupId, userIds) {
     }
 }
 
-async function removeUser(groupId, userId) {
-    try {
-        // Check if the group exists
-        const group = await Groups.findByPk(groupId);
-        if (!group) {
-            throw new Error('Group not found');
-        }
-
-        // Check if the user exists
-        const user = await Users.findByPk(userId);
-        if (!user) {
-            throw new Error('User not found');
-        }
-
-        // Remove the user from the group by deleting the UserGroups entry
-        const userGroup = await UserGroups.findOne({ where: { groupId, userId } });
-        if (!userGroup) {
-            throw new Error('User is not in the group');
-        }
-
-        await userGroup.destroy();  // Remove the user from the group
-
-        return { message: 'User removed from group successfully' };
-    } catch (error) {
-        console.error('Error removing user from group:', error);
-        throw error;
-    }
-}
-
 async function createGroup(data) {
     try {
         const newGroup = await Groups.create({
@@ -201,6 +172,40 @@ async function addPollGroups(groupIds, pollId) {
     }
 }
 
+async function deleteGroupUsers(groupId, userIds) {
+    try {
+        // Validate the group exists
+        const group = await Groups.findByPk(groupId);
+        if (!group) {
+            throw new Error('Group not found');
+        }
+
+        // Add users to the group (ensure no duplicates)
+        const promises = userIds.map(async (userId) => {
+            const user = await Users.findByPk(userId);
+            if (!user) {
+                throw new Error(`User with ID ${userId} not found`);
+            }
+
+            // Check if the user is already in the group
+            const existingUserGroup = await UserGroups.findOne({
+                where: { groupId, userId }
+            });
+            if (existingUserGroup) {
+                // Add the user to the group
+                await UserGroups.destroy( { where: { groupId: groupId, userId: userId }} );
+            }
+        });
+
+        // Wait for all promises to complete
+        await Promise.all(promises);
+
+        return { message: 'Users deleted successfully' };
+    } catch (error) {
+        console.error('Error deleting users from group:', error);
+        throw error;
+    }
+}
 
 module.exports = {
     fetchGroups,
@@ -208,9 +213,9 @@ module.exports = {
     fetchGroupUsers,
     editGroups,
     addUsersToGroup,
-    removeUser,
     createGroup,
     deleteGroup,
     fetchPollGroups,
-    addPollGroups
+    addPollGroups,
+    deleteGroupUsers
 };

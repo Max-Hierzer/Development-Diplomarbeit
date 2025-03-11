@@ -1,4 +1,4 @@
-const { fetchGroups, fetchUsers, fetchGroupUsers, editGroups, addUsersToGroup, removeUser, createGroup, deleteGroup, fetchPollGroups, addPollGroups } = require('../services/groupServices');
+const { fetchGroups, fetchUsers, fetchGroupUsers, editGroups, addUsersToGroup, createGroup, deleteGroup, fetchPollGroups, addPollGroups, deleteGroupUsers } = require('../services/groupServices');
 
 async function handleFetchGroups(req, res) {
     try {
@@ -51,18 +51,6 @@ async function handleAddUsersToGroup(req, res) {
     }
 }
 
-async function handleRemoveUser(req, res) {
-    const { groupId, userId } = req.body;
-
-    try {
-        const result = await removeUser(groupId, userId);
-        res.status(200).json(result);
-    } catch (error) {
-        console.error('Error removing user from group:', error);
-        res.status(500).json({ error: 'Error removing user from group', details: error.message });
-    }
-}
-
 async function handleCreateGroup(req, res) {
     try {
         const newGroup = await createGroup(req.body);
@@ -105,6 +93,17 @@ async function handleAddPollGroups(req, res) {
     }
 }
 
+async function handleDeleteGroupUsers(req, res) {
+    const { groupId, userIds } = req.body;
+
+    try {
+        const result = await deleteGroupUsers(groupId, userIds);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error('Error removing user from group:', error);
+        res.status(500).json({ error: 'Error removing user from group', details: error.message });
+    }
+}
 
 module.exports = {
     handleFetchGroups,
@@ -112,9 +111,9 @@ module.exports = {
     handleFetchGroupUsers,
     handleEditGroups,
     handleAddUsersToGroup,
-    handleRemoveUser,
     handleCreateGroup,
     handleDelete,
     handleFetchPollGroups,
-    handleAddPollGroups
+    handleAddPollGroups,
+    handleDeleteGroupUsers
 }
