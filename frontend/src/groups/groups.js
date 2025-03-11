@@ -277,127 +277,133 @@ const Groups = () => {
         }
     }
 
-    return (
-        <div className="groups-container">
-        {createGroup ? (
-            <>
-            <button onClick={() => {
-                setCreateGroup(0); // Switch to edit mode
-                setSelectedGroup(null); // Clear selected group
-                setSelectedUsers([]); // Clear selected users
-            }}>
-            Gruppen Bearbeiten
-            </button>
+        return (
+            <div className="groups-container">
+            {createGroup ? (
+                <div className="group-details"> {/* Apply group-details class here */}
+                <button onClick={() => {
+                    setCreateGroup(0);
+                    setSelectedGroup(null);
+                    setSelectedUsers([]);
+                }}>
+                Gruppen Bearbeiten
+                </button>
 
-            <form className="group-form" onSubmit={handleCreateGroup}>
-            <h1>Gruppe erstellen</h1>
-            <input
-            type="text"
-            placeholder="Gruppenname"
-            value={selectedGroup?.name || ''}
-            onChange={(e) => handleGroupChange('name', e.target.value)}
-            />
-            <textarea
-            placeholder="Beschreibung"
-            rows={5}
-            cols={50}
-            style={{ resize: 'vertical' }}
-            className="description"
-            value={selectedGroup?.description || ''}
-            onChange={(e) => handleGroupChange('description', e.target.value)}
-            />
+                <form onSubmit={handleCreateGroup}>
+                    <h2>Gruppe erstellen</h2>
+                    <label htmlFor="createName" className="hidden-label">Gruppenname</label>
+                    <input
+                        id="createName"
+                        type="text"
+                        placeholder="Gruppenname"
+                        value={selectedGroup?.name || ''}
+                        onChange={(e) => handleGroupChange('name', e.target.value)}
+                    />
+                    <label htmlFor="createDescription" className="hidden-label">Beschreibung</label>
+                    <textarea
+                        id="createDescription"
+                        placeholder="Beschreibung"
+                        rows={5}
+                        cols={50}
+                        style={{ resize: 'vertical' }}
+                        className="description"
+                        value={selectedGroup?.description || ''}
+                        onChange={(e) => handleGroupChange('description', e.target.value)}
+                    />
 
-            <h3>Füge Benutzer zur Gruppe hinzu</h3>
-            <Select
-            isMulti
-            value={selectedUsers}
-            options={allUsers.map(user => ({ value: user.id, label: user.name }))}
-            onChange={(selectedOptions) => setSelectedUsers(selectedOptions)}
-            placeholder="Suche nach Benutzern"
-            />
-            <button type="submit" className="create-button">Gruppe erstellen</button>
-            </form>
+                    <h3>Füge Benutzer zur Gruppe hinzu</h3>
+                    <Select
+                        isMulti
+                        value={selectedUsers}
+                        options={allUsers.map(user => ({ value: user.id, label: user.name }))}
+                        onChange={(selectedOptions) => setSelectedUsers(selectedOptions)}
+                        placeholder="Suche nach Benutzern"
+                    />
+                    <button type="submit" className="create-button">Gruppe erstellen</button>
+                </form>
 
-            {createGroup === 2 && <p>Gruppe erfolgreich erstellt!</p>}
-            </>
-        ) : (
-            <>
-            <button onClick={() => {
-                setCreateGroup(1); // Switch to create mode
-                setSelectedGroup({ name: '', description: '' }); // Reset group state
-                setSelectedUsers([]); // Clear selected users
-            }}>
-            Gruppen Erstellen
-            </button>
-
-            <h2>Wähle eine Gruppe</h2>
-            <Select
-            value={selectedGroup ? { value: selectedGroup.id, label: selectedGroup.name } : null}
-            options={allGroups.map(group => ({
-                value: group.id,
-                label: group.name
-            }))}
-            onChange={(selectedOptions) => {const group = allGroups.find(g => g.id === selectedOptions.value);
-                setSelectedGroup(group);
-            }}
-            placeholder="Suche nach einer Gruppe"
-            />
-
-            {selectedGroup && (
-                <div className="group-details">
-                <h3>Gruppenname</h3>
-                <label htmlFor="editName" className="hidden-label">Gruppenname bearbeiten</label>
-                <input
-                id="editName"
-                type="text"
-                value={selectedGroup.name || ''}
-                onChange={(e) => handleGroupChange('name', e.target.value)}
-                />
-                <br />
-                <h3>Gruppen Beschreibung</h3>
-                <label htmlFor="editDescription" className="hidden-label">Beschreibung bearbeiten</label>
-                <textarea
-                id="editDescription"
-                rows={5}
-                cols={50}
-                style={{ resize: 'vertical' }}
-                className="description"
-                value={selectedGroup.description || ''}
-                onChange={(e) => handleGroupChange('description', e.target.value)}
-                />
-
-                <h3>Füge Benutzer zur Gruppe hinzu</h3>
-                <Select
-                isMulti
-                value={selectedUsers} // Bind the selected users here
-                options={availableUsers.map(user => ({
-                    value: user.id,
-                    label: user.name
-                }))}
-                onChange={(selectedOptions) => setSelectedUsers(selectedOptions)} // Update selected users
-                placeholder="Suche nach Benutzern"
-                />
-                <br/>
-                <h3>Benutzer von Gruppe entfernen</h3>
-                <Select
-                isMulti
-                value={selectedUsersDel}
-                options={groupUsers.map(user => ({ value: user.id, label: user.name }))}
-                onChange={(selectedOptions) => setSelectedUsersDel(selectedOptions)}
-                placeholder="Suche nach Benutzern"
-                />
-
-                <button onClick={handleEditGroup}>Änderungen speichern</button>
-                <br/>
-                <button onClick={handleExport}>Benutzer exportieren</button>
-                <br/>
-                <button onClick={handleDeleteGroup}>Gruppe löschen</button>
+                {createGroup === 2 && <p>Gruppe erfolgreich erstellt!</p>}
                 </div>
-            )}
-            </>
-        )}
-        </div>
-    );
-};
+            ) : (
+                <>
+                <button onClick={() => {
+                    setCreateGroup(1);
+                    setSelectedGroup({ name: '', description: '' });
+                    setSelectedUsers([]);
+                }}>
+                Gruppen Erstellen
+                </button>
+                <div className="group-details">
+                <h2>Wähle eine Gruppe</h2>
+                <Select
+                    className="select-group-single"
+                    value={selectedGroup ? { value: selectedGroup.id, label: selectedGroup.name } : null}
+                    options={allGroups.map(group => ({
+                        value: group.id,
+                        label: group.name
+                    }))}
+                    onChange={(selectedOptions) => {
+                        const group = allGroups.find(g => g.id === selectedOptions.value);
+                        setSelectedGroup(group);
+                    }}
+                    placeholder="Suche nach einer Gruppe"
+                />
 
-export default Groups;
+                {selectedGroup && (
+                    <>
+                    <label htmlFor="editName" className="hidden-label">Gruppenname bearbeiten</label>
+                    <input
+                        id="editName"
+                        type="text"
+                        value={selectedGroup.name || ''}
+                        onChange={(e) => handleGroupChange('name', e.target.value)}
+                    />
+                    <br />
+                    <h3>Gruppen Beschreibung</h3>
+                    <label htmlFor="editDescription" className="hidden-label">Beschreibung bearbeiten</label>
+                    <textarea
+                        id="editDescription"
+                        rows={5}
+                        cols={50}
+                        style={{ resize: 'vertical' }}
+                        className="description"
+                        value={selectedGroup.description || ''}
+                        onChange={(e) => handleGroupChange('description', e.target.value)}
+                    />
+
+                    <h3>Füge Benutzer zur Gruppe hinzu</h3>
+                    <Select
+                        isMulti
+                        value={selectedUsers}
+                        options={availableUsers.map(user => ({
+                            value: user.id,
+                            label: user.name
+                        }))}
+                        onChange={(selectedOptions) => setSelectedUsers(selectedOptions)}
+                        placeholder="Suche nach Benutzern"
+                    />
+                    <br />
+                    <h3>Benutzer von Gruppe entfernen</h3>
+                    <Select
+                        isMulti
+                        value={selectedUsersDel}
+                        options={groupUsers.map(user => ({ value: user.id, label: user.name }))}
+                        onChange={(selectedOptions) => setSelectedUsersDel(selectedOptions)}
+                        placeholder="Suche nach Benutzern"
+                    />
+
+                    <button onClick={handleEditGroup}>Änderungen speichern</button>
+                    <br />
+                    <button onClick={handleExport}>Benutzer exportieren</button>
+                    <br />
+                    <button onClick={handleDeleteGroup}>Gruppe löschen</button>
+                    </>
+                )}
+                </div>
+                </>
+            )}
+            </div>
+        );
+    };
+
+    export default Groups;

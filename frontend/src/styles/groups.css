@@ -1,0 +1,83 @@
+.groups-container {
+    width: 100%;
+    max-width: 80%;
+    justify-content: center;
+    margin: 20px auto;
+}
+
+.group-form {
+    width: 100%;
+}
+
+.group-form input,
+.group-form textarea,
+.group-details input { /* Add styling for group-details inputs */
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.description {
+    padding: 10px;
+    font-size: 14px;
+}
+
+.create-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.create-button:hover {
+    background-color: --primary-hover-color;
+}
+
+.select-groups,
+.select-group-single { /* Add class for single select width */
+    width: 100%;
+    margin: 10px 0;
+}
+
+.group-details {
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.group-details h3 {
+    margin-bottom: 10px;
+}
+
+.group-details button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.group-details button:hover {
+    background-color: --primary-hover-color;
+}
+
+.hidden-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+@media (max-width: 810px) {
+    .groups-container {
+        max-width: 100%;
+    }
+}
