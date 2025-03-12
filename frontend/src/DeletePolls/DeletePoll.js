@@ -38,7 +38,7 @@ const DeletePoll = ({ selectedPoll, refreshPolls, setSelectedPoll, totalVotes })
     
     return (
     <div>
-    {totalVotes > 0 ? (
+    {totalVotes === 0 ? (
         <button
             onClick={handleDelete}
             disabled={!selectedPoll}

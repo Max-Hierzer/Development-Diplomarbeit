@@ -23,11 +23,11 @@ function MyPoll({ poll, refreshPolls, setSelectedPoll }) {
 
                 const data = await res.json();
                 setVotes(data);
+                console.log(data?.totalVotes);
             } catch (error) {
                 console.error('Error fetching results in frontend:', error);
             }
         };
-
         fetchResults();
     }, [poll.id]);
 
