@@ -232,13 +232,16 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                     if (selected) {
                         setSelectedPoll(selected);
                         setDisplayMode(2);
-                        setIsAnonymous(anonymous);
+                        setIsAnonymous(selected?.anonymous);
+                        setIsPublic(selected?.public);
                     }
                 } else if (mode === 'results') {
                     selected = resultsPolls.find((poll) => poll.id.toString() === pollId);
                     if (selected) {
                         setSelectedPoll(selected);
                         setDisplayMode(3);
+                        setIsAnonymous(selected?.anonymous);
+                        setIsPublic(selected?.public);
                     }
                 }
             }
