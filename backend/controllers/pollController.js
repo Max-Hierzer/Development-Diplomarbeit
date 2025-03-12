@@ -1,4 +1,4 @@
-const { createPoll } = require('../services/pollServices');
+const { createPoll, getPolls } = require('../services/pollServices');
 
 async function handleCreatePoll(req, res) {
     try {
@@ -47,7 +47,17 @@ async function handleCreatePoll(req, res) {
     }
 }
 
+async function handleGetPolls(req, res) {
+    try {
+        const polls = await getPolls(req.params.id);
+        res.status(200).json(polls);
+    } catch (error) {
+        console.error('Error fetching Polls in Controller: ', error)
+        res.status(500).json({error: 'Error fetching Polls: ', error})
+    }
+}
 
 module.exports = {
-    handleCreatePoll: handleCreatePoll
+    handleCreatePoll: handleCreatePoll,
+    handleGetPolls: handleGetPolls
 }

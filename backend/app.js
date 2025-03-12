@@ -3,7 +3,7 @@ const cors = require('cors');
 const { sequelize, testConnection } = require('./models'); // Import sequelize and testConnection
 const { postUser, getUsers, getLogin, postEmail } = require('./routes/userRoutes');
 const { postMessages, getMessages } = require('./routes/messageRoutes');
-const { postPoll } = require('./routes/pollRoutes');
+const { postPoll, getPoll } = require('./routes/pollRoutes');
 const { postQuestion, getQuestions } = require('./routes/questionRoutes');
 const { postAnswer, getAnswers } = require('./routes/answerRoutes');
 const { getResults, getPolls, getResultData } = require('./routes/resultsRoutes');
@@ -59,7 +59,7 @@ app.use('/groups', getPollGroups);
 app.use('/groups', addPollGroups);
 app.use('/groups', deleteGroupUsers);
 app.use('/groups', delPollGroups);
-
+app.use('/api', getPoll)
 
 app.post('/verify-recaptcha', async (req, res) => {
     const { token } = req.body;

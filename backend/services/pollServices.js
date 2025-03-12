@@ -2,7 +2,7 @@ const { Polls: Poll } = require('../models');
 const { Questions: Question } = require('../models');
 const { QuestionTypes: QuestionType } = require('../models');
 const { Answers: Answer } = require('../models');
-const { PollGroups, Groups } = require('../models');
+const { PollGroups, Groups, UserGroups, Users } = require('../models');
 
 async function createPoll(poll, questions, imageUrl, groups) {
     try {
@@ -74,6 +74,54 @@ async function createPoll(poll, questions, imageUrl, groups) {
     }
 }
 
+async function getPolls(userId) {
+    try {
+        const userGroups = await UserGroups.findAll({
+            where: { userId: userId },
+            include: [{ model: Groups }]
+        });
+
+        const groupIds = userGroups.map(ug => ug.groupId);
+
+        if (groupIds.length === 0) {
+            return [];
+        }
+
+        const pollGroups = await PollGroups.findAll({
+            where: { groupId: groupIds },
+            include: [
+                {
+                    model: Poll,
+                    attributes: ['id', 'name', 'user_id', 'public', 'anonymous', 'publish_date', 'end_date', 'description', 'imageUrl'],
+                    include: [
+                        {
+                            model: Question,
+                            attributes: ['id', 'name', 'typeId'],
+                            include: [
+                                { model: Answer, attributes: ['id', 'name'] },
+                                { model: QuestionType, attributes: ['id', 'name'], as: 'QuestionType' }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        });
+
+        const pollsMap = new Map();
+        pollGroups.forEach(pg => {
+            if (pg.Poll && !pollsMap.has(pg.Poll.id)) {
+                pollsMap.set(pg.Poll.id, pg.Poll);
+            }
+        });
+
+        return Array.from(pollsMap.values());
+    } catch (error) {
+        console.error('Error fetching polls for user:', error);
+        throw error;
+    }
+}
+
 module.exports = {
     createPoll,
+    getPolls
 };

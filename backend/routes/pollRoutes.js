@@ -1,5 +1,5 @@
 const express = require('express');
-const { handleCreatePoll } = require('../controllers/pollController');
+const { handleCreatePoll, handleGetPolls } = require('../controllers/pollController');
 const { Poll } = require('../models'); // Import your Poll model
 
 const router = express.Router();
@@ -26,7 +26,10 @@ router.delete('/poll/:id', async (req, res) => {
     }
 });
 
+const getPoll = router.get('/poll/user/:id', handleGetPolls)
+
 module.exports = {
     postPoll: postPoll,
-    deletePoll: router // Ensure the delete route is exported
+    deletePoll: router, // Ensure the delete route is exported
+    getPoll: getPoll
 };

@@ -139,8 +139,9 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
     const fetchPolls = useCallback(async () => {
         try {
             const userId = parseInt(sessionStorage.getItem('userId'));
-            const response = await fetch('http://localhost:3001/results/polls');
+            const response = await fetch(`http://localhost:3001/api/poll/user/${userId}`);
             const data = await response.json();
+            console.log(data)
             setPolls(data);
             setMaxId(maxIdValue);
             if (selectedPoll?.id && !data.find((poll) => poll.id === selectedPoll.id)) {
