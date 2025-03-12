@@ -80,13 +80,12 @@ exports.exportPollResults = async (req, res) => {
                         : '';
                 console.log(details.count);
                 csvData.push({
-                    Poll: poll.name,
-                    Description: poll.description,
-                    Question: question.name,
-                    QuestionType: questionType,
-                    Answer: answer.name,
-                    VoteCount: details.count,
-                    'Average Weight': averageWeight,
+                    Umfragenname: poll.name,
+                    Frage: question.name,
+                    Fragenart: questionType,
+                    Antwort: answer.name,
+                    Stimmenzahl: details.count,
+                    'Durchschnittliche Gewichtung': averageWeight,
                 });
             });
         });
