@@ -29,7 +29,7 @@ async function handleFetchLogin(req, res) {
         const loginData = await fetchLogin(username, password);
 
         if (!loginData.success) {
-            return res.status(401).json({ message: loginDatsendEmaila.message });
+            return res.status(401).json({ message: loginData.message });
         }
 
         res.status(200).json(loginData);                                // passes the data to frontend
