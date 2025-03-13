@@ -110,6 +110,10 @@ function CreatePoll() {
                 setImage(null); // Clear the image state after submission
                 setImageUrl(''); // Clear the image URL
                 setSelectedGroups([]);
+                const fileInput = document.getElementById("image-upload");
+                if (fileInput) {
+                    fileInput.value = "";
+                }
             } else {
                 setResponse(`Error: ${data.error || 'Something went wrong'}`);
             }
