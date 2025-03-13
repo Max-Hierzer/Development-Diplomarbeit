@@ -37,8 +37,8 @@ exports.exportPollResults = async (req, res) => {
         const userVotes = {};   // { userId: { questionId: true } } 
 
         voteResults.forEach((vote) => {
+            
             const { answerId, questionId, userId, weight } = vote;
-
             // Find question type
             const question = poll.Questions.find(q => q.id === questionId);
             const questionType = question?.QuestionType?.name || 'Unknown';
@@ -53,12 +53,17 @@ exports.exportPollResults = async (req, res) => {
 
             // Handle Single Choice correctly
             if (questionType === 'Single Choice') {
-                if (!voteDetails[questionId][answerId]) {
-                    voteDetails[questionId][answerId] = { count: 0, weightSum: 0 };
+                if (!userVotes[userId]) {
+                    userVotes[userId] = {};
                 }
+                if (!userVotes[userId][questionId]) {
+                    voteDetails[questionId][answerId].count += 1;
+                    userVotes[userId][questionId] = true; // Mark as voted
+                }
+            } else {
+                // For multiple choice and weighted choice
                 voteDetails[questionId][answerId].count += 1;
             }
-
             // Handle Weighted Choice correctly
             if (questionType === 'Weighted Choice' && weight) {
                 voteDetails[questionId][answerId].weightSum += weight;
@@ -78,7 +83,6 @@ exports.exportPollResults = async (req, res) => {
                     questionType === 'Weighted Choice'
                         ? (details.count > 0 ? (details.weightSum / details.count).toFixed(2) : 0)
                         : '';
-                console.log(details.count);
                 csvData.push({
                     Umfragenname: poll.name,
                     Frage: question.name,

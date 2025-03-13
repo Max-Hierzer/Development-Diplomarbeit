@@ -13,7 +13,7 @@ async function submitVote(userId, pollId, answers) {
                     where: { userId, questionId, answerId },
                 });
                 if (existingVote) {                                         // if he has already voted for this question throw error to not violate unique constraint
-                    throw new Error(`User has already voted for question ${questionId} with answer ${answerId}`);
+                    return { message: "You have already voted" };
                 }
                 await UserAnswers.create({
                     userId,

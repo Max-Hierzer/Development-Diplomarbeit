@@ -64,7 +64,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                 setResponse('Please select all questions');
                 return;
             }
-
+            console.log('HandleVote');
             console.log("Submitting vote:", JSON.stringify({ answers: selectedAnswers }, null, 2));
 
             try {
@@ -103,6 +103,8 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
             return;
         }
         console.log("Submitting Anonymous Vote", JSON.stringify({ answers: selectedAnswers }, null, 2));
+
+        console.log('AnonymousVote');
 
         const current_datetime = new Date().toISOString();
         if (selectedPoll.end_date > current_datetime) {
