@@ -1,5 +1,5 @@
 // services/deletionServices.js
-const { sequelize, Polls, Questions, Answers, UserAnswers } = require('../models'); // Adjust path if necessary
+const { sequelize, Polls, Questions, Answers, UserAnswers, PollGroups } = require('../models'); // Adjust path if necessary
 
 const deletePoll = async (pollId) => {
     const transaction = await sequelize.transaction();  // Use the sequelize instance
@@ -52,6 +52,12 @@ const deletePoll = async (pollId) => {
             where: { pollId },
             transaction,
         });
+
+        await PollGroups.destroy({
+            where: { pollId },
+            transaction,
+        });
+
 
         // Finally, delete the poll
         await Polls.destroy({
