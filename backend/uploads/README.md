@@ -1,0 +1,1 @@
+Das ist der Ordner in dem Pollbilder gespeichert werden
