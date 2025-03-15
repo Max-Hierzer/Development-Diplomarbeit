@@ -80,3 +80,10 @@
   }
 }
 
+@media (max-width: 500px) {
+  .qr-codes {
+    flex-direction: column;
+    align-items: center; 
+  }
+}
+
