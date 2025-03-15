@@ -9,7 +9,7 @@
     font-size: 1.4rem;
 }
 
-.votelink-container, .resultslink-container {
+.votelink-container, .resultslink-container, .qr-codes {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -19,6 +19,13 @@
   border-width: 2px;
   border-radius: 5px;
   padding: 0 5% 0 5%;
+}
+
+.qr-toggle-button {
+  width: 120px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 8px 16px;
 }
 
 .copy-button {
@@ -48,7 +55,7 @@
     font-size: 1.2rem;
   }
 
-  .votelink-container, .resultslink-container {
+  .votelink-container, .resultslink-container, .qr-codes {
     padding: 0 3% 0 3%;
   }
 
@@ -56,7 +63,7 @@
     font-size: 1rem;
   }
 
-  .copy-button {
+  .copy-button, .qr-toggle-button {
     padding: 3%;
     width: 80px;
   }

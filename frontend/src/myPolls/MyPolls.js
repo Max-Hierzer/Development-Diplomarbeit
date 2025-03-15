@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { QRCodeCanvas } from 'qrcode.react';
 import DeletePoll from '../DeletePolls/DeletePoll'
 import '../styles/myPolls.css';
 
 function MyPoll({ poll, refreshPolls, setSelectedPoll }) {
-    const [response, setResponse] = useState(null);
     const [copiedText, setCopiedText] = useState(null);
     const [votes, setVotes] = useState({});
+    const [showQR, setShowQR] = useState(false);
 
     useEffect(() => {
         const fetchResults = async () => {
@@ -37,10 +38,6 @@ function MyPoll({ poll, refreshPolls, setSelectedPoll }) {
     let voteLink = `http://localhost:3000/?${voteHash}`;
     let resultsLink = `http://localhost:3000/?${resultsHash}`;
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-    };
-
     const copyClipboard = async(type) => {
         if (type) {
             await navigator.clipboard.writeText(voteLink);
@@ -55,20 +52,40 @@ function MyPoll({ poll, refreshPolls, setSelectedPoll }) {
 
     return (
         <div className="my-polls">
-          <h2 className="pollname">{poll.name}</h2>
-          <div className="votelink-container">
-            <h3 className="link-label">Link zur <br /> Abstimmung:</h3>
-            <button onClick={() => copyClipboard(1)} className="copy-button">
-              {copiedText === 1 ? 'Kopiert!' : 'Link kopieren'}
+            <h2 className="pollname">{poll.name}</h2>
+            
+            <button onClick={() => setShowQR(!showQR)} className="qr-toggle-button">
+                {showQR ? "QR-Code ausblenden" : "QR-Code anzeigen"}
             </button>
-          </div>
-          <div className="resultslink-container">
-            <h3 className="link-label">Link zu den <br /> Ergebnissen:</h3>
-            <button onClick={() => copyClipboard(0)} className="copy-button">
-              {copiedText === 0 ? 'Kopiert!' : 'Link kopieren'}
-            </button>
-          </div>
-          <DeletePoll selectedPoll={poll} refreshPolls={refreshPolls} setSelectedPoll={setSelectedPoll} totalVotes={votes.totalVotes} />
+
+            {showQR && (
+                <div className="qr-codes">
+                    <div className="qr-container">
+                        <h3>Abstimmung</h3>
+                        <QRCodeCanvas value={voteLink} size={128} />
+                    </div>
+                    <div className="qr-container">
+                        <h3>Ergebnisse</h3>
+                        <QRCodeCanvas value={resultsLink} size={128} />
+                    </div>
+                </div>
+            )}
+
+            <div className="votelink-container">
+                <h3 className="link-label">Link zur <br /> Abstimmung:</h3>
+                <button onClick={() => copyClipboard(1)} className="copy-button">
+                    {copiedText === 1 ? 'Kopiert!' : 'Link kopieren'}
+                </button>
+            </div>
+
+            <div className="resultslink-container">
+                <h3 className="link-label">Link zu den <br /> Ergebnissen:</h3>
+                <button onClick={() => copyClipboard(0)} className="copy-button">
+                    {copiedText === 0 ? 'Kopiert!' : 'Link kopieren'}
+                </button>
+            </div>
+
+            <DeletePoll selectedPoll={poll} refreshPolls={refreshPolls} setSelectedPoll={setSelectedPoll} totalVotes={votes.totalVotes} />
         </div>
     );
 }
