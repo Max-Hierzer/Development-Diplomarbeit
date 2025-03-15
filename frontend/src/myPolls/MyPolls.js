@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQrcode } from '@fortawesome/free-solid-svg-icons';
 import DeletePoll from '../DeletePolls/DeletePoll'
 import '../styles/myPolls.css';
 
@@ -7,6 +9,16 @@ function MyPoll({ poll, refreshPolls, setSelectedPoll }) {
     const [copiedText, setCopiedText] = useState(null);
     const [votes, setVotes] = useState({});
     const [showQR, setShowQR] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 410);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 410);
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     useEffect(() => {
         const fetchResults = async () => {
@@ -38,7 +50,7 @@ function MyPoll({ poll, refreshPolls, setSelectedPoll }) {
     let voteLink = `http://localhost:3000/?${voteHash}`;
     let resultsLink = `http://localhost:3000/?${resultsHash}`;
 
-    const copyClipboard = async(type) => {
+    const copyClipboard = async (type) => {
         if (type) {
             await navigator.clipboard.writeText(voteLink);
         } else {
@@ -53,9 +65,9 @@ function MyPoll({ poll, refreshPolls, setSelectedPoll }) {
     return (
         <div className="my-polls">
             <h2 className="pollname">{poll.name}</h2>
-            
+
             <button onClick={() => setShowQR(!showQR)} className="qr-toggle-button">
-                {showQR ? "QR-Code ausblenden" : "QR-Code anzeigen"}
+                {isMobile ? <FontAwesomeIcon icon={faQrcode} size="lg" /> : (showQR ? "QR-Code ausblenden" : "QR-Code anzeigen")}
             </button>
 
             {showQR && (
