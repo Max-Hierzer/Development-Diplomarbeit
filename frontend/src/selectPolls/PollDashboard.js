@@ -163,6 +163,8 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                 else if (poll.public === true && poll.end_date < current_datetime) results.push(poll);
                 else results.push(poll);
             })
+
+            console.log("User POll: ", user);
             setEditPolls(edit);
             setVotePolls(vote);
             setResultsPolls(results);

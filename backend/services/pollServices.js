@@ -81,11 +81,19 @@ async function getPolls(userId) {
             include: [{ model: Groups }]
         });
 
+        const ownedPolls = await Poll.findAll({
+            where: { user_id: userId }
+        });
+       
+        
+
         const groupIds = userGroups.map(ug => ug.groupId);
 
-        if (groupIds.length === 0) {
+        
+        if (groupIds.length === 0 && ownedPolls.length === 0) {
             return [];
         }
+        
 
         const pollGroups = await PollGroups.findAll({
             where: { groupId: groupIds },
@@ -111,6 +119,12 @@ async function getPolls(userId) {
         pollGroups.forEach(pg => {
             if (pg.Poll && !pollsMap.has(pg.Poll.id)) {
                 pollsMap.set(pg.Poll.id, pg.Poll);
+            }
+        });
+
+        ownedPolls.forEach(op => {
+            if (!pollsMap.has(op.id)) {
+                pollsMap.set(op.id, op);
             }
         });
 
