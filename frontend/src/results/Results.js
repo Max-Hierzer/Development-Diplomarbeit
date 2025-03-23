@@ -57,11 +57,12 @@ const Results = ({ poll, showVotersMode }) => {
             <h2 className="poll-header">{poll.name}</h2>
             <h3>In dieser Umfrage {results.totalVotes == 1 ? "hat" : "haben"} {results.totalVotes || 0} {results.totalVotes == 1 ? "Person" : "Personen"} abgestimmt!</h3>
             <br />
-            <img
-                    src={`http://localhost:3001${poll.imageUrl}`}
-                    alt="Umfragebild"
-                    className="poll-image"
-                />
+            {poll.imageUrl && (<img
+                src={`http://localhost:3001${poll.imageUrl}`}
+                alt='Umfragebild'
+                className="poll-image"
+            />
+            )}
             <br />
             {poll.description && (
                 <div className="display-description">
