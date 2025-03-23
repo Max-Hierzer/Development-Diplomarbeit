@@ -82,7 +82,18 @@ async function getPolls(userId) {
         });
 
         const ownedPolls = await Poll.findAll({
-            where: { user_id: userId }
+            where: { user_id: userId },
+            attributes: ['id', 'name', 'user_id', 'public', 'anonymous', 'publish_date', 'end_date', 'description', 'imageUrl'],
+                include: [
+                    {
+                        model: Question,
+                        attributes: ['id', 'name', 'typeId'],
+                        include: [
+                            { model: Answer, attributes: ['id', 'name'] },
+                            { model: QuestionType, attributes: ['id', 'name'], as: 'QuestionType' }
+                        ]
+                    }
+                ]
         });
        
         
