@@ -23,6 +23,7 @@
     "react-image-crop": "^11.0.7",
     "react-scripts": "5.0.1",
     "react-select": "^5.10.1",
+    "react-tooltip": "^5.28.0",
     "smtpjs": "^0.0.1",
     "web-vitals": "^2.1.4"
   },

@@ -7,6 +7,8 @@ import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import '../styles/create.css';
+import CustomTooltips from "./Tooltips";
+
 
 function CreatePoll() {
     const [poll, setPoll] = useState('');
@@ -192,6 +194,7 @@ function CreatePoll() {
                     placeholder={`Name`}
                     value={poll}
                     onChange={(e) => setPoll(e.target.value)}
+                    data-tooltip-id="poll-name-tooltip"
                 />
                 <br />
                 <label htmlFor="beschreibung" className="hidden-label">Beschreibung</label>
@@ -204,12 +207,13 @@ function CreatePoll() {
                     cols={50} // Adjust the number of columns for the desired width
                     style={{ resize: 'vertical' }} // Optional: Allow resizing vertically only
                     className="description"
+                    data-tooltip-id="description-tooltip"
                 />
                 <br />
                 <br />
                 <h4>Öffentlich</h4>
                 <label htmlFor="public" className="hidden-label">Soll die Umfrage öffentlich sein?</label>
-                <select id="public" onChange={(e) => setSelectedPublic(e.target.value)} value={selectedPublic} className="select-public">
+                <select id="public" onChange={(e) => setSelectedPublic(e.target.value)} value={selectedPublic} className="select-public" data-tooltip-id="public-tooltip">
                     <option>Nein</option>
                     <option>Ja</option>
                 </select>
@@ -219,28 +223,30 @@ function CreatePoll() {
                     <div>
                         <h4>Anonym</h4>
                         <label htmlFor="anon" className="hidden-label">Soll die Umfrage anonym sein?</label>
-                        <select id="anon" onChange={(e) => setSelectedAnon(e.target.value)} value={selectedAnon} className="select-anon">
+                        <select id="anon" onChange={(e) => setSelectedAnon(e.target.value)} value={selectedAnon} className="select-anon" data-tooltip-id="anonym-tooltip">
                             <option>Ja</option>
                             <option>Nein</option>
                         </select>
                         <br />
                         <br />
                         <h4>Gruppen hinzufügen</h4>
-                        <Select
+                        <div data-tooltip-id="group-tooltip"><Select
                             className="select-groups"
                             isMulti
                             value={selectedGroups}
                             options={groups.map(group => ({ value: group.id, label: group.name }))}
                             onChange={(selectedOptions) => setSelectedGroups(selectedOptions)}
                             placeholder="Suche nach Gruppen"
+                            data-tooltip-id="group-tooltip"
                         />
+                        </div>
                         <br />
                         <br />
                     </div>
                 )}
-                <div className="datetime-container">
+                <div className="datetime-container" >
                     <label htmlFor="start-time" className="hidden-label">Wann soll die Umfrage starten?</label>
-                    <Datetime
+                    <div data-tooltip-id="start-tooltip"><Datetime
                         id="start-time"
                         key={`publish-${resetKey}`}
                         value={publishDate}
@@ -250,8 +256,9 @@ function CreatePoll() {
                         closeOnSelect={true}
                         inputProps={{ placeholder: "Startzeitpunkt" }}
                     />
+                    </div>
                     <label htmlFor="end-time" className="hidden-label">Wann soll die Umfrage enden?</label>
-                    <Datetime
+                    <div data-tooltip-id="end-tooltip"><Datetime
                         id="end-time"
                         key={`end-${resetKey}`}
                         value={endDate}
@@ -261,16 +268,17 @@ function CreatePoll() {
                         closeOnSelect={true}
                         inputProps={{ placeholder: "Endzeitpunkt" }}
                     />
+                    </div>
                 </div>
                 <br />
                 <br />
                 <label htmlFor="image-upload" className="hidden-label">Fügen Sie ein Bild hinzu</label>
-                <input
+                <div data-tooltip-id="image-tooltip"><input
                     type="file"
                     id="image-upload"
                     onChange={handleImageUpload}
                     accept="image/*" 
-                />
+                /></div>
                 <br />
 
                 {image && (
@@ -284,13 +292,13 @@ function CreatePoll() {
                     <div key={questionIndex} className="create-question">
                         <h4>Fragentyp</h4>
                         <label htmlFor="question-type" className="hidden-label">Was für einen Typ soll Frage {questionIndex + 1} haben?</label>
-                        <select id="question-type" onChange={(e) => handleQuestionTypes(questionIndex, e.target.value)} value={question.type} className="select-type">
+                        <select id="question-type" onChange={(e) => handleQuestionTypes(questionIndex, e.target.value)} value={question.type} className="select-type" data-tooltip-id="questiontype-tooltip">
                             <option>Single Choice</option>
                             <option>Multiple Choice</option>
                             <option>Weighted Choice</option>
                         </select>
                         <label htmlFor="question-text" className="hidden-label">Wie soll Frage {questionIndex + 1} lauten?</label>
-                        <div className="question-input">
+                        <div className="question-input" data-tooltip-id="question-tooltip">
                             <input
                                 id="question-text"
                                 type="text"
@@ -299,14 +307,14 @@ function CreatePoll() {
                                 onChange={(e) =>
                                     handleQuestionChange(questionIndex, e.target.value)
                                 }
-                            /><button type="button" className="delete" onClick={() => deleteQuestion(questionIndex)}>
+                            /><button type="button" className="delete" onClick={() => deleteQuestion(questionIndex)} data-tooltip-id="question-delete-tooltip">
                                 <FontAwesomeIcon icon={faTimes} />
                             </button>
                         </div>
                         <br />
                         <h4>Antworten</h4>
                         {question.answers.map((answer, answerIndex) => (
-                            <div key={answerIndex} className="answer-input">
+                            <div key={answerIndex} className="answer-input" data-tooltip-id="answer-tooltip">
                                 <label htmlFor="answer-text" className="hidden-label">Wie soll Antwort {answerIndex + 1} zu {questionIndex + 1} lauten?</label>
                                 <input
                                     id="answer-text"
@@ -316,21 +324,23 @@ function CreatePoll() {
                                     onChange={(e) =>
                                         handleAnswerChange(questionIndex, answerIndex, e.target.value)
                                     }
-                                /><button type="button" className="delete" onClick={() => deleteAnswer(questionIndex, answerIndex)}>
+                                /><button type="button" className="delete" onClick={() => deleteAnswer(questionIndex, answerIndex)} data-tooltip-id="answer-delete-tooltip">
                                     <FontAwesomeIcon icon={faTimes} />
                                 </button>
                             </div>
                         ))}
-                        <button type="button" className="add" onClick={() => addAnswer(questionIndex)}>Antwort hinzufügen</button>
+                        <button type="button" className="add" onClick={() => addAnswer(questionIndex)} data-tooltip-id="answer-add-tooltip">Antwort hinzufügen</button>
                     </div>
                 ))}
-                <button type="button" className="add" onClick={addQuestion}>Frage hinzufügen</button>
+                <button type="button" className="add" onClick={addQuestion} data-tooltip-id="question-add-tooltip">Frage hinzufügen</button>
 
                 <br />
-                <button type="submit" className="create-button">Umfrage erstellen</button>
+                <button type="submit" className="create-button" data-tooltip-id="submit-tooltip">Umfrage erstellen</button>
             </form>
             <p>{response}</p>
+            <CustomTooltips />
         </div>
+        
     );
 }
 
