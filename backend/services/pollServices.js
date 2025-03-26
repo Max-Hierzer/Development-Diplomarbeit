@@ -52,29 +52,50 @@ async function createPoll(poll, questions, imageUrl, publicQuestions, groups) {
             const questionType = await QuestionType.findOne({
                 where: { id: question.typeId },
             });
-            const [createdQuestion] = await PublicQuestions.findOrCreate({
+
+            let [createdQuestion, created] = await PublicQuestions.findOrCreate({
                 where: {
                     name: question.name,
                     typeId: questionType.id,
                 }
             });
-            console.log("this works")
+
+            if (!created) {
+                createdQuestion.name = question.name;
+                createdQuestion.typeId = questionType.id;
+                await createdQuestion.save();
+            }
+
             const createdAnswers = [];
             for (const answer of question.PublicAnswers) {
-                const [createdAnswer] = await PublicAnswers.findOrCreate({
+                const existingAnswer = await PublicAnswers.findOne({
                     where: { name: answer.name },
                 });
-                createdAnswers.push(createdAnswer);
+
+                if (existingAnswer) {
+                    if (existingAnswer.name !== answer.name) {
+                        existingAnswer.name = answer.name;
+                        await existingAnswer.save();
+                    }
+                    createdAnswers.push(existingAnswer);
+                } else {
+                    const createdAnswer = await PublicAnswers.create({
+                        name: answer.name,
+                    });
+                    createdAnswers.push(createdAnswer);
+                }
             }
+
             await createdQuestion.addPublicAnswers(createdAnswers);
 
-            createdQuestions.push(createdQuestion);
+            createdPublicQuestions.push(createdQuestion);
 
             await PublicPollQuestions.create({
                 pollId: createdPoll.id,
                 publicQuestionId: createdQuestion.id
-            })
+            });
         }
+
 
         // Add groups to the poll (ensure no duplicates)
         const promises = groups.map(async (group) => {

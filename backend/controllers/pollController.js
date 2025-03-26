@@ -3,7 +3,7 @@ const { createPoll, getPolls } = require('../services/pollServices');
 async function handleCreatePoll(req, res) {
     try {
         console.log('Request Body:', req.body);
-        const { poll, questions, allPubQuestions, selectedGroups } = req.body;
+        const { poll, questions, publicQuestions, selectedGroups } = req.body;
         console.log('Image URL from request:', poll.imageUrl);
 
         const imageUrl = poll.imageUrl || null;
@@ -39,8 +39,8 @@ async function handleCreatePoll(req, res) {
             }
         }
 
-        if (allPubQuestions && allPubQuestions.length > 0) {
-            for (const question of allPubQuestions) {
+        if (publicQuestions && publicQuestions.length > 0) {
+            for (const question of publicQuestions) {
                 if (!question.name) {
                     return res.status(400).json({ error: 'Each public question must have a valid name' });
                 }
@@ -57,7 +57,7 @@ async function handleCreatePoll(req, res) {
             }
         }
 
-        const newPoll = await createPoll(poll, questions, imageUrl, allPubQuestions, selectedGroups);
+        const newPoll = await createPoll(poll, questions, imageUrl, publicQuestions, selectedGroups);
         res.status(201).json(newPoll);
     } catch (error) {
         console.error('Error creating poll:', error);

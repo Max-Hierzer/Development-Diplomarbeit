@@ -30,7 +30,6 @@ function CreatePoll() {
     const [selectedPublicQuestions, setSelectedPublicQuestions] = useState([]);
     const [existingPublicQuestions, setExistingPublicQuestions] = useState([]);
 
-    console.log(selectedPublicQuestions)
 
     const handleImageUpload = async (event) => {
         const file = event.target.files[0];
@@ -69,7 +68,6 @@ function CreatePoll() {
 
         let isPublic = selectedPublic === "Ja";
         let isAnon = selectedAnon === "Ja";
-        let allPubQuestions = [...selectedPublicQuestions.map(q => q.value), ...publicQuestions];
 
         const payload = {
             poll: {
@@ -83,7 +81,7 @@ function CreatePoll() {
                 imageUrl: imageUrl, // Include image URL in the payload
             },
             questions,
-            allPubQuestions,
+            publicQuestions,
             selectedGroups
         };
 
@@ -161,9 +159,14 @@ function CreatePoll() {
 
     const deleteQuestion = (questionIndex, isPublic = false) => {
         if (isPublic) {
+            const questionToDelete = publicQuestions[questionIndex];
             const newQuestions = [...publicQuestions];
             newQuestions.splice(questionIndex, 1);
             setPublicQuestions(newQuestions);
+
+            setSelectedPublicQuestions(prevSelected =>
+            prevSelected.filter(q => q.value !== questionToDelete.id)
+            );
         }
         else {
             const newQuestions = [...questions];
@@ -186,6 +189,7 @@ function CreatePoll() {
     };
 
     const handleQuestionChange = (index, value, isPublic = false) => {
+
         if (isPublic) {
             const newQuestions = [...publicQuestions];
             newQuestions[index].name = value;
@@ -254,6 +258,20 @@ function CreatePoll() {
         }
         fetchAllPublicQuestions();
     }, [])
+
+    useEffect(() => {
+        const handlePublicQuestionChange = () => {
+            const newPublicQuestions = [
+                ...selectedPublicQuestions
+                .filter(q => !publicQuestions.some(pq => pq.id === q.value)) // Only add if not already in the array
+                .map(q => q.question),
+              ...publicQuestions
+            ];
+            setPublicQuestions(newPublicQuestions);
+        };
+
+        handlePublicQuestionChange();
+    }, [selectedPublicQuestions]);
 
     return (
         <div className="create-content">
@@ -366,81 +384,12 @@ function CreatePoll() {
                     className="select-publicQuestions"
                     isMulti
                     value={selectedPublicQuestions}
-                    options={existingPublicQuestions.map(question => ({ value: question, label: question.name }))}
+                    options={existingPublicQuestions.map(question => ({ value: question.id, label: question.name, question: question }))}
                     onChange={(selectedOptions) => setSelectedPublicQuestions(selectedOptions)}
                     placeholder="Suche nach Fragen"
                     />
                     <br />
                     <br />
-
-                    {selectedPublicQuestions.map((question, questionIndex) =>
-                        (
-                        <div key={questionIndex} className="create-question">
-                        <h4>Fragentyp</h4>
-                        <label htmlFor={`question-type-${questionIndex}`} className="hidden-label">
-                        Was für einen Typ soll Frage {questionIndex + 1} haben?
-                        </label>
-                        <select
-                        id={`question-type-${questionIndex}`}
-                        onChange={(e) => handleQuestionTypes(questionIndex, e.target.value, true)}
-                        value={question.value.type}
-                        className="select-type"
-                        >
-                        <option value="Single Choice">Single Choice</option>
-                        <option value="Multiple Choice">Multiple Choice</option>
-                        </select>
-
-                        <label htmlFor={`question-text-${questionIndex}`} className="hidden-label">
-                        Wie soll Frage {questionIndex + 1} lauten?
-                        </label>
-                        <div className="question-input">
-                        <input
-                        id={`question-text-${questionIndex}`}
-                        type="text"
-                        placeholder={`Frage ${questionIndex + 1}`}
-                        value={question.value.name}
-                        onChange={(e) => handleQuestionChange(questionIndex, e.target.value, true)}
-                        />
-                        <button
-                        type="button"
-                        className="delete"
-                        onClick={() => deleteQuestion(questionIndex, true)}
-                        >
-                        <FontAwesomeIcon icon={faTimes} />
-                        </button>
-                        </div>
-                        <br />
-
-                        <h4>Antworten</h4>
-
-                        {question.value.PublicAnswers.map((answer, answerIndex) => (
-                            <div key={answerIndex} className="answer-input">
-                            <label
-                            htmlFor={`answer-text-${questionIndex}-${answerIndex}`}
-                            className="hidden-label"
-                            >
-                            Wie soll Antwort {answerIndex + 1} zu Frage {questionIndex + 1} lauten?
-                            </label>
-                            <input
-                            id={`answer-text-${questionIndex}-${answerIndex}`}
-                            type="text"
-                            placeholder={`Antwort ${answerIndex + 1}`}
-                            value={answer.name}
-                            onChange={(e) =>
-                                handleAnswerChange(questionIndex, answerIndex, e.target.value, true)
-                            }
-                            />
-                            <button
-                            type="button"
-                            className="delete"
-                            onClick={() => deleteAnswer(questionIndex, answerIndex, true)}
-                            >
-                            <FontAwesomeIcon icon={faTimes} />
-                            </button>
-                            </div>
-                        ))}
-                        </div>
-                    ))}
 
                     {publicQuestions.map((question, questionIndex) => (
                         <div key={questionIndex} className="create-question">
