@@ -6,17 +6,24 @@ module.exports = (sequelize) => {
     class PublicUserData extends Model {
         static associate(models) {
             // Define the association between PublicUserData and Polls
-            this.belongsTo(models.Polls, { foreignKey: 'pollId' });
+            this.belongsTo(models.PublicAnswers, { foreignKey: 'publicAnswerId' });
+            this.belongsTo(models.PublicQuestions,  { foreignKey: 'publicQuestionId' })
         }
     }
     PublicUserData.init(
         {
-            gender: { type: DataTypes.STRING, allowNull: false },
-            age: { type: DataTypes.INTEGER, allowNull: false },
-            job: { type: DataTypes.STRING, allowNull: false },
-            pollId: { type: DataTypes.INTEGER, allowNull: false, references: { model: 'Polls' , key: 'id' } }
+            publicAnswerId: { type: DataTypes.INTEGER, allowNull: false},
+            publicQuestionId: { type: DataTypes.INTEGER, allowNull: false},
+
         },
-        { sequelize, modelName: 'PublicUserData' }
+
+        { sequelize, modelName: 'PublicUserData',
+            indexes: [
+                {
+                    unique: true,
+                    fields: ['publicAnswerId', 'publicQuestionId']
+                }
+            ] },
     );
 
     return PublicUserData
