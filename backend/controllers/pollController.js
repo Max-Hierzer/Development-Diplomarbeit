@@ -3,7 +3,7 @@ const { createPoll, getPolls } = require('../services/pollServices');
 async function handleCreatePoll(req, res) {
     try {
         console.log('Request Body:', req.body);
-        const { poll, questions, selectedGroups } = req.body;
+        const { poll, questions, allPubQuestions, selectedGroups } = req.body;
         console.log('Image URL from request:', poll.imageUrl);
 
         const imageUrl = poll.imageUrl || null;
@@ -28,7 +28,7 @@ async function handleCreatePoll(req, res) {
                 return res.status(400).json({ error: 'Each question must have a valid name' });
             }
 
-            if (!question.answers[0].name) {
+            if (!question|| questions.length === 0 || !questions[0].name) {
                 return res.status(400).json({ error: `Question "${question.name}" must have at least one answer` });
             }
 
@@ -39,7 +39,25 @@ async function handleCreatePoll(req, res) {
             }
         }
 
-        const newPoll = await createPoll(poll, questions, imageUrl, selectedGroups);
+        if (allPubQuestions && allPubQuestions.length > 0) {
+            for (const question of allPubQuestions) {
+                if (!question.name) {
+                    return res.status(400).json({ error: 'Each public question must have a valid name' });
+                }
+
+                if (!question.PublicAnswers || question.PublicAnswers.length === 0) {
+                    return res.status(400).json({ error: `Public question "${question.name}" must have at least one answer` });
+                }
+
+                for (const answer of question.PublicAnswers) {
+                    if (!answer.name) {
+                        return res.status(400).json({ error: `All answers for public question "${question.name}" must have a valid name` });
+                    }
+                }
+            }
+        }
+
+        const newPoll = await createPoll(poll, questions, imageUrl, allPubQuestions, selectedGroups);
         res.status(201).json(newPoll);
     } catch (error) {
         console.error('Error creating poll:', error);

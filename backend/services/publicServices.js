@@ -6,7 +6,7 @@ const publicService = {
             const questions = await PublicQuestions.findAll({                     // get data from Polls
                     attributes: ['id', 'name', 'typeId'],       // include id and name from question
                     include: [
-                        { model: PublicAnswers, attributes: ['id', 'name'] },
+                        { model: PublicAnswers, attributes: ['id', 'name'], through: { attributes: [] }, },
                         { model: QuestionTypes, attributes: ['id', 'name'], as: 'QuestionType' }
                     ]
                 }

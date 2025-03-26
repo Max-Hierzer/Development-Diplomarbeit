@@ -4,6 +4,7 @@ module.exports = (sequelize) => {
     class QuestionTypes extends Model {
         static associate(models) { // define relations
             QuestionTypes.hasMany(models.Questions, { foreignKey: 'typeId' });
+            QuestionTypes.hasMany(models.PublicQuestions, { foreignKey: 'typeId' });
         }
     }
 

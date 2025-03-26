@@ -30,6 +30,8 @@ function CreatePoll() {
     const [selectedPublicQuestions, setSelectedPublicQuestions] = useState([]);
     const [existingPublicQuestions, setExistingPublicQuestions] = useState([]);
 
+    console.log(selectedPublicQuestions)
+
     const handleImageUpload = async (event) => {
         const file = event.target.files[0];
 
@@ -67,6 +69,7 @@ function CreatePoll() {
 
         let isPublic = selectedPublic === "Ja";
         let isAnon = selectedAnon === "Ja";
+        let allPubQuestions = [...selectedPublicQuestions.map(q => q.value), ...publicQuestions];
 
         const payload = {
             poll: {
@@ -80,6 +83,7 @@ function CreatePoll() {
                 imageUrl: imageUrl, // Include image URL in the payload
             },
             questions,
+            allPubQuestions,
             selectedGroups
         };
 
@@ -115,6 +119,8 @@ function CreatePoll() {
                 setImage(null); // Clear the image state after submission
                 setImageUrl(''); // Clear the image URL
                 setSelectedGroups([]);
+                setPublicQuestions([]);
+                setSelectedPublicQuestions([]);
                 const fileInput = document.getElementById("image-upload");
                 if (fileInput) {
                     fileInput.value = "";
@@ -136,14 +142,14 @@ function CreatePoll() {
 
     const addPublicQuestion = () => {
             const newQuestions = [...publicQuestions];
-            newQuestions.push({ name: '', type: 'Single Choice', answers: [{ name: '' }, { name: '' }] });
+            newQuestions.push({ name: '', typeId: 1, PublicAnswers: [{ name: '' }, { name: '' }] });
             setPublicQuestions(newQuestions);
     };
 
     const addAnswer = (questionIndex, isPublic = false) => {
         if (isPublic) {
             const newQuestions = [...publicQuestions];
-            newQuestions[questionIndex].answers.push({ name: '' });
+            newQuestions[questionIndex].PublicAnswers.push({ name: '' });
             setPublicQuestions(newQuestions);
         }
         else {
@@ -169,7 +175,7 @@ function CreatePoll() {
     const deleteAnswer = (questionIndex, answerIndex, isPublic = false) => {
         if (isPublic) {
             const newQuestions = [...publicQuestions];
-            newQuestions[questionIndex].answers.splice(answerIndex, 1);
+            newQuestions[questionIndex].PublicAnswers.splice(answerIndex, 1);
             setPublicQuestions(newQuestions);
         }
         else {
@@ -195,7 +201,7 @@ function CreatePoll() {
     const handleAnswerChange = (questionIndex, answerIndex, value, isPublic = false) => {
         if (isPublic) {
             const newQuestions = [...publicQuestions];
-            newQuestions[questionIndex].answers[answerIndex].name = value;
+            newQuestions[questionIndex].PublicAnswers[answerIndex].name = value;
             setPublicQuestions(newQuestions);
         }
         else {
@@ -360,14 +366,15 @@ function CreatePoll() {
                     className="select-publicQuestions"
                     isMulti
                     value={selectedPublicQuestions}
-                    options={existingPublicQuestions.map(question => ({ value: question.id, label: question.name }))}
+                    options={existingPublicQuestions.map(question => ({ value: question, label: question.name }))}
                     onChange={(selectedOptions) => setSelectedPublicQuestions(selectedOptions)}
                     placeholder="Suche nach Fragen"
                     />
                     <br />
                     <br />
 
-                    {selectedPublicQuestions.map((question, questionIndex) => (
+                    {selectedPublicQuestions.map((question, questionIndex) =>
+                        (
                         <div key={questionIndex} className="create-question">
                         <h4>Fragentyp</h4>
                         <label htmlFor={`question-type-${questionIndex}`} className="hidden-label">
@@ -376,12 +383,13 @@ function CreatePoll() {
                         <select
                         id={`question-type-${questionIndex}`}
                         onChange={(e) => handleQuestionTypes(questionIndex, e.target.value, true)}
-                        value={question.type}
+                        value={question.value.type}
                         className="select-type"
                         >
-                        <option>Single Choice</option>
-                        <option>Multiple Choice</option>
+                        <option value="Single Choice">Single Choice</option>
+                        <option value="Multiple Choice">Multiple Choice</option>
                         </select>
+
                         <label htmlFor={`question-text-${questionIndex}`} className="hidden-label">
                         Wie soll Frage {questionIndex + 1} lauten?
                         </label>
@@ -390,19 +398,28 @@ function CreatePoll() {
                         id={`question-text-${questionIndex}`}
                         type="text"
                         placeholder={`Frage ${questionIndex + 1}`}
-                        value={question.name}
+                        value={question.value.name}
                         onChange={(e) => handleQuestionChange(questionIndex, e.target.value, true)}
                         />
-                        <button type="button" className="delete" onClick={() => deleteQuestion(questionIndex, true)}>
+                        <button
+                        type="button"
+                        className="delete"
+                        onClick={() => deleteQuestion(questionIndex, true)}
+                        >
                         <FontAwesomeIcon icon={faTimes} />
                         </button>
                         </div>
                         <br />
+
                         <h4>Antworten</h4>
-                        {question.answers.map((answer, answerIndex) => (
+
+                        {question.value.PublicAnswers.map((answer, answerIndex) => (
                             <div key={answerIndex} className="answer-input">
-                            <label htmlFor={`answer-text-${questionIndex}-${answerIndex}`} className="hidden-label">
-                            Wie soll Antwort {answerIndex + 1} zu {questionIndex + 1} lauten?
+                            <label
+                            htmlFor={`answer-text-${questionIndex}-${answerIndex}`}
+                            className="hidden-label"
+                            >
+                            Wie soll Antwort {answerIndex + 1} zu Frage {questionIndex + 1} lauten?
                             </label>
                             <input
                             id={`answer-text-${questionIndex}-${answerIndex}`}
@@ -413,7 +430,11 @@ function CreatePoll() {
                                 handleAnswerChange(questionIndex, answerIndex, e.target.value, true)
                             }
                             />
-                            <button type="button" className="delete" onClick={() => deleteAnswer(questionIndex, answerIndex, true)}>
+                            <button
+                            type="button"
+                            className="delete"
+                            onClick={() => deleteAnswer(questionIndex, answerIndex, true)}
+                            >
                             <FontAwesomeIcon icon={faTimes} />
                             </button>
                             </div>
@@ -453,7 +474,7 @@ function CreatePoll() {
                         </div>
                         <br />
                         <h4>Antworten</h4>
-                        {question.answers.map((answer, answerIndex) => (
+                        {question.PublicAnswers.map((answer, answerIndex) => (
                             <div key={answerIndex} className="answer-input">
                             <label htmlFor={`public-answer-text-${questionIndex}-${answerIndex}`} className="hidden-label">
                             Wie soll Antwort {answerIndex + 1} zu {questionIndex + 1} lauten?

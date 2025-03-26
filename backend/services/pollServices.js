@@ -2,9 +2,9 @@ const { Polls: Poll } = require('../models');
 const { Questions: Question } = require('../models');
 const { QuestionTypes: QuestionType } = require('../models');
 const { Answers: Answer } = require('../models');
-const { PollGroups, Groups, UserGroups, Users } = require('../models');
+const { PollGroups, Groups, UserGroups, Users, PublicQuestions, PublicAnswers, PublicPollQuestions } = require('../models');
 
-async function createPoll(poll, questions, imageUrl, groups) {
+async function createPoll(poll, questions, imageUrl, publicQuestions, groups) {
     try {
         console.log('Poll in createPoll:', poll);
         console.log('Questions in createPoll:', questions);
@@ -46,6 +46,36 @@ async function createPoll(poll, questions, imageUrl, groups) {
             createdQuestions.push(createdQuestion);
         }
 
+        const createdPublicQuestions = [];
+        for (const question of publicQuestions) {
+
+            const questionType = await QuestionType.findOne({
+                where: { id: question.typeId },
+            });
+            const [createdQuestion] = await PublicQuestions.findOrCreate({
+                where: {
+                    name: question.name,
+                    typeId: questionType.id,
+                }
+            });
+            console.log("this works")
+            const createdAnswers = [];
+            for (const answer of question.PublicAnswers) {
+                const [createdAnswer] = await PublicAnswers.findOrCreate({
+                    where: { name: answer.name },
+                });
+                createdAnswers.push(createdAnswer);
+            }
+            await createdQuestion.addPublicAnswers(createdAnswers);
+
+            createdQuestions.push(createdQuestion);
+
+            await PublicPollQuestions.create({
+                pollId: createdPoll.id,
+                publicQuestionId: createdQuestion.id
+            })
+        }
+
         // Add groups to the poll (ensure no duplicates)
         const promises = groups.map(async (group) => {
             const g = await Groups.findByPk(group.value);
@@ -66,6 +96,7 @@ async function createPoll(poll, questions, imageUrl, groups) {
         return {
             poll: createdPoll,
             questions: createdQuestions,
+            publicQuestions: createdPublicQuestions,
             groups: pollgroups
         };
     } catch (error) {
