@@ -234,6 +234,21 @@ function CreatePoll() {
         fetchGroups();
     }, []);
 
+    useEffect(() => {
+        const fetchAllPublicQuestions = async () => {
+            try {
+                const response = await fetch('http://localhost:3001/public/all');
+                if (response.ok) {
+                    const data = await response.json();
+                    setExistingPublicQuestions(data);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        fetchAllPublicQuestions();
+    }, [])
+
     return (
         <div className="create-content">
             <form onSubmit={handleSubmit} className="create-form">

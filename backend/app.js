@@ -13,6 +13,7 @@ const rolesRoutes = require('./routes/rolesRoutes');
 const csvExportRoutes = require('./routes/csvExportRoutes');
 const imageRoutes = require('./routes/imageRoutes');
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+const publicRoutes = require('./routes/publicRoutes');
 require('dotenv').config();
 
 sequelize.sync({ alter: true })
@@ -53,7 +54,8 @@ app.use('/groups', getPollGroups);
 app.use('/groups', addPollGroups);
 app.use('/groups', deleteGroupUsers);
 app.use('/groups', delPollGroups);
-app.use('/api', getPoll)
+app.use('/api', getPoll);
+app.use('/public', publicRoutes);
 
 app.post('/verify-recaptcha', async (req, res) => {
     const { token } = req.body;
