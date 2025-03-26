@@ -1,4 +1,6 @@
 // services/deletionServices.js
+const fs = require('fs');
+const path = require('path');
 const { sequelize, Polls, Questions, Answers, UserAnswers, PollGroups } = require('../models'); // Adjust path if necessary
 
 const deletePoll = async (pollId) => {
@@ -57,6 +59,17 @@ const deletePoll = async (pollId) => {
             where: { pollId },
             transaction,
         });
+
+        // Delete associated image
+        if (poll.imageUrl) {
+            const imagePath = path.join(__dirname, '../uploads', path.basename(poll.imageUrl));
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath);
+                console.log(`Deleted image: ${imagePath}`);
+            } else {
+                console.log('Image file not found, skipping deletion.');
+            }
+        }
 
 
         // Finally, delete the poll
