@@ -26,6 +26,9 @@ function CreatePoll() {
     const [imageUrl, setImageUrl] = useState('');
     const [groups, setGroups] = useState([]);
     const [selectedGroups, setSelectedGroups] = useState([]);
+    const [publicQuestions, setPublicQuestions] = useState([]);
+    const [selectedPublicQuestions, setSelectedPublicQuestions] = useState([]);
+    const [existingPublicQuestions, setExistingPublicQuestions] = useState([]);
 
     const handleImageUpload = async (event) => {
         const file = event.target.files[0];
@@ -126,45 +129,93 @@ function CreatePoll() {
     };
 
     const addQuestion = () => {
-        const newQuestions = [...questions];
-        newQuestions.push({ name: '', type: 'Single Choice', answers: [{ name: '' }, { name: '' }] });
-        setQuestions(newQuestions);
+            const newQuestions = [...questions];
+            newQuestions.push({ name: '', type: 'Single Choice', answers: [{ name: '' }, { name: '' }] });
+            setQuestions(newQuestions);
     };
 
-    const addAnswer = (questionIndex) => {
-        const newQuestions = [...questions];
-        newQuestions[questionIndex].answers.push({ name: '' });
-        setQuestions(newQuestions);
+    const addPublicQuestion = () => {
+            const newQuestions = [...publicQuestions];
+            newQuestions.push({ name: '', type: 'Single Choice', answers: [{ name: '' }, { name: '' }] });
+            setPublicQuestions(newQuestions);
     };
 
-    const deleteQuestion = (questionIndex) => {
-        const newQuestions = [...questions];
-        newQuestions.splice(questionIndex, 1);
-        setQuestions(newQuestions);
+    const addAnswer = (questionIndex, isPublic = false) => {
+        if (isPublic) {
+            const newQuestions = [...publicQuestions];
+            newQuestions[questionIndex].answers.push({ name: '' });
+            setPublicQuestions(newQuestions);
+        }
+        else {
+            const newQuestions = [...questions];
+            newQuestions[questionIndex].answers.push({ name: '' });
+            setQuestions(newQuestions);
+        }
     };
 
-    const deleteAnswer = (questionIndex, answerIndex) => {
-        const newQuestions = [...questions];
-        newQuestions[questionIndex].answers.splice(answerIndex, 1);
-        setQuestions(newQuestions);
+    const deleteQuestion = (questionIndex, isPublic = false) => {
+        if (isPublic) {
+            const newQuestions = [...publicQuestions];
+            newQuestions.splice(questionIndex, 1);
+            setPublicQuestions(newQuestions);
+        }
+        else {
+            const newQuestions = [...questions];
+            newQuestions.splice(questionIndex, 1);
+            setQuestions(newQuestions);
+        }
     };
 
-    const handleQuestionChange = (index, value) => {
-        const newQuestions = [...questions];
-        newQuestions[index].name = value;
-        setQuestions(newQuestions);
+    const deleteAnswer = (questionIndex, answerIndex, isPublic = false) => {
+        if (isPublic) {
+            const newQuestions = [...publicQuestions];
+            newQuestions[questionIndex].answers.splice(answerIndex, 1);
+            setPublicQuestions(newQuestions);
+        }
+        else {
+            const newQuestions = [...questions];
+            newQuestions[questionIndex].answers.splice(answerIndex, 1);
+            setQuestions(newQuestions);
+        }
     };
 
-    const handleAnswerChange = (questionIndex, answerIndex, value) => {
-        const newQuestions = [...questions];
-        newQuestions[questionIndex].answers[answerIndex].name = value;
-        setQuestions(newQuestions);
+    const handleQuestionChange = (index, value, isPublic = false) => {
+        if (isPublic) {
+            const newQuestions = [...publicQuestions];
+            newQuestions[index].name = value;
+            setPublicQuestions(newQuestions);
+        }
+        else {
+            const newQuestions = [...questions];
+            newQuestions[index].name = value;
+            setQuestions(newQuestions);
+        }
     };
 
-    const handleQuestionTypes = (questionIndex, value) => {
-        const newType = [...questions];
-        newType[questionIndex].type = value;
-        setQuestions(newType);
+    const handleAnswerChange = (questionIndex, answerIndex, value, isPublic = false) => {
+        if (isPublic) {
+            const newQuestions = [...publicQuestions];
+            newQuestions[questionIndex].answers[answerIndex].name = value;
+            setPublicQuestions(newQuestions);
+        }
+        else {
+            const newQuestions = [...questions];
+            newQuestions[questionIndex].answers[answerIndex].name = value;
+            setQuestions(newQuestions);
+        }
+    };
+
+    const handleQuestionTypes = (questionIndex, value, isPublic = false) => {
+        if (isPublic) {
+            const newType = [...publicQuestions];
+            newType[questionIndex].type = value;
+            setPublicQuestions(newType);
+        }
+        else {
+            const newType = [...questions];
+            newType[questionIndex].type = value;
+            setQuestions(newType);
+        }
     }
 
 
@@ -287,6 +338,136 @@ function CreatePoll() {
                     </div>
                 )}
                 <br />
+                {selectedPublic === "Ja" && (
+                    <div>
+                    <h2>Demografische Fragen</h2>
+                    <Select
+                    className="select-publicQuestions"
+                    isMulti
+                    value={selectedPublicQuestions}
+                    options={existingPublicQuestions.map(question => ({ value: question.id, label: question.name }))}
+                    onChange={(selectedOptions) => setSelectedPublicQuestions(selectedOptions)}
+                    placeholder="Suche nach Fragen"
+                    />
+                    <br />
+                    <br />
+
+                    {selectedPublicQuestions.map((question, questionIndex) => (
+                        <div key={questionIndex} className="create-question">
+                        <h4>Fragentyp</h4>
+                        <label htmlFor={`question-type-${questionIndex}`} className="hidden-label">
+                        Was für einen Typ soll Frage {questionIndex + 1} haben?
+                        </label>
+                        <select
+                        id={`question-type-${questionIndex}`}
+                        onChange={(e) => handleQuestionTypes(questionIndex, e.target.value, true)}
+                        value={question.type}
+                        className="select-type"
+                        >
+                        <option>Single Choice</option>
+                        <option>Multiple Choice</option>
+                        </select>
+                        <label htmlFor={`question-text-${questionIndex}`} className="hidden-label">
+                        Wie soll Frage {questionIndex + 1} lauten?
+                        </label>
+                        <div className="question-input">
+                        <input
+                        id={`question-text-${questionIndex}`}
+                        type="text"
+                        placeholder={`Frage ${questionIndex + 1}`}
+                        value={question.name}
+                        onChange={(e) => handleQuestionChange(questionIndex, e.target.value, true)}
+                        />
+                        <button type="button" className="delete" onClick={() => deleteQuestion(questionIndex, true)}>
+                        <FontAwesomeIcon icon={faTimes} />
+                        </button>
+                        </div>
+                        <br />
+                        <h4>Antworten</h4>
+                        {question.answers.map((answer, answerIndex) => (
+                            <div key={answerIndex} className="answer-input">
+                            <label htmlFor={`answer-text-${questionIndex}-${answerIndex}`} className="hidden-label">
+                            Wie soll Antwort {answerIndex + 1} zu {questionIndex + 1} lauten?
+                            </label>
+                            <input
+                            id={`answer-text-${questionIndex}-${answerIndex}`}
+                            type="text"
+                            placeholder={`Antwort ${answerIndex + 1}`}
+                            value={answer.name}
+                            onChange={(e) =>
+                                handleAnswerChange(questionIndex, answerIndex, e.target.value, true)
+                            }
+                            />
+                            <button type="button" className="delete" onClick={() => deleteAnswer(questionIndex, answerIndex, true)}>
+                            <FontAwesomeIcon icon={faTimes} />
+                            </button>
+                            </div>
+                        ))}
+                        </div>
+                    ))}
+
+                    {publicQuestions.map((question, questionIndex) => (
+                        <div key={questionIndex} className="create-question">
+                        <h4>Fragentyp</h4>
+                        <label htmlFor={`public-question-type-${questionIndex}`} className="hidden-label">
+                        Was für einen Typ soll Frage {questionIndex + 1} haben?
+                        </label>
+                        <select
+                        id={`public-question-type-${questionIndex}`}
+                        onChange={(e) => handleQuestionTypes(questionIndex, e.target.value, true)}
+                        value={question.type}
+                        className="select-type"
+                        >
+                        <option>Single Choice</option>
+                        <option>Multiple Choice</option>
+                        </select>
+                        <label htmlFor={`public-question-text-${questionIndex}`} className="hidden-label">
+                        Wie soll Frage {questionIndex + 1} lauten?
+                        </label>
+                        <div className="question-input">
+                        <input
+                        id={`public-question-text-${questionIndex}`}
+                        type="text"
+                        placeholder={`Frage ${questionIndex + 1}`}
+                        value={question.name}
+                        onChange={(e) => handleQuestionChange(questionIndex, e.target.value, true)}
+                        />
+                        <button type="button" className="delete" onClick={() => deleteQuestion(questionIndex, true)}>
+                        <FontAwesomeIcon icon={faTimes} />
+                        </button>
+                        </div>
+                        <br />
+                        <h4>Antworten</h4>
+                        {question.answers.map((answer, answerIndex) => (
+                            <div key={answerIndex} className="answer-input">
+                            <label htmlFor={`public-answer-text-${questionIndex}-${answerIndex}`} className="hidden-label">
+                            Wie soll Antwort {answerIndex + 1} zu {questionIndex + 1} lauten?
+                            </label>
+                            <input
+                            id={`public-answer-text-${questionIndex}-${answerIndex}`}
+                            type="text"
+                            placeholder={`Antwort ${answerIndex + 1}`}
+                            value={answer.name}
+                            onChange={(e) =>
+                                handleAnswerChange(questionIndex, answerIndex, e.target.value, true)
+                            }
+                            />
+                            <button type="button" className="delete" onClick={() => deleteAnswer(questionIndex, answerIndex, true)}>
+                            <FontAwesomeIcon icon={faTimes} />
+                            </button>
+                            </div>
+                        ))}
+                        <button type="button" className="add" onClick={() => addAnswer(questionIndex, true)}>Antwort hinzufügen</button>
+                        </div>
+                    ))}
+
+                    <button type="button" className="add" onClick={addPublicQuestion}>Frage hinzufügen</button>
+                    <br />
+                    <br />
+                    </div>
+                )}
+
+                <h2>Umfrage Fragen</h2>
 
                 {questions.map((question, questionIndex) => (
                     <div key={questionIndex} className="create-question">
