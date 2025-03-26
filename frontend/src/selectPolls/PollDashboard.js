@@ -26,6 +26,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
     const [isAnonymous, setIsAnonymous] = useState(selectedPoll?.anonymous || null);
     const [maxIdValue, setMaxId] = useState(null)
     const roleId = parseInt(userRoleId);
+    const [voteSubmitted, setVoteSubmitted] = useState(false);
 
     const resetAnswers = () => {
         setSelectedAnswers({});
@@ -83,6 +84,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                 if (res.ok) {
                     setResponse(`User ID: ${userId} voted successfully.`);
                     resetAnswers();
+                    setVoteSubmitted(true);
                 } else {
                     alert(`User has already voted.`);
                     resetAnswers();
@@ -123,6 +125,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
 
                 if (res.ok) {
                     const data = await res.json();
+                    setVoteSubmitted(true);
                     alert(data.message);
                 } else {
                     const errorData = await res.json();
@@ -264,9 +267,25 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
             case 2:
                 return (
                     <div>
-                        <button className="vote-button" onClick={isAnonymous === true ? handleAnonymousVote : handleVote}>
-                            Abstimmen
-                        </button>
+                        {!voteSubmitted && (
+                            <button
+                                className="vote-button"
+                                onClick={isAnonymous === true ? handleAnonymousVote : handleVote}
+                                title={'Klicken Sie hier um die Umfrage abzuschließen.'}
+                            >Umfrage abschließen
+                            </button>
+                        )}
+
+                        {voteSubmitted && (
+                            <><button
+                                className={'disabled-button'}
+                                title={'Auf diese Umfrage haben Sie bereits abgestimmt.'} // Tooltip-Nachricht hier
+                            >
+                                Umfrage abschließen
+                            </button><p className="success-message">
+                                    Danke für Ihre Teilnahme an dieser Umfrage.<br />
+                                </p></>
+                        )}
                     </div>
                 );
             case 3:

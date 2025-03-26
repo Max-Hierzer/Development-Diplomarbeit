@@ -14,6 +14,7 @@ const PublicPolls = () => {
   const [job, setJob] = useState('');
   const [formErrors, setFormErrors] = useState({});
   const [pollValue, setPollValue] = useState(0);
+  const [voteSubmitted, setVoteSubmitted] = useState(false);
 
   // Always mounted recaptcha reference
   const recaptchaRef = useRef(null);
@@ -130,6 +131,7 @@ const PublicPolls = () => {
 
           if (res.ok) {
             console.log("Voted successfully");
+            setVoteSubmitted(true);
           }
         } catch (error) {
           console.error('Error submitting vote:', error);
@@ -137,7 +139,6 @@ const PublicPolls = () => {
       } else {
         console.log('Poll has already ended');
       }
-      alert('Vote submitted!');
     } else {
       alert('You have already submitted your vote.');
     }
@@ -210,108 +211,126 @@ const PublicPolls = () => {
 
   return (
     <div className="public-container">
-    <ReCAPTCHA
-    sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
-    size="invisible"
-    ref={recaptchaRef}
-    />
-    {poll ? (
-      !showVoting ? (
-        <div className="publicData">
-          <h2>Bitte beantworten sie die folgenden Fragen.</h2>
-          <form onSubmit={handleSubmitData}>
-            <div>
-              <label htmlFor="gender" className="required-label">Wählen Sie Ihr Geschlecht:</label>
-              <select
-                id="gender"
-                required
-                onChange={(e) => setGender(e.target.value)}
-                className={`required ${formErrors.gender ? 'invalid' : ''}`}
-              >
-              <option value="">-</option>
-              <option value="male">männlich</option>
-              <option value="female">weiblich</option>
-              <option value="non-binary">divers</option>
-              </select>
-              {formErrors.gender && <span className="error-message">{formErrors.gender}</span>}
-            </div>
-            <div>
-              <label htmlFor="age" className="required-label">Wie alt sind Sie:</label>
-              <input
-                type="text"
-                id="age"
-                required
-                placeholder="Ihr Alter"
-                onChange={(e) => setAge(e.target.value)}
-                className={`required ${formErrors.age ? 'invalid' : ''}`}
-              />
-              {formErrors.age && <span className="error-message">{formErrors.age}</span>}
-            </div>
-            <div>
-              <label htmlFor="job" className="required-label">Ihr Beruf:</label>
-              <input
-                type="text"
-                id="job"
-                required
-                placeholder="Ihr Beruf"
-                onChange={(e) => setJob(e.target.value)}
-                className={`required ${formErrors.job ? 'invalid' : ''}`}
-              />
-              {formErrors.job && <span className="error-message">{formErrors.job}</span>}
-            </div>
-            <button type="submit">Submit Data</button>
-          </form>
-        </div>
-      ) : (
-        <div className="vote-container">
-        <h2><span>{poll.name}</span></h2>
-        {poll.description && (
-          <div>
-          <h4 className="description-header">Beschreibung:</h4>
-          <h5 className="description">{poll.description}</h5>
-          </div>
-        )}
-        <br />
-        {poll.Questions &&
-          poll.Questions.map((question) => (
-            <div key={question.id} className="question">
-            <h3 className="question-header">
-            <span className="question-text">{question.name}</span>
-            <span className="question-type">{question.QuestionType.name}</span>
-            </h3>
-            {question.Answers &&
-              question.Answers.map((answer) => (
-                <div key={answer.id} className="answer">
+      <ReCAPTCHA
+        sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+        size="invisible"
+        ref={recaptchaRef}
+      />
+      {poll ? (
+        !showVoting ? (
+          <div className="publicData">
+            <h2>Bitte beantworten sie die folgenden Fragen.</h2>
+            <form onSubmit={handleSubmitData}>
+              <div>
+                <label htmlFor="gender" className="required-label">Wählen Sie Ihr Geschlecht:</label>
+                <select
+                  id="gender"
+                  required
+                  onChange={(e) => setGender(e.target.value)}
+                  className={`required ${formErrors.gender ? 'invalid' : ''}`}
+                >
+                  <option value="">-</option>
+                  <option value="male">männlich</option>
+                  <option value="female">weiblich</option>
+                  <option value="non-binary">divers</option>
+                </select>
+                {formErrors.gender && <span className="error-message">{formErrors.gender}</span>}
+              </div>
+              <div>
+                <label htmlFor="age" className="required-label">Wie alt sind Sie:</label>
                 <input
-                type={question.QuestionType.name === "Multiple Choice" ? "checkbox" : "radio"}
-                name={`question-${question.id}`}
-                value={answer.id}
-                checked={
-                  question.QuestionType.name === "Multiple Choice"
-                  ? !!selectedAnswers[question.id]?.answer?.includes(answer.id)
-                  : selectedAnswers[question.id]?.answer?.[0] === answer.id
-                }
-                onChange={(event) =>
-                  handleAnswerChange(question.id, answer.id, question.QuestionType.name === "Multiple Choice", event.target.checked)
-                }
+                  type="text"
+                  id="age"
+                  required
+                  placeholder="Ihr Alter"
+                  onChange={(e) => setAge(e.target.value)}
+                  className={`required ${formErrors.age ? 'invalid' : ''}`}
                 />
-                <label>{answer.name}</label>
+                {formErrors.age && <span className="error-message">{formErrors.age}</span>}
+              </div>
+              <div>
+                <label htmlFor="job" className="required-label">Ihr Beruf:</label>
+                <input
+                  type="text"
+                  id="job"
+                  required
+                  placeholder="Ihr Beruf"
+                  onChange={(e) => setJob(e.target.value)}
+                  className={`required ${formErrors.job ? 'invalid' : ''}`}
+                />
+                {formErrors.job && <span className="error-message">{formErrors.job}</span>}
+              </div>
+              <button type="submit">Submit Data</button>
+            </form>
+          </div>
+        ) : (
+          <div className="vote-container">
+            <h2><span>{poll.name}</span></h2>
+            {poll.description && (
+              <div>
+                <h4 className="description-header">Beschreibung:</h4>
+                <h5 className="description">{poll.description}</h5>
+              </div>
+            )}
+            <br />
+            {poll.Questions &&
+              poll.Questions.map((question) => (
+                <div key={question.id} className="question">
+                  <h3 className="question-header">
+                    <span className="question-text">{question.name}</span>
+                    <span className="question-type">{question.QuestionType.name}</span>
+                  </h3>
+                  {question.Answers &&
+                    question.Answers.map((answer) => (
+                      <div key={answer.id} className="answer">
+                        <input
+                          type={question.QuestionType.name === "Multiple Choice" ? "checkbox" : "radio"}
+                          name={`question-${question.id}`}
+                          value={answer.id}
+                          checked={
+                            question.QuestionType.name === "Multiple Choice"
+                              ? !!selectedAnswers[question.id]?.answer?.includes(answer.id)
+                              : selectedAnswers[question.id]?.answer?.[0] === answer.id
+                          }
+                          onChange={(event) =>
+                            handleAnswerChange(question.id, answer.id, question.QuestionType.name === "Multiple Choice", event.target.checked)
+                          }
+                        />
+                        <label>{answer.name}</label>
+                      </div>
+                    ))}
+                  {question.QuestionType.name === "Weighted Choice" && (
+                    <ImportanceScale
+                      questionId={question.id}
+                      onImportanceChange={handleImportanceChange}
+                    />
+                  )}
                 </div>
               ))}
-              {question.QuestionType.name === "Weighted Choice" && (
-                <ImportanceScale
-                questionId={question.id}
-                onImportanceChange={handleImportanceChange}
-                />
-              )}
-              </div>
-          ))}
-          <button className="vote-button" onClick={handleVoteSubmit}>Submit Vote</button>
+            {!voteSubmitted && (
+              <button 
+              className="vote-button" 
+              onClick={handleVoteSubmit}
+              title={'Klicken Sie hier um die Umfrage abzuschließen.'}
+              >Umfrage abschließen</button>
+            )}
+            
+            {voteSubmitted && (
+            <><button
+                  className={'disabled-button'}
+                  title={'Auf diese Umfrage haben Sie bereits abgestimmt.'} 
+                >
+                  Umfrage abschließen
+                </button><p className="success-message">
+                    Danke für Ihre Teilnahme an dieser Umfrage.<br />
+                    Falls Sie sich weiter informieren wollen, besuchen Sie gerne unsere <a href="https://liste-petrovic.at/" target="_blank" rel="noopener noreferrer">Website</a>.
+                  </p></>
+            )}
           </div>
-      )
-    ) : (
-      <p>Poll not available</p>
-    )}
+        )
+      ) : (
+        <p>Poll not available</p>
+      )}
     </div>
   );
 };

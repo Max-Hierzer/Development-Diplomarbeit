@@ -209,6 +209,10 @@ p {
     margin-bottom: 10px;
 }
 
+.success-message {
+    color: black;
+}
+
 @media (max-width: 810px) {
     .question {
         max-width: 100%;
