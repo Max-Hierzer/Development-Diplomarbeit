@@ -254,14 +254,13 @@ const Groups = () => {
         if (!selectedGroup) return;
 
         try {
-            const response = await fetch(`http://localhost:3001/groups/polls`, {
+            const response = await fetch(`http://localhost:3001/groups/delete`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     groupId: selectedGroup.id,
-                    userIds: selectedUsersDel
                 }),
             });
 

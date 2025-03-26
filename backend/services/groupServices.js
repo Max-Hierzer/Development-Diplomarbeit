@@ -110,6 +110,10 @@ async function deleteGroup(groupId) {
         if (userGroup) {
             await UserGroups.destroy( {where: {groupId}} );
         }
+        const pollGroup = await PollGroups.findByPk(groupId);
+        if (pollGroup) {
+            await PollGroups.destroy( {where: {groupId}} );
+        }
         await Groups.destroy( {where: {id: groupId}} );
         return { message: 'Group deleted successfully' };
     } catch (error) {
