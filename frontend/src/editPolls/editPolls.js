@@ -21,7 +21,11 @@ function EditPolls({ selectedPoll }) {
     const [pollGroups, setPollGroups] = useState([]);
     const [selectedGroups, setSelectedGroups] = useState([]);
     const [selectedGroupsDel, setSelectedGroupsDel] = useState([]);
+    const [publicQuestions, setPublicQuestions] = useState([]);
+    const [selectedPublicQuestions, setSelectedPublicQuestions] = useState([]);
+    const [existingPublicQuestions, setExistingPublicQuestions] = useState([]);
 
+    console.log(publicQuestions)
 
     // Initialize state with `selectedPoll`
     useEffect(() => {
@@ -46,6 +50,18 @@ function EditPolls({ selectedPoll }) {
                     Answers: q.Answers || [{ name: '' }, { name: '' }],
                 }))
             );
+            setPublicQuestions(
+                (selectedPoll.publicPollQuestions || []).map((publicPoll) => ({
+                    id: publicPoll.PublicQuestion.id,
+                    name: publicPoll.PublicQuestion.name,
+                    typeId: publicPoll.PublicQuestion.typeId,
+                    questionType: publicPoll.PublicQuestion.QuestionType.name, // e.g., 'Single Choice'
+                    PublicAnswers: publicPoll.PublicQuestion.PublicAnswers.map((answer) => ({
+                        id: answer.id,
+                        name: answer.name,
+                    }))
+                }))
+            );
         }
     }, [selectedPoll]);
 
@@ -53,63 +69,111 @@ function EditPolls({ selectedPoll }) {
         setQuestions([...questions, { id: null, name: '', QuestionType: { name: 'Single Choice'}, Answers: [{ name: '' }, { name: '' }] }]);
     };
 
-    const addAnswer = (questionIndex) => {
-        setQuestions(
-            questions.map((q, index) =>
-            index === questionIndex
-            ? { ...q, Answers: [...q.Answers, { name: '' }] }
-            : q
-            )
-        );
+    const addPublicQuestion = () => {
+        const newQuestions = [...publicQuestions];
+        newQuestions.push({ name: '', typeId: 1, PublicAnswers: [{ name: '' }, { name: '' }] });
+        setPublicQuestions(newQuestions);
     };
 
-    const deleteQuestion = (questionIndex) => {
-        setQuestions((prevQuestions) =>
-        prevQuestions.filter((_, index) => index !== questionIndex)
-        );
-    };
-
-    const deleteAnswer = (questionIndex, answerIndex) => {
-        setQuestions((prevQuestions) =>
-        prevQuestions.map((q, qIndex) =>
-        qIndex === questionIndex
-        ? {
-            ...q,
-            Answers: q.Answers.filter((_, aIndex) => aIndex !== answerIndex),
+    const addAnswer = (questionIndex, isPublic = false) => {
+        if (isPublic) {
+            const newQuestions = [...publicQuestions];
+            newQuestions[questionIndex].PublicAnswers.push({ name: '' });
+            setPublicQuestions(newQuestions);
         }
-        : q
-        )
-        );
-    };
-
-    const handleQuestionChange = (index, value) => {
-        setQuestions(
-            questions.map((q, qIndex) =>
-            qIndex === index ? { ...q, name: value } : q
-            )
-        );
-    };
-
-    const handleAnswerChange = (questionIndex, answerIndex, value) => {
-        setQuestions((prevQuestions) =>
-        prevQuestions.map((q, qIndex) =>
-        qIndex === questionIndex
-        ? {
-            ...q,
-            Answers: q.Answers.map((a, aIndex) =>
-            aIndex === answerIndex ? { ...a, name: value } : a
-            ),
+        else {
+            const newQuestions = [...questions];
+            newQuestions[questionIndex].answers.push({ name: '' });
+            setQuestions(newQuestions);
         }
-        : q
-        )
-        );
     };
 
-    const handleQuestionTypes = (questionIndex, value) => {
-        const newType = [...questions];
-        newType[questionIndex].QuestionType.name = value;
-        setQuestions(newType);
+    const deleteQuestion = (questionIndex, isPublic = false) => {
+        if (isPublic) {
+            const questionToDelete = publicQuestions[questionIndex];
+            const newQuestions = [...publicQuestions];
+            newQuestions.splice(questionIndex, 1);
+            setPublicQuestions(newQuestions);
+
+            setSelectedPublicQuestions(prevSelected =>
+            prevSelected.filter(q => q.value !== questionToDelete.id)
+            );
+        }
+        else {
+            const newQuestions = [...questions];
+            newQuestions.splice(questionIndex, 1);
+            setQuestions(newQuestions);
+        }
     };
+
+    const deleteAnswer = (questionIndex, answerIndex, isPublic = false) => {
+        if (isPublic) {
+            const newQuestions = [...publicQuestions];
+            newQuestions[questionIndex].PublicAnswers.splice(answerIndex, 1);
+            setPublicQuestions(newQuestions);
+        }
+        else {
+            const newQuestions = [...questions];
+            newQuestions[questionIndex].answers.splice(answerIndex, 1);
+            setQuestions(newQuestions);
+        }
+    };
+
+    const handleQuestionChange = (index, value, isPublic = false) => {
+
+        if (isPublic) {
+            const newQuestions = [...publicQuestions];
+            newQuestions[index].name = value;
+            setPublicQuestions(newQuestions);
+        }
+        else {
+            const newQuestions = [...questions];
+            newQuestions[index].name = value;
+            setQuestions(newQuestions);
+        }
+    };
+
+
+    const handleAnswerChange = (questionIndex, answerIndex, value, isPublic = false) => {
+        if (isPublic) {
+            const newQuestions = [...publicQuestions];
+            newQuestions[questionIndex].PublicAnswers[answerIndex].name = value;
+            setPublicQuestions(newQuestions);
+        }
+        else {
+            const newQuestions = [...questions];
+            newQuestions[questionIndex].answers[answerIndex].name = value;
+            setQuestions(newQuestions);
+        }
+    };
+
+    const handleQuestionTypes = (questionIndex, value, isPublic = false) => {
+        if (isPublic) {
+            const newType = [...publicQuestions];
+            newType[questionIndex].type = value;
+            setPublicQuestions(newType);
+        }
+        else {
+            const newType = [...questions];
+            newType[questionIndex].type = value;
+            setQuestions(newType);
+        }
+    }
+
+    useEffect(() => {
+        const handlePublicQuestionChange = () => {
+            const newPublicQuestions = [
+                ...publicQuestions,
+                ...selectedPublicQuestions.map(selected => selected.question)
+                .filter(newQuestion =>
+                !publicQuestions.some(existingQuestion => existingQuestion.id === newQuestion.id)
+                )
+            ];
+            setPublicQuestions(newPublicQuestions);
+        };
+
+        handlePublicQuestionChange();
+    }, [selectedPublicQuestions]);
 
     const handlePublicChange = (value) => {
         if (value === "Ja") setIsAnon(value);
@@ -255,6 +319,21 @@ function EditPolls({ selectedPoll }) {
     !pollGroups.some(pollGroup => pollGroup.id === group.id)
     );
 
+    useEffect(() => {
+        const fetchAllPublicQuestions = async () => {
+            try {
+                const response = await fetch('http://localhost:3001/public/all');
+                if (response.ok) {
+                    const data = await response.json();
+                    setExistingPublicQuestions(data);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        fetchAllPublicQuestions();
+    }, [])
+
     return (
         <div className="edit-content">
             <form onSubmit={handleSubmit} className="edit-form">
@@ -344,6 +423,83 @@ function EditPolls({ selectedPoll }) {
             </div>
             <br />
             <br />
+            <br />
+            {isPublic === "Ja" && (
+                <div>
+                <h2>Demografische Fragen</h2>
+                <Select
+                className="select-publicQuestions"
+                isMulti
+                value={selectedPublicQuestions}
+                options={existingPublicQuestions.map(question => ({ value: question.id, label: question.name, question: question }))}
+                onChange={(selectedOptions) => setSelectedPublicQuestions(selectedOptions)}
+                placeholder="Suche nach Fragen"
+                />
+                <br />
+                <br />
+
+                { publicQuestions.map((question, questionIndex) => (
+                    <div key={questionIndex} className="create-question">
+                    <h4>Fragentyp</h4>
+                    <label htmlFor={`public-question-type-${questionIndex}`} className="hidden-label">
+                    Was für einen Typ soll Frage {questionIndex + 1} haben?
+                    </label>
+                    <select
+                    id={`public-question-type-${questionIndex}`}
+                    onChange={(e) => handleQuestionTypes(questionIndex, e.target.value, true)}
+                    value={question.type}
+                    className="select-type"
+                    >
+                    <option>Single Choice</option>
+                    <option>Multiple Choice</option>
+                    </select>
+                    <label htmlFor={`public-question-text-${questionIndex}`} className="hidden-label">
+                    Wie soll Frage {questionIndex + 1} lauten?
+                    </label>
+                    <div className="question-input">
+                    <input
+                    id={`public-question-text-${questionIndex}`}
+                    type="text"
+                    placeholder={`Frage ${questionIndex + 1}`}
+                    value={question.name}
+                    onChange={(e) => handleQuestionChange(questionIndex, e.target.value, true)}
+                    />
+                    <button type="button" className="delete" onClick={() => deleteQuestion(questionIndex, true)}>
+                    <FontAwesomeIcon icon={faTimes} />
+                    </button>
+                    </div>
+                    <br />
+                    <h4>Antworten</h4>
+                    {question.PublicAnswers.map((answer, answerIndex) => (
+                        <div key={answerIndex} className="answer-input">
+                        <label htmlFor={`public-answer-text-${questionIndex}-${answerIndex}`} className="hidden-label">
+                        Wie soll Antwort {answerIndex + 1} zu {questionIndex + 1} lauten?
+                        </label>
+                        <input
+                        id={`public-answer-text-${questionIndex}-${answerIndex}`}
+                        type="text"
+                        placeholder={`Antwort ${answerIndex + 1}`}
+                        value={answer.name}
+                        onChange={(e) =>
+                            handleAnswerChange(questionIndex, answerIndex, e.target.value, true)
+                        }
+                        />
+                        <button type="button" className="delete" onClick={() => deleteAnswer(questionIndex, answerIndex, true)}>
+                        <FontAwesomeIcon icon={faTimes} />
+                        </button>
+                        </div>
+                    ))}
+                    <button type="button" className="add" onClick={() => addAnswer(questionIndex, true)}>Antwort hinzufügen</button>
+                    </div>
+                ))}
+
+                <button type="button" className="add" onClick={addPublicQuestion}>Frage hinzufügen</button>
+                <br />
+                <br />
+                </div>
+            )}
+
+            <h2>Umfrage Fragen</h2>
             {questions.map((question, questionIndex) => (
                 <div key={question.id || questionIndex} className="create-question">
                     <h4>Typ</h4>
