@@ -63,7 +63,7 @@ const PublicPolls = () => {
 
       // Send the token to your backend for verification.
       console.log("Sending reCAPTCHA token to backend...");
-      const response = await fetch("http://localhost:3001/verify-recaptcha", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/verify-recaptcha`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token }),
@@ -112,7 +112,7 @@ const PublicPolls = () => {
       const current_datetime = new Date().toISOString();
       if (poll.end_date > current_datetime) {
         try {
-          const res = await fetch('http://localhost:3001/api/vote/public', {
+          const res = await fetch(`${process.env.REACT_APP_API_URL}/api/vote/public`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -148,7 +148,7 @@ const PublicPolls = () => {
     const fetchPoll = async () => {
       if (pollValue) {
         try {
-          const response = await fetch('http://localhost:3001/results/polls');
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/results/polls`);
           const data = await response.json();
           const poll_ = data.find((p) => p.id === Number(pollValue));
           if (poll_) {

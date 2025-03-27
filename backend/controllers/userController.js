@@ -41,12 +41,12 @@ async function handleFetchLogin(req, res) {
 
 async function handleSendEmail(req, res) {
     try {
-        const { firstName, lastName, email, roleId } = req.body;
+        const { firstName, lastName, email, roleId, url } = req.body;
         if (!email || !firstName || !lastName) {
             return res.status(400).json({ error: "Keine E-Mail-Adresse angegeben" });
         }
 
-        const emailData = await sendEmail(firstName, lastName, email, roleId);
+        const emailData = await sendEmail(firstName, lastName, email, roleId, url);
 
         if (!emailData.success) {
             return res.status(401).json({ message: emailData.message });

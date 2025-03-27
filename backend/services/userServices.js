@@ -97,7 +97,7 @@ async function fetchLogin(username, password) {
     }
 }
 
-async function sendEmail(firstName, lastName, email, roleId) {
+async function sendEmail(firstName, lastName, email, roleId, url) {
     let transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
@@ -109,7 +109,7 @@ async function sendEmail(firstName, lastName, email, roleId) {
     const token = crypto.randomBytes(32).toString('hex');
     const hash = encodeURIComponent(btoa(`token=${token}`));
 
-    const registrationUrl = "http://localhost:3000/?" + hash;
+    const registrationUrl = url + hash;
 
     const mailOptions = {
         from: `"LMP" <${process.env.USER_EMAIL}>`,

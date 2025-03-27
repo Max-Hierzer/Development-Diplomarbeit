@@ -1,6 +1,7 @@
 // models/index.js
 const { Sequelize, DataTypes } = require('sequelize');
-const config = require('../config/config.json')['development'];
+const env = process.env.NODE_ENV || 'development';
+const config = require('../config/config.json')[env];
 
 // connects to database
 const sequelize = new Sequelize(

@@ -13,7 +13,7 @@ const NewUser = ({ token }) => {
         event.preventDefault();
         try {
             if (inputPassword && username && inputPassword === validationPassword) {
-                const res = await fetch('http://localhost:3001/api/user', {
+                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/user`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',

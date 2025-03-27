@@ -12,7 +12,7 @@ const DeletePoll = ({ selectedPoll, refreshPolls, setSelectedPoll, totalVotes })
     
         try {
             console.log(`Deleting poll with ID: ${selectedPoll.id}`);  // Log Poll-ID
-            const res = await fetch(`http://localhost:3001/api/polls/${selectedPoll.id}`, {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/polls/${selectedPoll.id}`, {
                 method: 'DELETE',
             });
     
