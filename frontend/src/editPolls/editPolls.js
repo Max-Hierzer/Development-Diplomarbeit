@@ -24,6 +24,7 @@ function EditPolls({ selectedPoll, publicQ }) {
     const [publicQuestions, setPublicQuestions] = useState([]);
     const [selectedPublicQuestions, setSelectedPublicQuestions] = useState([]);
     const [existingPublicQuestions, setExistingPublicQuestions] = useState([]);
+    const [existingSelectable, setExistingSelectable] = useState([]);
 
     useEffect(()=> {
         setPublicQuestions(publicQ);
@@ -165,6 +166,19 @@ function EditPolls({ selectedPoll, publicQ }) {
 
         handlePublicQuestionChange();
     }, [selectedPublicQuestions]);
+
+    useEffect(() => {
+        const handleSelectableQuestions = () => {
+            const newSelectableQuestions = existingPublicQuestions
+            .filter(existing =>
+            !publicQuestions.some(newQ => newQ.id === existing.id)
+            )
+
+            setExistingSelectable(newSelectableQuestions);
+        };
+
+        handleSelectableQuestions();
+    }, [publicQuestions, existingPublicQuestions]);
 
     const handlePublicChange = (value) => {
         if (value === "Ja") setIsAnon(value);
@@ -426,7 +440,7 @@ function EditPolls({ selectedPoll, publicQ }) {
                         className="select-publicQuestions"
                         isMulti
                         value={selectedPublicQuestions}
-                        options={existingPublicQuestions.map(question => ({ value: question.id, label: question.name, question: question }))}
+                        options={existingSelectable.map(question => ({ value: question.id, label: question.name, question: question }))}
                         onChange={(selectedOptions) => setSelectedPublicQuestions(selectedOptions)}
                         placeholder="Suche nach Fragen"
                     />
