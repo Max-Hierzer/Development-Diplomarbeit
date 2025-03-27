@@ -58,14 +58,14 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
 
     const handleExportPublicQuestions = async () => {
         try {
-            const response = await fetch(`http://localhost:3001/api/export/${selectedPoll.id}`, { method: 'GET' });
+            const response = await fetch(`http://localhost:3001/public/export/${selectedPoll.id}`, { method: 'GET' });
 
             if (response.ok) {
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `${selectedPoll.name}_poll.csv`;
+                a.download = `${selectedPoll.name}_demografische_daten.csv`;
                 document.body.appendChild(a);
                 a.click();
                 a.remove();

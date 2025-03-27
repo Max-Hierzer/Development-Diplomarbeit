@@ -1,4 +1,5 @@
 const { PublicQuestions, QuestionTypes, PublicAnswers, Polls, Questions, Answers, PublicPollQuestions, PublicUserData, UserAnswers } = require('../models');
+const { Parser } = require('json2csv');
 
 const publicService = {
     async fetchAll() {
@@ -106,6 +107,72 @@ const publicService = {
             return { message: "vote submitted successfully", answers: userAnswers, publicAnswers: pubAnswers };
         } catch (error) {
             console.error('Error creating vote in service:', error);
+            throw error;
+        }
+    },
+    async exports(pollId) {
+        try {
+            const voteResults = await PublicUserData.findAll({
+                attributes: ['pollId', 'publicAnswerId', 'publicQuestionId'],
+                where: { pollId: pollId },
+            });
+
+            const voteDetails = {};
+
+            voteResults.forEach((vote) => {
+                const { publicAnswerId, publicQuestionId, weight } = vote;
+
+                if (!voteDetails[publicQuestionId]) {
+                    voteDetails[publicQuestionId] = {};
+                }
+                if (!voteDetails[publicQuestionId][publicAnswerId]) {
+                    voteDetails[publicQuestionId][publicAnswerId] = { count: 0, weightSum: 0 };
+                }
+
+                voteDetails[publicQuestionId][publicAnswerId].count += 1;
+            });
+
+            const poll = await Polls.findOne({
+                attributes: ['name', 'description'],
+                where: { id: pollId },
+            });
+
+            // Prepare CSV data for export
+            const csvData = [];
+            for (const questionId in voteDetails) {
+                const question = voteDetails[questionId];
+
+                const publicQuestion = await PublicQuestions.findByPk(questionId, {
+                    include: [
+                        {
+                            model: QuestionTypes,
+                            attributes: ['name'],
+                            as: 'QuestionType',
+                        },
+                    ],
+                });
+
+                const questionType = publicQuestion?.QuestionType?.name || 'Unknown';
+
+                for (const answerId in question) {
+                    const details = question[answerId];
+                    const answer = await PublicAnswers.findByPk(answerId);
+                    csvData.push({
+                        Umfragenname: poll.name,
+                        Frage: publicQuestion.name,
+                        Fragenart: questionType,
+                        Antwort: answer ? answer.name : `Answer ${answerId}`,
+                        Stimmenzahl: details.count,
+                    });
+                }
+            }
+
+            const json2csvParser = new Parser();
+            const csv = json2csvParser.parse(csvData);
+
+            return csv;
+        } catch (error) {
+            console.error('Error exporting public poll results:', error);
             throw error;
         }
     }

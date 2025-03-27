@@ -28,6 +28,19 @@ const publicController = {
             res.status(500).json({error: 'Error fetching Poll: ', error})
         }
     },
+    async handleExport(req, res) {
+        try {
+            const csvData = await publicService.exports(req.params.id);
+
+            res.header('Content-Type', 'text/csv');
+            res.attachment(`${req.params.id}_results.csv`);
+            res.send(csvData);
+        } catch (error) {
+            console.error('Error getting Export in Controller: ', error);
+            res.status(500).json({ error: 'Error exporting Poll: ', message: error.message });
+        }
+    }
+
 };
 
 module.exports = publicController;
