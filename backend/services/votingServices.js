@@ -71,4 +71,17 @@ async function submitAnonymousVote(answers, userId, pollId) {
     }
 }
 
-module.exports = { submitVote, submitAnonymousVote };
+async function hasUserVoted(userId, pollId) {
+    try {
+        const existingVote = await UserPolls.findOne({
+            where: { userId, pollId }
+        });
+
+        return !!existingVote;  // Returns true if the user has voted, otherwise false
+    } catch (error) {
+        console.error('Error checking vote status in service:', error);
+        throw error;
+    }
+}
+
+module.exports = { submitVote, submitAnonymousVote, hasUserVoted };

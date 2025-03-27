@@ -208,7 +208,29 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
         const selected = polls.find((poll) => poll.id.toString() === pollId);
         setSelectedPoll(selected || null);
         setIsAnonymous(selected?.anonymous || null);
+
+        if (selected) {
+            handleCheckUserVote(selected.id, userId); 
+        }
     };
+
+    const handleCheckUserVote = useCallback(async (pollId, userId) => {
+        try {
+            const response = await fetch(`http://localhost:3001/api/hasVoted/${userId}/${pollId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch vote status');
+            }
+            const data = await response.json();
+            setVoteSubmitted(data.hasVoted);
+            return data.hasVoted;
+    
+        } catch (error) {
+            console.error('Error checking user vote:', error);
+            setVoteSubmitted(false); 
+            return false;
+        }
+    }, []);
+    
 
     const handleAnswerChange = (questionId, answerId, isMultipleChoice = false, checked = false) => {
         setSelectedAnswers((prevAnswers) => {

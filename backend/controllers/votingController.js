@@ -1,5 +1,5 @@
 // controllers/voteController.js
-const { submitVote, submitAnonymousVote } = require('../services/votingServices');
+const { submitVote, submitAnonymousVote, hasUserVoted } = require('../services/votingServices');
 
 // resolves api connection with frontend for to input votes
 async function handleVote(req, res) {
@@ -37,4 +37,16 @@ async function handleAnonymousVote(req, res) {
     }
 }
 
-module.exports = { handleVote, handleAnonymousVote };
+async function checkIfVoted(req, res) {
+    const { userId, pollId } = req.params;
+
+    try {
+        const hasVoted = await hasUserVoted(userId, pollId);
+        return res.status(200).json({ hasVoted });
+    } catch (error) {
+        console.error('Error checking vote status: ', error);
+        return res.status(500).json({ error: 'Failed to check vote status'});
+    }
+}
+
+module.exports = { handleVote, handleAnonymousVote, checkIfVoted };
