@@ -143,6 +143,7 @@ function EditPolls({ selectedPoll, publicQ }) {
         if (isPublic) {
             const newType = [...publicQuestions];
             newType[questionIndex].type = value;
+            newType[questionIndex].typeId = value === "Multiple Choice" ? 2 : value === "SingleChoice" ? 1 : newType[questionIndex].typeId;
             setPublicQuestions(newType);
         }
         else {
