@@ -167,10 +167,10 @@ const PublicPolls = () => {
           ...prevAnswers,
           [questionId]: {
             answer: isMultipleChoice
-            ? (checked
-            ? [...(prevAnswers[questionId]?.answer || []), answerId]  // Add answer
-            : (prevAnswers[questionId]?.answer || []).filter((id) => id !== answerId)) // Remove answer
-            : [answerId], // Single choice overwrites
+              ? (checked
+                ? [...(prevAnswers[questionId]?.answer || []), answerId]  // Add answer
+                : (prevAnswers[questionId]?.answer || []).filter((id) => id !== answerId)) // Remove answer
+              : [answerId], // Single choice overwrites
             importance: prevAnswers[questionId]?.importance || null,
           },
         };
@@ -181,10 +181,10 @@ const PublicPolls = () => {
           ...prevAnswers,
           [questionId]: {
             answer: isMultipleChoice
-            ? (checked
-            ? [...(prevAnswers[questionId]?.answer || []), answerId]  // Add answer
-            : (prevAnswers[questionId]?.answer || []).filter((id) => id !== answerId)) // Remove answer
-            : [answerId], // Single choice overwrites
+              ? (checked
+                ? [...(prevAnswers[questionId]?.answer || []), answerId]  // Add answer
+                : (prevAnswers[questionId]?.answer || []).filter((id) => id !== answerId)) // Remove answer
+              : [answerId], // Single choice overwrites
             importance: prevAnswers[questionId]?.importance || null,
           },
         };
@@ -214,55 +214,55 @@ const PublicPolls = () => {
       {poll ? (
         !showVoting ? (
           <div className="publicData">
-          <h2><span>{poll.name}</span></h2>
-          {poll.description && (
-            <div>
-            <h4 className="description-header">Beschreibung:</h4>
-            <h5 className="description">{poll.description}</h5>
-            </div>
-          )}
-          <form onSubmit={handleSubmitData}>
-          <div>
-          {publicQuestions &&
-            publicQuestions.map((question) => {
-              const isMultipleChoice = question.QuestionType.name === "Multiple Choice";
-              return (
-                <div key={question.id} className="question">
-                <h3 className="question-header">
-                <span className="question-text">{question.name}</span>
-                <span className="question-type">{question.QuestionType.name}</span>
-                </h3>
-                {question.PublicAnswers &&
-                  question.PublicAnswers.map((answer) => (
-                    <div key={answer.id} className="answer">
-                    <input
-                    type={isMultipleChoice ? "checkbox" : "radio"}
-                    name={`question-${question.id}`}
-                    value={answer.id}
-                    checked={
-                      isMultipleChoice
-                      ? !!selectedPublicAnswers[question.id]?.answer?.includes(answer.id)
-                      : selectedPublicAnswers[question.id]?.answer?.[0] === answer.id
-                    }
-                    onChange={(event) =>
-                      handleAnswerChange(question.id, answer.id, isMultipleChoice, event.target.checked, true)
-                    }
-                    />
-                    <label>{answer.name}</label>
-                    </div>
-                  ))}
-                  </div>
-              );
-            })}
-            </div>
-            <button type="submit">Submit Data</button>
+            <h2><span>{poll.name}</span></h2>
+            {poll.description && (
+              <div className='display-description'>
+                <h4 className="description-header">Beschreibung:</h4>
+                <h5 className="description">{poll.description}</h5>
+              </div>
+            )}
+            <form onSubmit={handleSubmitData}>
+              <div>
+                {publicQuestions &&
+                  publicQuestions.map((question) => {
+                    const isMultipleChoice = question.QuestionType.name === "Multiple Choice";
+                    return (
+                      <div key={question.id} className="question">
+                        <h3 className="question-header">
+                          <span className="question-text">{question.name}</span>
+                          <span className="question-type">{question.QuestionType.name}</span>
+                        </h3>
+                        {question.PublicAnswers &&
+                          question.PublicAnswers.map((answer) => (
+                            <div key={answer.id} className="answer">
+                              <input
+                                type={isMultipleChoice ? "checkbox" : "radio"}
+                                name={`question-${question.id}`}
+                                value={answer.id}
+                                checked={
+                                  isMultipleChoice
+                                    ? !!selectedPublicAnswers[question.id]?.answer?.includes(answer.id)
+                                    : selectedPublicAnswers[question.id]?.answer?.[0] === answer.id
+                                }
+                                onChange={(event) =>
+                                  handleAnswerChange(question.id, answer.id, isMultipleChoice, event.target.checked, true)
+                                }
+                              />
+                              <label>{answer.name}</label>
+                            </div>
+                          ))}
+                      </div>
+                    );
+                  })}
+              </div>
+              <button type="submit">Submit Data</button>
             </form>
-            </div>
+          </div>
         ) : (
           <div className="vote-container">
             <h2><span>{poll.name}</span></h2>
             {poll.description && (
-              <div>
+              <div className='display-description'>
                 <h4 className="description-header">Beschreibung:</h4>
                 <h5 className="description">{poll.description}</h5>
               </div>
@@ -303,23 +303,23 @@ const PublicPolls = () => {
                 </div>
               ))}
             {!voteSubmitted && (
-              <button 
-              className="vote-button" 
-              onClick={handleVoteSubmit}
-              title={'Klicken Sie hier um die Umfrage abzuschließen.'}
+              <button
+                className="vote-button"
+                onClick={handleVoteSubmit}
+                title={'Klicken Sie hier um die Umfrage abzuschließen.'}
               >Umfrage abschließen</button>
             )}
-            
+
             {voteSubmitted && (
-            <><button
-                  className={'disabled-button'}
-                  title={'Auf diese Umfrage haben Sie bereits abgestimmt.'} 
-                >
-                  Umfrage abschließen
-                </button><p className="success-message">
-                    Danke für Ihre Teilnahme an dieser Umfrage.<br />
-                    Falls Sie sich weiter informieren wollen, besuchen Sie gerne unsere <a href="https://liste-petrovic.at/" target="_blank" rel="noopener noreferrer">Website</a>.
-                  </p></>
+              <><button
+                className={'disabled-button'}
+                title={'Auf diese Umfrage haben Sie bereits abgestimmt.'}
+              >
+                Umfrage abschließen
+              </button><p className="success-message">
+                  Danke für Ihre Teilnahme an dieser Umfrage.<br />
+                  Falls Sie sich weiter informieren wollen, besuchen Sie gerne unsere <a href="https://liste-petrovic.at/" target="_blank" rel="noopener noreferrer">Website</a>.
+                </p></>
             )}
           </div>
         )
