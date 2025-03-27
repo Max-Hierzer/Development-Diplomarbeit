@@ -4,13 +4,13 @@
     min-height: 60vh;
     padding: 20px;
     background-color: white;
-    border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    border-radius: 8px;
 }
 
 @media (max-width: 1920px) {
@@ -27,21 +27,12 @@
 
 
 .publicData {
-    width: 80%;
+    width: 100%;
     max-width: 600px;
     padding: 0;
-    border: 3px solid black;
-    border-radius: 8px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
-}
-
-.publicData h2 {
-    background-color: var(--primary-hover-color);
-    padding: 8px 5px;
-    border-radius: 5px 5px 0 0;
-    margin: 0;
 }
 
 .publicData form {
@@ -54,16 +45,6 @@
     font-weight: bold;
     display: block;
     margin-bottom: 5px;
-}
-
-.publicData input[type="text"],
-.publicData select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
 }
 
 .publicData button {
@@ -81,23 +62,6 @@
 
 .publicData button:hover {
     background-color: var(--primary-hover-color);
-}
-
-
-.publicData.submitted .invalid {
-    border-color: red;
-}
-
-.publicData .error-message {
-    display: none;
-}
-
-.publicData.submitted .error-message {
-    display: block;
-    color: red;
-    font-size: 0.8em;
-    margin-top: -10px;
-    margin-bottom: 10px;
 }
 
 

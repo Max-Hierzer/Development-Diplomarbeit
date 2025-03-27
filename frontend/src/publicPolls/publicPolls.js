@@ -9,12 +9,11 @@ const PublicPolls = () => {
   const [showVoting, setShowVoting] = useState(false);
   const [poll, setPoll] = useState([]);
   const [selectedAnswers, setSelectedAnswers] = useState({});
-  const [gender, setGender] = useState('');
-  const [age, setAge] = useState('');
-  const [job, setJob] = useState('');
-  const [formErrors, setFormErrors] = useState({});
   const [pollValue, setPollValue] = useState(0);
   const [voteSubmitted, setVoteSubmitted] = useState(false);
+  const [publicQuestions, setPublicQuestions] = useState([]);
+
+  console.log(publicQuestions)
 
   // Always mounted recaptcha reference
   const recaptchaRef = useRef(null);
@@ -29,6 +28,12 @@ const PublicPolls = () => {
     return () => clearInterval(checkRecaptcha);
   }, []);
 
+  useEffect(() => {
+    if (poll) { // Check if poll exists before accessing its properties
+      setPublicQuestions(poll.publicPollQuestions);
+    }
+  }, [poll]);
+
   // Handle the first form submission (to verify user data and execute reCAPTCHA)
   const handleSubmitData = async (event) => {
     event.preventDefault();
@@ -37,18 +42,6 @@ const PublicPolls = () => {
     // Mark the form as submitted
     const publicDataElement = document.querySelector('.publicData');
     publicDataElement.classList.add('submitted');
-
-    // Validate form fields
-    const newFormErrors = {};
-    if (!gender) newFormErrors.gender = '*';
-    if (!age || isNaN(age) || parseInt(age) < 0) newFormErrors.age = 'Bitte geben Sie eine Zahl an.';
-    if (!job) newFormErrors.job = '*';
-
-    setFormErrors(newFormErrors);
-    if (Object.keys(newFormErrors).length > 0) {
-      alert('Bitte füllen Sie alle Felder aus.');
-      return;
-    }
 
     // Ensure reCAPTCHA is ready before execution.
     if (!recaptchaRef.current || !recaptchaRef.current.executeAsync) {
@@ -120,12 +113,6 @@ const PublicPolls = () => {
             },
             body: JSON.stringify({
               answers: selectedAnswers,
-              userData: {
-                gender,
-                age: parseInt(age),
-                job,
-                pollId: poll.id,
-              },
             }),
           });
 
@@ -149,9 +136,8 @@ const PublicPolls = () => {
     const fetchPoll = async () => {
       if (pollValue) {
         try {
-          const response = await fetch('http://localhost:3001/results/polls');
-          const data = await response.json();
-          const poll_ = data.find((p) => p.id === Number(pollValue));
+          const response = await fetch(`http://localhost:3001/public/poll/${pollValue}`);
+          const poll_ = await response.json();
           if (poll_) {
             const currentDateTime = new Date().toISOString();
             if (poll_.publish_date <= currentDateTime && poll_.end_date >= currentDateTime) {
@@ -219,50 +205,50 @@ const PublicPolls = () => {
       {poll ? (
         !showVoting ? (
           <div className="publicData">
-            <h2>Bitte beantworten sie die folgenden Fragen.</h2>
-            <form onSubmit={handleSubmitData}>
-              <div>
-                <label htmlFor="gender" className="required-label">Wählen Sie Ihr Geschlecht:</label>
-                <select
-                  id="gender"
-                  required
-                  onChange={(e) => setGender(e.target.value)}
-                  className={`required ${formErrors.gender ? 'invalid' : ''}`}
-                >
-                  <option value="">-</option>
-                  <option value="male">männlich</option>
-                  <option value="female">weiblich</option>
-                  <option value="non-binary">divers</option>
-                </select>
-                {formErrors.gender && <span className="error-message">{formErrors.gender}</span>}
-              </div>
-              <div>
-                <label htmlFor="age" className="required-label">Wie alt sind Sie:</label>
-                <input
-                  type="text"
-                  id="age"
-                  required
-                  placeholder="Ihr Alter"
-                  onChange={(e) => setAge(e.target.value)}
-                  className={`required ${formErrors.age ? 'invalid' : ''}`}
-                />
-                {formErrors.age && <span className="error-message">{formErrors.age}</span>}
-              </div>
-              <div>
-                <label htmlFor="job" className="required-label">Ihr Beruf:</label>
-                <input
-                  type="text"
-                  id="job"
-                  required
-                  placeholder="Ihr Beruf"
-                  onChange={(e) => setJob(e.target.value)}
-                  className={`required ${formErrors.job ? 'invalid' : ''}`}
-                />
-                {formErrors.job && <span className="error-message">{formErrors.job}</span>}
-              </div>
-              <button type="submit">Submit Data</button>
+          <h2><span>{poll.name}</span></h2>
+          {poll.description && (
+            <div>
+            <h4 className="description-header">Beschreibung:</h4>
+            <h5 className="description">{poll.description}</h5>
+            </div>
+          )}
+          <form onSubmit={handleSubmitData}>
+          <div>
+          {publicQuestions &&
+            publicQuestions.map((question) => {
+              const isMultipleChoice = question.QuestionType.name === "Multiple Choice";
+              return (
+                <div key={question.id} className="question">
+                <h3 className="question-header">
+                <span className="question-text">{question.name}</span>
+                <span className="question-type">{question.QuestionType.name}</span>
+                </h3>
+                {question.PublicAnswers &&
+                  question.PublicAnswers.map((answer) => (
+                    <div key={answer.id} className="answer">
+                    <input
+                    type={isMultipleChoice ? "checkbox" : "radio"}
+                    name={`question-${question.id}`}
+                    value={answer.id}
+                    checked={
+                      isMultipleChoice
+                      ? !!selectedAnswers[question.id]?.answer?.includes(answer.id)
+                      : selectedAnswers[question.id]?.answer?.[0] === answer.id
+                    }
+                    onChange={(event) =>
+                      handleAnswerChange(question.id, answer.id, isMultipleChoice, event.target.checked)
+                    }
+                    />
+                    <label>{answer.name}</label>
+                    </div>
+                  ))}
+                  </div>
+              );
+            })}
+            </div>
+            <button type="submit">Submit Data</button>
             </form>
-          </div>
+            </div>
         ) : (
           <div className="vote-container">
             <h2><span>{poll.name}</span></h2>
