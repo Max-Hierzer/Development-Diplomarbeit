@@ -1,4 +1,4 @@
-const { Polls, Questions, QuestionTypes, Answers, UserAnswers } = require('../models');
+const { Polls, Questions, QuestionTypes, Answers, UserAnswers, PublicQuestions, PublicAnswers, PublicPollQuestions } = require('../models');
 
 const editService = {
     async updatePoll(data) {
@@ -88,6 +88,98 @@ const editService = {
                     const newAnswer = await Answers.create({ name: answer.name });
                     await newQuestion.addAnswer(newAnswer);
                 }
+            }
+        }
+
+        const createdPublicQuestions = [];
+        const existingPollQuestions = await PublicPollQuestions.findAll({
+            where: { pollId: data.pollId },
+        });
+
+        for (const question of data.publicQuestions) {
+            const questionType = await QuestionTypes.findOne({
+                where: { id: question.typeId },
+            });
+
+            let createdQuestion;
+            if (question.id) {
+                // If the question has an ID, it's an existing question
+                createdQuestion = await PublicQuestions.findOne({ where: { id: question.id } });
+                if (createdQuestion) {
+                    createdQuestion.name = question.name;
+                    createdQuestion.typeId = questionType.id;
+                    await createdQuestion.save();
+                } else {
+                    // Question ID was provided, but question doesn't exist. create it.
+                    createdQuestion = await PublicQuestions.create({
+                        name: question.name,
+                        typeId: questionType.id,
+                    });
+                }
+            } else {
+                // If the question doesn't have an ID, it's a new question
+                [createdQuestion] = await PublicQuestions.findOrCreate({
+                    where: { name: question.name, typeId: questionType.id },
+                });
+            }
+
+            const createdAnswers = [];
+            const existingQuestionAnswers = await createdQuestion.getPublicAnswers();
+
+            for (const answer of question.PublicAnswers) {
+                let [createdAnswer, answerCreated] = await PublicAnswers.findOrCreate({
+                    where: { name: answer.name },
+                });
+
+                if (!answerCreated) {
+                    createdAnswer.name = answer.name;
+                    await createdAnswer.save();
+                }
+                createdAnswers.push(createdAnswer);
+            }
+
+            await createdQuestion.setPublicAnswers(createdAnswers);
+
+            // Check for deleted answers
+            for (const existingAnswer of existingQuestionAnswers) {
+                const answerExistsInData = question.PublicAnswers.some(
+                    (a) => a.name === existingAnswer.name
+                );
+                if (!answerExistsInData) {
+                    await createdQuestion.removePublicAnswer(existingAnswer);
+                }
+            }
+
+            createdPublicQuestions.push(createdQuestion);
+
+            const existingPollQuestion = await PublicPollQuestions.findOne({
+                where: {
+                    pollId: data.pollId,
+                    publicQuestionId: createdQuestion.id,
+                },
+            });
+
+            if (!existingPollQuestion) {
+                await PublicPollQuestions.create({
+                    pollId: data.pollId,
+                    publicQuestionId: createdQuestion.id,
+                });
+            }
+        }
+
+        // Check for deleted questions
+        for (const existingPollQuestion of existingPollQuestions) {
+            const questionExistsInData = data.publicQuestions.some(
+                (q) => q.id === existingPollQuestion.publicQuestionId
+            );
+
+            if (!questionExistsInData) {
+                await PublicPollQuestions.destroy({
+                    where: {
+                        pollId: data.pollId,
+                        publicQuestionId: existingPollQuestion.publicQuestionId,
+                    },
+                });
             }
         }
 

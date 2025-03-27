@@ -25,8 +25,7 @@ function EditPolls({ selectedPoll }) {
     const [selectedPublicQuestions, setSelectedPublicQuestions] = useState([]);
     const [existingPublicQuestions, setExistingPublicQuestions] = useState([]);
 
-    console.log(publicQuestions)
-
+console.log(publicQuestions)
     // Initialize state with `selectedPoll`
     useEffect(() => {
         if (selectedPoll) {
@@ -51,7 +50,7 @@ function EditPolls({ selectedPoll }) {
                 }))
             );
             setPublicQuestions(
-                (selectedPoll.publicPollQuestions || []).map((publicPoll) => ({
+                (selectedPoll.publicPollQuestions).map((publicPoll) => ({
                     id: publicPoll.PublicQuestion.id,
                     name: publicPoll.PublicQuestion.name,
                     typeId: publicPoll.PublicQuestion.typeId,
@@ -205,6 +204,7 @@ function EditPolls({ selectedPoll }) {
                         name: a.name,
                     })),
                 })),
+                publicQuestions: publicQuestions
             };
             console.log(JSON.stringify(payload, null, 2));
 
@@ -325,7 +325,10 @@ function EditPolls({ selectedPoll }) {
                 const response = await fetch('http://localhost:3001/public/all');
                 if (response.ok) {
                     const data = await response.json();
-                    setExistingPublicQuestions(data);
+                        const filteredData = data.filter(existingQuestion =>
+                        !publicQuestions.some(publicQuestion => publicQuestion.id === existingQuestion.id)
+                    );
+                    setExistingPublicQuestions(filteredData);
                 }
             } catch (error) {
                 console.error(error);
@@ -427,14 +430,14 @@ function EditPolls({ selectedPoll }) {
             {isPublic === "Ja" && (
                 <div>
                 <h2>Demografische Fragen</h2>
-                <Select
-                className="select-publicQuestions"
-                isMulti
-                value={selectedPublicQuestions}
-                options={existingPublicQuestions.map(question => ({ value: question.id, label: question.name, question: question }))}
-                onChange={(selectedOptions) => setSelectedPublicQuestions(selectedOptions)}
-                placeholder="Suche nach Fragen"
-                />
+                    <Select
+                        className="select-publicQuestions"
+                        isMulti
+                        value={selectedPublicQuestions}
+                        options={existingPublicQuestions.map(question => ({ value: question.id, label: question.name, question: question }))}
+                        onChange={(selectedOptions) => setSelectedPublicQuestions(selectedOptions)}
+                        placeholder="Suche nach Fragen"
+                    />
                 <br />
                 <br />
 
