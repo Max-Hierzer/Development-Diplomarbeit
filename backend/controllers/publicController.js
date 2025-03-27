@@ -18,7 +18,16 @@ const publicController = {
             console.error('Error fetching Poll in Controller: ', error)
             res.status(500).json({error: 'Error fetching Poll: ', error})
         }
-    }
+    },
+    async handleVote(req, res) {
+        try {
+            const poll = await publicService.vote(req.body);
+            res.status(200).json(poll);
+        } catch (error) {
+            console.error('Error fetching Poll in Controller: ', error)
+            res.status(500).json({error: 'Error fetching Poll: ', error})
+        }
+    },
 };
 
 module.exports = publicController;

@@ -12,8 +12,7 @@ const PublicPolls = () => {
   const [pollValue, setPollValue] = useState(0);
   const [voteSubmitted, setVoteSubmitted] = useState(false);
   const [publicQuestions, setPublicQuestions] = useState([]);
-
-  console.log(publicQuestions)
+  const [selectedPublicAnswers, setSelectedPublicAnswers] = useState({});
 
   // Always mounted recaptcha reference
   const recaptchaRef = useRef(null);
@@ -106,13 +105,15 @@ const PublicPolls = () => {
       const current_datetime = new Date().toISOString();
       if (poll.end_date > current_datetime) {
         try {
-          const res = await fetch('http://localhost:3001/api/vote/public', {
+          const res = await fetch('http://localhost:3001/public/vote', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
+              pollId: poll.id,
               answers: selectedAnswers,
+              publicAnswers: selectedPublicAnswers,
             }),
           });
 
@@ -159,30 +160,38 @@ const PublicPolls = () => {
   }, [pollValue]);
 
   // Update selected answers when a user selects an answer.
-  const handleAnswerChange = (questionId, answerId, isMultipleChoice = false, checked = false) => {
-    setSelectedAnswers((prevAnswers) => {
-      if (isMultipleChoice) {
-        const currentAnswers = prevAnswers[questionId]?.answer || [];
+  const handleAnswerChange = (questionId, answerId, isMultipleChoice = false, checked = false, isPublic = false) => {
+    if (isPublic) {
+      setSelectedPublicAnswers((prevAnswers) => {
         return {
           ...prevAnswers,
           [questionId]: {
-            answer: checked
-              ? [...currentAnswers, answerId]
-              : currentAnswers.filter((id) => id !== answerId),
+            answer: isMultipleChoice
+            ? (checked
+            ? [...(prevAnswers[questionId]?.answer || []), answerId]  // Add answer
+            : (prevAnswers[questionId]?.answer || []).filter((id) => id !== answerId)) // Remove answer
+            : [answerId], // Single choice overwrites
             importance: prevAnswers[questionId]?.importance || null,
           },
         };
-      } else {
+      });
+    } else {
+      setSelectedAnswers((prevAnswers) => {
         return {
           ...prevAnswers,
           [questionId]: {
-            answer: [answerId],
+            answer: isMultipleChoice
+            ? (checked
+            ? [...(prevAnswers[questionId]?.answer || []), answerId]  // Add answer
+            : (prevAnswers[questionId]?.answer || []).filter((id) => id !== answerId)) // Remove answer
+            : [answerId], // Single choice overwrites
             importance: prevAnswers[questionId]?.importance || null,
           },
         };
-      }
-    });
+      });
+    }
   };
+
 
   // Update the importance scale value for weighted questions.
   const handleImportanceChange = (questionId, importance) => {
@@ -232,11 +241,11 @@ const PublicPolls = () => {
                     value={answer.id}
                     checked={
                       isMultipleChoice
-                      ? !!selectedAnswers[question.id]?.answer?.includes(answer.id)
-                      : selectedAnswers[question.id]?.answer?.[0] === answer.id
+                      ? !!selectedPublicAnswers[question.id]?.answer?.includes(answer.id)
+                      : selectedPublicAnswers[question.id]?.answer?.[0] === answer.id
                     }
                     onChange={(event) =>
-                      handleAnswerChange(question.id, answer.id, isMultipleChoice, event.target.checked)
+                      handleAnswerChange(question.id, answer.id, isMultipleChoice, event.target.checked, true)
                     }
                     />
                     <label>{answer.name}</label>

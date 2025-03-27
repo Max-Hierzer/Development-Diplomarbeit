@@ -1,4 +1,4 @@
-const { PublicQuestions, QuestionTypes, PublicAnswers, Polls, Questions, Answers, PublicPollQuestions } = require('../models');
+const { PublicQuestions, QuestionTypes, PublicAnswers, Polls, Questions, Answers, PublicPollQuestions, PublicUserData, UserAnswers } = require('../models');
 
 const publicService = {
     async fetchAll() {
@@ -74,9 +74,41 @@ const publicService = {
             console.error('Error fetching polls in service: ', error);
             throw error;
         }
+    },
+    async vote(d) {
+        try {
+            const userAnswers = [];
+            for (const [questionId, data] of Object.entries(d.answers)) {
+                const { answer: answerIds, importance } = data;
+
+                for (const answerId of answerIds) {
+                    const createdAnswer = await UserAnswers.create({
+                        questionId,
+                        answerId,
+                        weight: importance || null
+                    });
+                    userAnswers.push(createdAnswer);
+                }
+            }
+            const pubAnswers = [];
+            for (const [questionId, data] of Object.entries(d.publicAnswers)) {
+                const { answer: answerIds, importance } = data;
+
+                for (const answerId of answerIds) {
+                    const createdAnswer = await PublicUserData.create({
+                        publicQuestionId: questionId,
+                        publicAnswerId: answerId,
+                        pollId: d.pollId
+                    });
+                    pubAnswers.push(createdAnswer);
+                }
+            }
+            return { message: "vote submitted successfully", answers: userAnswers, publicAnswers: pubAnswers };
+        } catch (error) {
+            console.error('Error creating vote in service:', error);
+            throw error;
+        }
     }
-
-
 };
 
 

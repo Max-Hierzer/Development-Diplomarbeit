@@ -14,16 +14,10 @@ module.exports = (sequelize) => {
         {
             publicAnswerId: { type: DataTypes.INTEGER, allowNull: false},
             publicQuestionId: { type: DataTypes.INTEGER, allowNull: false},
-
+            pollId: { type: DataTypes.INTEGER, allowNull: false}
         },
 
-        { sequelize, modelName: 'PublicUserData',
-            indexes: [
-                {
-                    unique: true,
-                    fields: ['publicAnswerId', 'publicQuestionId']
-                }
-            ] },
+        { sequelize, modelName: 'PublicUserData' },
     );
 
     return PublicUserData

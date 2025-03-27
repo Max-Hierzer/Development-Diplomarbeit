@@ -56,7 +56,28 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
         }
     };
 
+    const handleExportPublicQuestions = async () => {
+        try {
+            const response = await fetch(`http://localhost:3001/api/export/${selectedPoll.id}`, { method: 'GET' });
 
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${selectedPoll.name}_poll.csv`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            } else {
+                console.log(response)
+                alert('Error exporting poll');
+            }
+        } catch (error) {
+            console.error('Error exporting poll:', error);
+            alert('Error exporting poll');
+        }
+    };
 
     const handleVote = async () => {
         const current_datetime = new Date().toISOString();
@@ -289,11 +310,19 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                     </div>
                 );
             case 3:
-                if (selectedPoll.public || selectedPoll.anonymous) return (
+                if (selectedPoll.anonymous) return (
+                    <>
                     <button className="export-button" onClick={handleExportPoll}>
                         Export Poll
                     </button>
-                )
+                    <div style={{ marginBottom: '10px' }}></div>
+                    {selectedPoll.public && (
+                        <button className="export-button" onClick={handleExportPublicQuestions}>
+                        Demografische Daten exportieren
+                        </button>
+                    )}
+                    </>
+                );
                 else {
                     return (
                         <div>
