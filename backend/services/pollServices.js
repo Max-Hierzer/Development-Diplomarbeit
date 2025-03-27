@@ -191,7 +191,47 @@ async function getPolls(userId) {
             }
         });
 
-        return Array.from(pollsMap.values());
+        const polls = Array.from(pollsMap.values());
+        const finished = []
+        for (const poll of polls) {
+            // Manually create a plain object from the poll instance
+            const plainPoll = {
+                id: poll.id,
+                name: poll.name,
+                user_id: poll.user_id,
+                public: poll.public,
+                    anonymous: poll.anonymous,
+                    publish_date: poll.publish_date,
+                    end_date: poll.end_date,
+                    description: poll.description,
+                    imageUrl: poll.imageUrl,
+                    Questions: poll.Questions,  // Assuming Questions are included already
+            };
+
+            // Fetch publicPollQuestions related to this poll
+            const publicPollQuestions = await PublicPollQuestions.findAll({
+                where: { pollId: poll.id },
+                include: [
+                    {
+                        model: PublicQuestions,
+                        attributes: ['id', 'name', 'typeId'],
+                        include: [
+                            { model: PublicAnswers, attributes: ['id', 'name'] },
+                            { model: QuestionType, attributes: ['id', 'name'], as: 'QuestionType' }
+                        ]
+                    }
+                ],
+                nest: true,
+            });
+
+            // Add publicPollQuestions to the plainPoll object
+            plainPoll.publicPollQuestions = publicPollQuestions;
+
+            // Push the serialized poll into the finished array
+            finished.push(plainPoll);
+        }
+
+        return finished;
     } catch (error) {
         console.error('Error fetching polls for user:', error);
         throw error;
