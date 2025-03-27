@@ -92,7 +92,6 @@ function CreatePoll() {
             setResponse(error);
             return;
         }
-
         try {
             const res = await fetch('http://localhost:3001/api/poll', {
                 method: 'POST',
@@ -219,6 +218,7 @@ function CreatePoll() {
         if (isPublic) {
             const newType = [...publicQuestions];
             newType[questionIndex].type = value;
+            newType[questionIndex].typeId = value === "Multiple Choice" ? 2 : value === "SingleChoice" ? 1 : newType[questionIndex].typeId;
             setPublicQuestions(newType);
         }
         else {
