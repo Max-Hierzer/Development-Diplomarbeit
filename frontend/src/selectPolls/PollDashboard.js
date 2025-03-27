@@ -396,6 +396,16 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                     <EditPolls
                         selectedPoll={selectedPoll}
                         refreshPolls={fetchPolls}
+                        publicQ={(selectedPoll.publicPollQuestions).map((publicPoll) => ({
+                            id: publicPoll.PublicQuestion.id,
+                            name: publicPoll.PublicQuestion.name,
+                            typeId: publicPoll.PublicQuestion.typeId,
+                            questionType: publicPoll.PublicQuestion.QuestionType.name, // e.g., 'Single Choice'
+                            PublicAnswers: publicPoll.PublicQuestion.PublicAnswers.map((answer) => ({
+                                id: answer.id,
+                                name: answer.name,
+                            }))
+                        }))}
                     />
                 )}
                 {displayMode === 2 && selectedPoll && (

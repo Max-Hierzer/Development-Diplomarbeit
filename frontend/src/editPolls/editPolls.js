@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import "../styles/create.css";
 
-function EditPolls({ selectedPoll }) {
+function EditPolls({ selectedPoll, publicQ }) {
     const [poll, setPoll] = useState('');
     const [questions, setQuestions] = useState([]);
     const [response, setResponse] = useState('');
@@ -25,7 +25,10 @@ function EditPolls({ selectedPoll }) {
     const [selectedPublicQuestions, setSelectedPublicQuestions] = useState([]);
     const [existingPublicQuestions, setExistingPublicQuestions] = useState([]);
 
-console.log(publicQuestions)
+    useEffect(()=> {
+        setPublicQuestions(publicQ);
+    }, publicQ)
+
     // Initialize state with `selectedPoll`
     useEffect(() => {
         if (selectedPoll) {
@@ -49,18 +52,7 @@ console.log(publicQuestions)
                     Answers: q.Answers || [{ name: '' }, { name: '' }],
                 }))
             );
-            setPublicQuestions(
-                (selectedPoll.publicPollQuestions).map((publicPoll) => ({
-                    id: publicPoll.PublicQuestion.id,
-                    name: publicPoll.PublicQuestion.name,
-                    typeId: publicPoll.PublicQuestion.typeId,
-                    questionType: publicPoll.PublicQuestion.QuestionType.name, // e.g., 'Single Choice'
-                    PublicAnswers: publicPoll.PublicQuestion.PublicAnswers.map((answer) => ({
-                        id: answer.id,
-                        name: answer.name,
-                    }))
-                }))
-            );
+
         }
     }, [selectedPoll]);
 
