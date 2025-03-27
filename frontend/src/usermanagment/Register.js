@@ -43,7 +43,7 @@ function Register() {
                     lastName,
                     email,
                     roleId,
-                    url: ${process.env.REACT_APP_API_URL
+                    url: process.env.REACT_APP_API_URL
                 })
             });
 
