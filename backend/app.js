@@ -86,7 +86,14 @@ app.post('/verify-recaptcha', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3001;
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+});
+
+
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {                            // listens for requests on port
     console.log(`Server running on port ${PORT}`);
 });

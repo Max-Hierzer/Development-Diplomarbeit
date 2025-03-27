@@ -2,6 +2,7 @@ const { Users, Roles, UserAnswers } = require('../models/index');
 const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer");
 const crypto = require('crypto');
+const { MailerSend, EmailParams, Sender, Recipient } = require('mailersend');
 require('dotenv').config();
 
 // writing new user data in database
@@ -98,18 +99,22 @@ async function fetchLogin(username, password) {
 }
 
 async function sendEmail(firstName, lastName, email, roleId, url) {
-    let transporter = nodemailer.createTransport({
-        service: "gmail",
+/*    let transporter = nodemailer.createTransport({
+        host: "smtp.mailersend.net",
+        port: 587,
+        secure: false,
         auth: {
             user: process.env.USER_EMAIL,
             pass: process.env.USER_PASS,
         },
+        socketTimeout: 10000,
+        connectionTimeout: 10000
     });
 
     const token = crypto.randomBytes(32).toString('hex');
     const hash = encodeURIComponent(btoa(`token=${token}`));
 
-    const registrationUrl = url + hash;
+    const registrationUrl = "https://togema.eu/?" + hash;
 
     const mailOptions = {
         from: `"LMP" <${process.env.USER_EMAIL}>`,
@@ -124,6 +129,16 @@ Bei Fragen kannst du uns unter lmp.support@example.com erreichen.\n\n
 Viele Grüße,\n
 Das LMP-Team`
     };
+*/
+
+
+    const mailerSend = new MailerSend({
+        apiKey: process.env.MAILERSEND_API_KEY,
+    });
+
+    const token = crypto.randomBytes(32).toString('hex');
+    const hash = encodeURIComponent(btoa(`token=${token}`));
+    const registrationUrl = `${url}/?${hash}`;
 
     try {
         const checkEmail = await Users.findOne({
@@ -133,14 +148,32 @@ Das LMP-Team`
         });
 
         if (checkEmail) {
-            return { message: "Email existiert bereits." };
+            return { success: false, message: "Email existiert bereits." };
         }
 
-        const user = await Users.create({ email, roleId, token });
+/*        console.log("attempting to send email...");
         const info = await transporter.sendMail(mailOptions);
+        console.log("email sent:", info);
+*/
+
+        const mailOptions = new EmailParams()
+          .setFrom(new Sender(process.env.MAILERSEND_FROM_EMAIL, 'LMP Umfragetool'))
+          .setTo([new Recipient(email, `${firstName} ${lastName}`)])
+          .setSubject('Deine Einladung zur Registrierung beim LMP Umfragetool')
+          .setText(`Hallo ${firstName} ${lastName},\n\n
+du wurdest von einem Administrator eingeladen, dich beim LMP Umfragetool zu registrieren.
+Über den folgenden Link kannst du dein Passwort setzen und deine Registrierung abschließen:\n\n
+🔗 ${registrationUrl}\n\n
+Falls du diese Einladung nicht erwartet hast, kannst du diese E-Mail ignorieren.
+Bei Fragen kannst du uns unter lmp.support@example.com erreichen.\n\n
+Viele Grüße,\n
+Das LMP-Team`);
+
+        const info =  await mailerSend.email.send(mailOptions);
+        const user = await Users.create({ email, roleId, token });
 
         if (!info || !user) {
-            return { message: "Fehler beim Senden der E-Mail." };
+            return { success: false, message: "Fehler beim Senden der E-Mail." };
         }
 
         return {
@@ -148,6 +181,7 @@ Das LMP-Team`
         };
     } catch (error) {
         console.error("Fehler beim Senden der E-Mail:", error);
+        return {success: false, message: "E-mail konnte nicht gesendet werden."};
     }
 }
 

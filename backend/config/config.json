@@ -9,9 +9,8 @@
   "production": {
     "username": "admin",
     "password": "admin",
-    "database": "deployment_test",
+    "database": "diplomarbeit",
     "host": "127.0.0.1",
-    "dialect": "postgres",
-    "logging": false
+    "dialect": "postgres"
   }
 }
