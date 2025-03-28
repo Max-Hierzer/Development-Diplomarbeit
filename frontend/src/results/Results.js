@@ -84,7 +84,7 @@ const Results = ({ poll, showVotersMode }) => {
                             <label>{answer.name}</label>
                             <h4 className='showResults'>
                                 {showVotersMode
-                                    ? `${results.answerPercentages?.[answer.id] || '0.00'} %`
+                                    ? `${results.questionVotes?.[question.id][answer.id] || '0.00'} %`
                                     : `Voters: ${users?.[answer.id]?.length > 0 ? users[answer.id].join(', ') : "No Voters"}`
                                 }
                             </h4>

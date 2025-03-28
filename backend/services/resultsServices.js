@@ -7,13 +7,13 @@ async function fetchResults(pollId, questions) {
         });
 
         const questionVotes = {};
-        const answerPercentages = {};
+        //const answerPercentages = {};
 
         for (const question of questions) {
             const questionVotesCount = await UserAnswers.count({
                 where: { questionId: question.id }
             })
-            questionVotes[question.id] = questionVotesCount;
+            questionVotes[question.id] = {};
 
             for (const answer of question.Answers) {
                 const answerVotesCount = await UserAnswers.count({
@@ -24,14 +24,13 @@ async function fetchResults(pollId, questions) {
                 })
                 const percentage = questionVotesCount > 0 ? ((answerVotesCount / questionVotesCount) * 100).toFixed(2) : "0.00";
 
-                answerPercentages[answer.id] = percentage;
+                questionVotes[question.id][answer.id] = percentage;
             }
         }
 
         return {
             totalVotes,
-            questionVotes,
-            answerPercentages
+            questionVotes
         }
     } catch (error) {
         console.error('Error fetching results in service: ', error);
