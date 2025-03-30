@@ -8,25 +8,35 @@ require('dotenv').config();
 // writing new user data in database
 async function createUser(token, name, password) {
     try {
-        const user = await Users.findOne({
+        const tokenExists = await Users.findOne({
             where: {
                 token
             }
         });
+        if (!tokenExists) {
+            return { success: false, message: 'Token existiert nicht' };
+        }
 
-        if (!user) {
-            return res.status(404).json({ message: 'Token existiert nicht' });
+        const user = await Users.findOne({
+            where: {
+                name
+            }
+        });
+        if (user) {
+            return { success: false, message: 'Username existiert bereits' };
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        await user.update({
+        await tokenExists.update({
             name,
             password: hashedPassword,
             token: null
         });
 
-        return user;
+        return {
+            success: true
+        };
     } catch (error) {
         console.error('Error creating user in service:', error);
         throw error;

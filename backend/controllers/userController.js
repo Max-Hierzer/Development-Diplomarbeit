@@ -1,11 +1,13 @@
 const { createUser, fetchUsers, fetchLogin, sendEmail } = require('../services/userServices');
 
-// resolves api connection with frontend for the registration of user
 async function handleCreateUser(req, res) {
     try {
-        const { token, name, password } = req.body;                 // gives the data names
-        const newUser = await createUser(token, name, password);    // passes new users data to service
-        res.status(201).json(newUser);                              // response
+        const { token, name, password } = req.body;
+        const newUser = await createUser(token, name, password);
+        if (!newUser.success) {
+            return res.status(500).json({message: newUser.message });
+        }
+        return res.status(201).json({ message: "Benutzer erfolgreich registriert" });
     } catch (error) {
         res.status(500).json({error: 'Error creating user in controller' });
     }
@@ -22,7 +24,6 @@ async function handleFetchUsers(req, res) {
     }
 }
 
-// resolves api connection with frontend for to give login data
 async function handleFetchLogin(req, res) {
     try {
         const { username, password } = req.body;
