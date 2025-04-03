@@ -225,7 +225,7 @@ function EditPolls({ selectedPoll, publicQ }) {
                     body: JSON.stringify(payload),
                 });
                 const data = await res.json();
-                if (selectedGroups.length > 0) {
+                if (selectedGroups.length > 0 && isPublic === "Nein") {
                     const groupIds = selectedGroups.map(group => group.value);
                     const addGroupsResponse = await fetch('http://localhost:3001/groups/polls', {
                         method: 'POST',
