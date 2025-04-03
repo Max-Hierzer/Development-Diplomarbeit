@@ -17,7 +17,7 @@ function Register() {
     useEffect(() => {
         const fetchRoles = async () => {
             try {
-                const res = await fetch('http://localhost:3001/api/roles');
+                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/roles`);
                 const data = await res.json();
                 setRoles(data);
                 setRoleId(data.at(-1)?.id);
@@ -33,12 +33,18 @@ function Register() {
         event.preventDefault(); // Prevent page refresh on form submit
 
         try {
-            const res = await fetch('http://localhost:3001/api/email', {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/email`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ firstName, lastName, email, roleId }) // Send user data to backend
+                body: JSON.stringify({
+                    firstName,
+                    lastName,
+                    email,
+                    roleId,
+                    url: process.env.REACT_APP_API_URL
+                })
             });
 
             const data = await res.json();

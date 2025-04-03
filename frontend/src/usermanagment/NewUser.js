@@ -5,7 +5,6 @@ const NewUser = ({ token }) => {
     const [username, setUsername] = useState('');
     const [inputPassword, setInputPassword] = useState('');
     const [validationPassword, setValidationPassword] = useState('');
-    const [users, setUsers] = useState('');
     const [errorMessage, setErrorMessage] = useState(null);
     const [response, setResponse] = useState(null);
 
@@ -13,7 +12,7 @@ const NewUser = ({ token }) => {
         event.preventDefault();
         try {
             if (inputPassword && username && inputPassword === validationPassword) {
-                const res = await fetch('http://localhost:3001/api/user', {
+                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/user`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -25,7 +24,6 @@ const NewUser = ({ token }) => {
                     }),
                 });
                 const data = await res.json();
-                setUsers(data);
 
                 if (res.ok) {
                     setErrorMessage(null);
@@ -35,7 +33,7 @@ const NewUser = ({ token }) => {
                     }, 5000);
                 } else {
                     setResponse(null);
-                    setErrorMessage(data.error || "Fehler beim Anlegen des Users!");
+                    setErrorMessage(data.message || "Fehler beim Anlegen des Users!");
                 }
             } else {
                 setResponse(null);

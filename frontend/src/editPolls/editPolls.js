@@ -217,7 +217,7 @@ function EditPolls({ selectedPoll, publicQ }) {
             console.log(JSON.stringify(payload, null, 2));
 
             try {
-                const res = await fetch(`http://localhost:3001/api/polls/${selectedPoll.id}`, {
+                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/polls/${selectedPoll.id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -227,7 +227,7 @@ function EditPolls({ selectedPoll, publicQ }) {
                 const data = await res.json();
                 if (selectedGroups.length > 0 && isPublic === "Nein") {
                     const groupIds = selectedGroups.map(group => group.value);
-                    const addGroupsResponse = await fetch('http://localhost:3001/groups/polls', {
+                    const addGroupsResponse = await fetch(`${process.env.REACT_APP_API_URL}/groups/polls`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -256,7 +256,7 @@ function EditPolls({ selectedPoll, publicQ }) {
                 }
                 if (selectedGroupsDel.length > 0) {
                     const groupIdsDel = selectedGroupsDel.map(user => user.value);
-                    const delGroupsResponse = await fetch(`http://localhost:3001/groups/polls`, {
+                    const delGroupsResponse = await fetch(`${process.env.REACT_APP_API_URL}/groups/polls`, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json',
@@ -296,7 +296,7 @@ function EditPolls({ selectedPoll, publicQ }) {
     useEffect(() => {
         const handleFetchGroups = async () => {
             try {
-                const response = await fetch('http://localhost:3001/groups');
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/groups`);
                 if (response.ok) {
                     const data = await response.json();
                     setAllGroups(data);
@@ -311,7 +311,7 @@ function EditPolls({ selectedPoll, publicQ }) {
     useEffect(() => {
         const handleFetchPollGroups = async (pollId) => {
             try {
-                const response = await fetch(`http://localhost:3001/groups/polls/${pollId}`);
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/groups/polls/${pollId}`);
                 if (response.ok) {
                     const data = await response.json();
                     setPollGroups(data);

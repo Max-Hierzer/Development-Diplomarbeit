@@ -9,7 +9,7 @@ const Voting = ({ selectedPoll, selectedAnswers, handleAnswerChange, handleImpor
             {selectedPoll.imageUrl && (
                 <div className="image-container">
                 <img
-                    src={`http://localhost:3001${selectedPoll.imageUrl}`}
+                    src={`${process.env.REACT_APP_API_URL}${selectedPoll.imageUrl}`}
                     alt="Umfragebild"
                     className="poll-image"
                 />

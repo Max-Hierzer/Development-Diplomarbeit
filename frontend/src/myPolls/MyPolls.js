@@ -23,7 +23,7 @@ function MyPoll({ poll, refreshPolls, setSelectedPoll }) {
     useEffect(() => {
         const fetchResults = async () => {
             try {
-                const res = await fetch('http://localhost:3001/results/results', {
+                const res = await fetch(`${process.env.REACT_APP_API_URL}/results/results`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -47,8 +47,8 @@ function MyPoll({ poll, refreshPolls, setSelectedPoll }) {
     const voteHash = encodeURIComponent(btoa(`public=${poll.public}&mode=vote&poll=${poll.id}&anonymous=${poll.anonymous}`));
     const resultsHash = encodeURIComponent(btoa(`public=${poll.public}&mode=results&poll=${poll.id}&anonymous=${poll.anonymous}`));
 
-    let voteLink = `http://localhost:3000/?${voteHash}`;
-    let resultsLink = `http://localhost:3000/?${resultsHash}`;
+    let voteLink = `${process.env.REACT_APP_API_URL}/?${voteHash}`;
+    let resultsLink = `${process.env.REACT_APP_API_URL}/?${resultsHash}`;
 
     const copyClipboard = async (type) => {
         if (type) {

@@ -28,7 +28,7 @@ const Groups = () => {
     // Fetch groups from the server
     const handleFetchGroups = async () => {
         try {
-            const response = await fetch('http://localhost:3001/groups');
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/groups`);
             if (response.ok) {
                 const data = await response.json();
                 setAllGroups(data);
@@ -41,7 +41,7 @@ const Groups = () => {
     // Fetch all users from the server
     const handleFetchAllUsers = async () => {
         try {
-            const response = await fetch('http://localhost:3001/groups/users');
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/groups/users`);
             if (response.ok) {
                 const data = await response.json();
                 setAllUsers(data);
@@ -54,7 +54,7 @@ const Groups = () => {
     // Fetch users in a specific group
     const handleFetchUsers = async (groupId) => {
         try {
-            const response = await fetch(`http://localhost:3001/groups/users/${groupId}`);
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/groups/users/${groupId}`);
             if (response.ok) {
                 const data = await response.json();
                 setGroupUsers(data);
@@ -86,7 +86,7 @@ const Groups = () => {
         event.preventDefault();
         try {
             // First, save changes to the group
-            const res = await fetch(`http://localhost:3001/groups/edit`, {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/groups/edit`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -103,7 +103,7 @@ const Groups = () => {
             if (selectedUsers.length > 0) {
                 const userIds = selectedUsers.map(user => user.value); // Get user IDs from selected options
 
-                const addUsersResponse = await fetch('http://localhost:3001/groups/users', {
+                const addUsersResponse = await fetch(`${process.env.REACT_APP_API_URL}/groups/users`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -131,7 +131,7 @@ const Groups = () => {
             }
             if (selectedUsersDel.length > 0) {
                 const userIdsDel = selectedUsersDel.map(user => user.value);
-                const delUserResponse = await fetch(`http://localhost:3001/groups/users`, {
+                const delUserResponse = await fetch(`${process.env.REACT_APP_API_URL}/groups/users`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -164,7 +164,7 @@ const Groups = () => {
         event.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:3001/groups/create', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/groups/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -183,7 +183,7 @@ const Groups = () => {
                 // Add selected users to the new group
                 if (selectedUsers.length > 0) {
                     const userIds = selectedUsers.map(user => user.value);
-                    await fetch('http://localhost:3001/groups/users', {
+                    await fetch(`${process.env.REACT_APP_API_URL}/groups/users`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -196,7 +196,7 @@ const Groups = () => {
 
                 if (selectedUsersDel.length > 0) {
                     const userIds = selectedUsersDel.map(user => user.value);
-                    await fetch(`http://localhost:3001/groups/users`, {
+                    await fetch(`${process.env.REACT_APP_API_URL}/groups/users`, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json',
@@ -254,7 +254,7 @@ const Groups = () => {
         if (!selectedGroup) return;
 
         try {
-            const response = await fetch(`http://localhost:3001/groups/delete`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/groups/delete`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

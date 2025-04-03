@@ -8,7 +8,7 @@ const Results = ({ poll, showVotersMode }) => {
     useEffect(() => {
         const fetchResults = async () => {
             try {
-                const res = await fetch('http://localhost:3001/results/results', {
+                const res = await fetch(`${process.env.REACT_APP_API_URL}/results/results`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ const Results = ({ poll, showVotersMode }) => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const res = await fetch('http://localhost:3001/api/users', {
+                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/users`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ const Results = ({ poll, showVotersMode }) => {
             <h3>In dieser Umfrage {results.totalVotes == 1 ? "hat" : "haben"} {results.totalVotes || 0} {results.totalVotes == 1 ? "Person" : "Personen"} abgestimmt!</h3>
             <br />
             {poll.imageUrl && (<img
-                src={`http://localhost:3001${poll.imageUrl}`}
+                src={`${process.env.REACT_APP_API_URL}${poll.imageUrl}`}
                 alt='Umfragebild'
                 className="poll-image"
             />

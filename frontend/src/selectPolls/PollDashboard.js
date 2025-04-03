@@ -35,7 +35,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
 
     const handleExportPoll = async () => {
         try {
-            const response = await fetch(`http://localhost:3001/api/export/${selectedPoll.id}`, { method: 'GET' });
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/export/${selectedPoll.id}`, { method: 'GET' });
 
             if (response.ok) {
                 const blob = await response.blob();
@@ -90,7 +90,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
             console.log("Submitting vote:", JSON.stringify({ answers: selectedAnswers }, null, 2));
 
             try {
-                const res = await fetch('http://localhost:3001/api/vote', {
+                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/vote`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
         const current_datetime = new Date().toISOString();
         if (selectedPoll.end_date > current_datetime) {
             try {
-                const res = await fetch('http://localhost:3001/api/vote/anonymous', {
+                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/vote/anonymous`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -165,7 +165,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
     const fetchPolls = useCallback(async () => {
         try {
             const userId = parseInt(sessionStorage.getItem('userId'));
-            const response = await fetch(`http://localhost:3001/api/poll/user/${userId}`);
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/poll/user/${userId}`);
             const data = await response.json();
             console.log(data)
             setPolls(data);

@@ -43,7 +43,7 @@ function CreatePoll() {
         formData.append("image", file);
 
         try {
-            const res = await fetch('http://localhost:3001/api/upload-image', {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/upload-image`, {
                 method: 'POST',
                 body: formData,
             });
@@ -93,7 +93,7 @@ function CreatePoll() {
             return;
         }
         try {
-            const res = await fetch('http://localhost:3001/api/poll', {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/poll`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -232,7 +232,7 @@ function CreatePoll() {
     useEffect(() => {
         const fetchGroups = async () => {
             try {
-                const response = await fetch('http://localhost:3001/groups');
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/groups`);
                 if (response.ok) {
                     const data = await response.json();
                     setGroups(data);
