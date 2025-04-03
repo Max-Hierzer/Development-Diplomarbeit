@@ -6,6 +6,7 @@ import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import "../styles/create.css";
+import CustomTooltips from "./Tooltips";
 
 function EditPolls({ selectedPoll, publicQ }) {
     const [poll, setPoll] = useState('');
@@ -353,6 +354,7 @@ function EditPolls({ selectedPoll, publicQ }) {
             value={poll}
             onChange={(e) => setPoll(e.target.value)}
             placeholder="Poll Name"
+            data-tooltip-id="poll-name-tooltip"
             />
             <h4>Description</h4>
             <textarea
@@ -363,11 +365,12 @@ function EditPolls({ selectedPoll, publicQ }) {
             cols={50} // Adjust the number of columns for the desired width
             style={{ resize: 'vertical' }} // Optional: Allow resizing vertically only
             className="description"
+            data-tooltip-id="description-tooltip"
             />
             <br />
             <br />
             <h4>Public</h4>
-            <select onChange={(e) => handlePublicChange(e.target.value)} value={isPublic} className="select-public">
+            <select onChange={(e) => handlePublicChange(e.target.value)} value={isPublic} className="select-public" data-tooltip-id="public-tooltip">
                 <option>Nein</option>
                 <option>Ja</option>
             </select>
@@ -376,7 +379,7 @@ function EditPolls({ selectedPoll, publicQ }) {
             {isPublic === "Nein" && (
                 <div>
                 <h4>Anonymous</h4>
-                <select onChange={(e) => handleAnonChange(e.target.value)} value={isAnon} className="select-anon">
+                <select onChange={(e) => handleAnonChange(e.target.value)} value={isAnon} className="select-anon" data-tooltip-id="anonym-tooltip">
                     <option>Ja</option>
                     <option>Nein</option>
                 </select>
@@ -390,6 +393,7 @@ function EditPolls({ selectedPoll, publicQ }) {
                     options={availableGroups.map(group => ({ value: group.id, label: group.name }))}
                     onChange={(selectedOptions) => setSelectedGroups(selectedOptions)}
                     placeholder="Suche nach Gruppen"
+                    data-tooltip-id="add-group-tooltip"
                 />
                 <br/>
                 <br/>
@@ -402,13 +406,14 @@ function EditPolls({ selectedPoll, publicQ }) {
                     options={pollGroups.map(group => ({ value: group.id, label: group.name }))}
                     onChange={(selectedOptions) => setSelectedGroupsDel(selectedOptions)}
                     placeholder="Suche nach Gruppen"
+                    data-tooltip-id="remove-group-tooltip"
                 />
                 <br />
                 <br />
                 </div>
             )}
             <div className="datetime-container">
-                <div className="start-date">
+                <div className="start-date" data-tooltip-id="start-tooltip">
                     <h4>Startzeitpunkt</h4>
                     <Datetime
                         value={publishDate}
@@ -419,7 +424,7 @@ function EditPolls({ selectedPoll, publicQ }) {
                         //inputProps={{ placeholder: "Publish Date" }}
                     />
                 </div>
-                <div className="end-date">
+                <div className="end-date" data-tooltip-id="end-tooltip">
                     <h4>Endzeitpunkt</h4>
                     <Datetime
                         value={endDate}
@@ -459,6 +464,7 @@ function EditPolls({ selectedPoll, publicQ }) {
                     onChange={(e) => handleQuestionTypes(questionIndex, e.target.value, true)}
                     value={question.type}
                     className="select-type"
+                    data-tooltip-id="questiontype-tooltip"
                     >
                     <option>Single Choice</option>
                     <option>Multiple Choice</option>
@@ -473,20 +479,22 @@ function EditPolls({ selectedPoll, publicQ }) {
                     placeholder={`Frage ${questionIndex + 1}`}
                     value={question.name}
                     onChange={(e) => handleQuestionChange(questionIndex, e.target.value, true)}
+                    data-tooltip-id="question-tooltip"
                     />
-                    <button type="button" className="delete" onClick={() => deleteQuestion(questionIndex, true)}>
+                    <button type="button" className="delete" onClick={() => deleteQuestion(questionIndex, true)} data-tooltip-id="question-delete-tooltip">
                     <FontAwesomeIcon icon={faTimes} />
                     </button>
                     </div>
                     <br />
                     <h4>Antworten</h4>
                     {question.PublicAnswers.map((answer, answerIndex) => (
-                        <div key={answerIndex} className="answer-input">
+                        <div key={answerIndex} className="answer-input" data-tooltip-id="answer-tooltip">
                         <label htmlFor={`public-answer-text-${questionIndex}-${answerIndex}`} className="hidden-label">
                         Wie soll Antwort {answerIndex + 1} zu {questionIndex + 1} lauten?
                         </label>
                         <input
                         id={`public-answer-text-${questionIndex}-${answerIndex}`}
+                        data-tooltip-id="answer-tooltip"
                         type="text"
                         placeholder={`Antwort ${answerIndex + 1}`}
                         value={answer.name}
@@ -494,16 +502,16 @@ function EditPolls({ selectedPoll, publicQ }) {
                             handleAnswerChange(questionIndex, answerIndex, e.target.value, true)
                         }
                         />
-                        <button type="button" className="delete" onClick={() => deleteAnswer(questionIndex, answerIndex, true)}>
+                        <button type="button" className="delete" onClick={() => deleteAnswer(questionIndex, answerIndex, true)} data-tooltip-id="answer-delete-tooltip">
                         <FontAwesomeIcon icon={faTimes} />
                         </button>
                         </div>
                     ))}
-                    <button type="button" className="add" onClick={() => addAnswer(questionIndex, true)}>Antwort hinzufügen</button>
+                    <button type="button" className="add" onClick={() => addAnswer(questionIndex, true)} data-tooltip-id="answer-add-tooltip">Antwort hinzufügen</button>
                     </div>
                 ))}
 
-                <button type="button" className="add" onClick={addPublicQuestion}>Frage hinzufügen</button>
+                <button type="button" className="add" onClick={addPublicQuestion} data-tooltip-id="question-add-tooltip">Frage hinzufügen</button>
                 <br />
                 <br />
                 </div>
@@ -513,27 +521,27 @@ function EditPolls({ selectedPoll, publicQ }) {
             {questions.map((question, questionIndex) => (
                 <div key={question.id || questionIndex} className="create-question">
                     <h4>Typ</h4>
-                    <select onChange={(e) => handleQuestionTypes(questionIndex, e.target.value)} value={question.QuestionType.name} className="select-type">
+                    <select onChange={(e) => handleQuestionTypes(questionIndex, e.target.value)} value={question.QuestionType.name} className="select-type" data-tooltip-id="questiontype-tooltip">
                         <option>Single Choice</option>
                         <option>Multiple Choice</option>
                         <option>Weighted Choice</option>
                     </select>
                     <br />
-                    <div className="question-input">
+                    <div className="question-input" data-tooltip-id="question-tooltip">
                         <input
                         type="text"
                         placeholder={`Question ${questionIndex + 1}`}
                         value={question.name}
                         onChange={(e) => handleQuestionChange(questionIndex, e.target.value)}
                         />
-                        <button type="button" className="delete" onClick={() => deleteQuestion(questionIndex)}>
+                        <button type="button" className="delete" onClick={() => deleteQuestion(questionIndex)} data-tooltip-id="question-delete-tooltip">
                             <FontAwesomeIcon icon={faTimes} />
                         </button>
                     </div>
                     <br />
                     <h4>Antworten</h4>
                     {question.Answers.map((answer, answerIndex) => (
-                        <div key={answer.id || answerIndex} className="answer-input">
+                        <div key={answer.id || answerIndex} className="answer-input" data-tooltip-id="answer-tooltip">
                             <input
                             type="text"
                             placeholder={`Answer ${answerIndex + 1}`}
@@ -542,21 +550,22 @@ function EditPolls({ selectedPoll, publicQ }) {
                                 handleAnswerChange(questionIndex, answerIndex, e.target.value)
                             }
                             />
-                            <button type="button" className="delete" onClick={() => deleteAnswer(questionIndex, answerIndex)}>
+                            <button type="button" className="delete" onClick={() => deleteAnswer(questionIndex, answerIndex)} data-tooltip-id="answer-delete-tooltip">
                                 <FontAwesomeIcon icon={faTimes} />
                             </button>
                         </div>
                     ))}
-                    <button type="button" className="add" onClick={() => addAnswer(questionIndex)}>Antwort hinzufügen</button>
+                    <button type="button" className="add" onClick={() => addAnswer(questionIndex)} data-tooltip-id="answer-add-tooltip">Antwort hinzufügen</button>
                 </div>
             ))}
-            <button type="button" className="add" onClick={addQuestion}>Frage hinzufügen</button>
+            <button type="button" className="add" onClick={addQuestion} data-tooltip-id="question-add-tooltip">Frage hinzufügen</button>
             <br />
-            <button type="submit" className="edit-button">
+            <button type="submit" className="edit-button" data-tooltip-id="submit-tooltip">
                 {submitted ? 'Änderungen gespeichert!' : 'Änderungen speichern'}
             </button>
             </form>
         <p>{response}</p>
+        <CustomTooltips />
         </div>
     );
 }

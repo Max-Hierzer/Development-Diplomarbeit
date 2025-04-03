@@ -227,7 +227,7 @@ const PublicPolls = () => {
                   publicQuestions.map((question) => {
                     const isMultipleChoice = question.QuestionType.name === "Multiple Choice";
                     return (
-                      <div key={question.id} className="question">
+                      <div key={question.id} className="demographicQuestion">
                         <h3 className="question-header">
                           <span className="question-text">{question.name}</span>
                           <span className="question-type">{question.QuestionType.name}</span>

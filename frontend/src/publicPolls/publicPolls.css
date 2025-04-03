@@ -40,6 +40,9 @@
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .publicData form {
@@ -133,7 +136,8 @@ p {
     color: black;
 }
 
-.publicQuestion {
+.publicQuestion, .demographicQuestion {
+    align-self: center;
     border-style: solid;
     border-radius: 8px;
     border-width: 3px;
@@ -141,9 +145,12 @@ p {
     margin-bottom: 30px;
     width: 100%;
     max-width: 70%;
-    margin: 0 auto;
 }
 
+.demographicQuestion {
+    margin-left: auto; 
+    margin-right: auto;
+}
 
 .question-header {
     background-color: var(--primary-hover-color);
