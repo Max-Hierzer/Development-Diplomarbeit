@@ -28,6 +28,15 @@
   padding: 8px 16px;
 }
 
+.qr-codes {
+  justify-content: center;
+  flex-direction: column;
+}
+
+.qr-container {
+  flex-direction: column;
+}
+
 .copy-button {
   width: 100px;
   margin-top: 10px;

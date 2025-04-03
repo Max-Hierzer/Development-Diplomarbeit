@@ -270,7 +270,7 @@ const PublicPolls = () => {
             <br />
             {poll.Questions &&
               poll.Questions.map((question) => (
-                <div key={question.id} className="question">
+                <div key={question.id} className="publicQuestion">
                   <h3 className="question-header">
                     <span className="question-text">{question.name}</span>
                     <span className="question-type">{question.QuestionType.name}</span>

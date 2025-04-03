@@ -76,10 +76,6 @@ function MyPoll({ poll, refreshPolls, setSelectedPoll }) {
                         <h3>Abstimmung</h3>
                         <QRCodeCanvas value={voteLink} size={128} />
                     </div>
-                    <div className="qr-container">
-                        <h3>Ergebnisse</h3>
-                        <QRCodeCanvas value={resultsLink} size={128} />
-                    </div>
                 </div>
             )}
 

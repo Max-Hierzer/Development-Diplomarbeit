@@ -133,7 +133,7 @@ p {
     color: black;
 }
 
-.question {
+.publicQuestion {
     border-style: solid;
     border-radius: 8px;
     border-width: 3px;
@@ -193,7 +193,7 @@ p {
 }
 
 @media (max-width: 810px) {
-    .question {
+    .publicQuestion {
         max-width: 100%;
     }
 }
