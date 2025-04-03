@@ -1,6 +1,6 @@
 # Deployment Anleitung
 
-Diese Anleitung beschreibt Schritt für Schritt, wie du unser Projekt auf einem Ubuntu-Server aufsetzen kannst.    # Test
+Diese Anleitung beschreibt Schritt für Schritt, wie du unser Projekt auf einem Ubuntu-Server aufsetzen kannst.
 
 ---
 
