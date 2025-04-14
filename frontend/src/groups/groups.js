@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import '../styles/groups.css';
+import CustomTooltips from "./Tooltips";
 
 const Groups = () => {
     const [createGroup, setCreateGroup] = useState(0);
@@ -284,7 +285,7 @@ const Groups = () => {
                     setCreateGroup(0);
                     setSelectedGroup(null);
                     setSelectedUsers([]);
-                }}>
+                }} data-tooltip-id="edit-group-tooltip">
                 Gruppen Bearbeiten
                 </button>
 
@@ -297,6 +298,7 @@ const Groups = () => {
                         placeholder="Gruppenname"
                         value={selectedGroup?.name || ''}
                         onChange={(e) => handleGroupChange('name', e.target.value)}
+                        data-tooltip-id="group-name-tooltip"
                     />
                     <label htmlFor="createDescription" className="hidden-label">Beschreibung</label>
                     <textarea
@@ -308,6 +310,7 @@ const Groups = () => {
                         className="description"
                         value={selectedGroup?.description || ''}
                         onChange={(e) => handleGroupChange('description', e.target.value)}
+                        data-tooltip-id="description-tooltip"
                     />
 
                     <h3>Füge Benutzer zur Gruppe hinzu</h3>
@@ -317,8 +320,9 @@ const Groups = () => {
                         options={allUsers.map(user => ({ value: user.id, label: user.name }))}
                         onChange={(selectedOptions) => setSelectedUsers(selectedOptions)}
                         placeholder="Suche nach Benutzern"
+                        data-tooltip-id="add-users-tooltip"
                     />
-                    <button type="submit" className="create-button">Gruppe erstellen</button>
+                    <button type="submit" className="create-button" data-tooltip-id="save-group-tooltip">Gruppe erstellen</button>
                 </form>
 
                 {createGroup === 2 && <p>Gruppe erfolgreich erstellt!</p>}
@@ -329,7 +333,7 @@ const Groups = () => {
                     setCreateGroup(1);
                     setSelectedGroup({ name: '', description: '' });
                     setSelectedUsers([]);
-                }}>
+                }} data-tooltip-id="create-group-tooltip">
                 Gruppen Erstellen
                 </button>
                 <div className="group-details">
@@ -346,6 +350,7 @@ const Groups = () => {
                         setSelectedGroup(group);
                     }}
                     placeholder="Suche nach einer Gruppe"
+                    data-tooltip-id="select-group-tooltip"
                 />
 
                 {selectedGroup && (
@@ -356,6 +361,7 @@ const Groups = () => {
                         type="text"
                         value={selectedGroup.name || ''}
                         onChange={(e) => handleGroupChange('name', e.target.value)}
+                        data-tooltip-id="group-name-tooltip"
                     />
                     <br />
                     <h3>Gruppen Beschreibung</h3>
@@ -368,6 +374,7 @@ const Groups = () => {
                         className="description"
                         value={selectedGroup.description || ''}
                         onChange={(e) => handleGroupChange('description', e.target.value)}
+                        data-tooltip-id="description-tooltip"
                     />
 
                     <h3>Füge Benutzer zur Gruppe hinzu</h3>
@@ -380,6 +387,7 @@ const Groups = () => {
                         }))}
                         onChange={(selectedOptions) => setSelectedUsers(selectedOptions)}
                         placeholder="Suche nach Benutzern"
+                        data-tooltip-id="add-users-tooltip"
                     />
                     <br />
                     <h3>Benutzer von Gruppe entfernen</h3>
@@ -389,18 +397,20 @@ const Groups = () => {
                         options={groupUsers.map(user => ({ value: user.id, label: user.name }))}
                         onChange={(selectedOptions) => setSelectedUsersDel(selectedOptions)}
                         placeholder="Suche nach Benutzern"
+                        data-tooltip-id="remove-users-tooltip"
                     />
 
-                    <button onClick={handleEditGroup}>Änderungen speichern</button>
+                    <button onClick={handleEditGroup} data-tooltip-id="save-changes-tooltip">Änderungen speichern</button>
                     <br />
-                    <button onClick={handleExport}>Benutzer exportieren</button>
+                    <button onClick={handleExport} data-tooltip-id="export-group-tooltip">Benutzer exportieren</button>
                     <br />
-                    <button onClick={handleDeleteGroup}>Gruppe löschen</button>
+                    <button onClick={handleDeleteGroup} data-tooltip-id="delete-group-tooltip">Gruppe löschen</button>
                     </>
                 )}
                 </div>
                 </>
             )}
+            <CustomTooltips />
             </div>
         );
     };
