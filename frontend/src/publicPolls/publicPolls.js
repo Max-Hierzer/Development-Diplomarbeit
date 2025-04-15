@@ -65,7 +65,7 @@ const PublicPolls = () => {
       const result = await response.json();
       if (result.success) {
         console.log("CAPTCHA validation successful!");
-        setShowVoting(true);
+        handleVoteSubmit();
       } else {
         console.error("CAPTCHA validation failed:", result);
         alert("CAPTCHA verification failed. Please try again.");
@@ -212,7 +212,7 @@ const PublicPolls = () => {
         ref={recaptchaRef}
       />
       {poll ? (
-        !showVoting ? (
+        showVoting ? (
           <div className="publicData">
             <h2><span>{poll.name}</span></h2>
             {poll.description && (
@@ -255,7 +255,27 @@ const PublicPolls = () => {
                     );
                   })}
               </div>
-              <button type="submit">Submit Data</button>
+              {!voteSubmitted && (
+                <button
+                type="submit"
+                className="vote-button"
+                onClick={handleVoteSubmit}
+                title={'Klicken Sie hier um die Umfrage abzuschließen.'}
+                >Umfrage abschließen</button>
+              )}
+
+              {voteSubmitted && (
+                <><button
+                className={'disabled-button'}
+                disabled
+                title={'Auf diese Umfrage haben Sie bereits abgestimmt.'}
+                >
+                Umfrage abschließen
+                </button><p className="success-message">
+                Danke für Ihre Teilnahme an dieser Umfrage.<br />
+                Falls Sie sich weiter informieren wollen, besuchen Sie gerne unsere <a href="https://liste-petrovic.at/" target="_blank" rel="noopener noreferrer">Website</a>.
+                </p></>
+              )}
             </form>
           </div>
         ) : (
@@ -302,25 +322,11 @@ const PublicPolls = () => {
                   )}
                 </div>
               ))}
-            {!voteSubmitted && (
               <button
-                className="vote-button"
-                onClick={handleVoteSubmit}
-                title={'Klicken Sie hier um die Umfrage abzuschließen.'}
-              >Umfrage abschließen</button>
-            )}
-
-            {voteSubmitted && (
-              <><button
-                className={'disabled-button'}
-                title={'Auf diese Umfrage haben Sie bereits abgestimmt.'}
-              >
-                Umfrage abschließen
-              </button><p className="success-message">
-                  Danke für Ihre Teilnahme an dieser Umfrage.<br />
-                  Falls Sie sich weiter informieren wollen, besuchen Sie gerne unsere <a href="https://liste-petrovic.at/" target="_blank" rel="noopener noreferrer">Website</a>.
-                </p></>
-            )}
+              className="vote-button"
+              onClick={() => setShowVoting(true)}
+              title={'Klicken Sie hier um ihre Stimme abzugeben.'}
+              >Stimme abgeben</button>
           </div>
         )
       ) : (
