@@ -97,11 +97,6 @@ const PublicPolls = () => {
     }
     if (!Cookies.get('pollSubmitted')) {
       // Mark the poll as submitted by setting the cookie.
-      Cookies.set('pollSubmitted', 'true', {
-        expires: new Date(poll.end_date),
-        SameSite: 'None',
-        Secure: true,
-      });
       const current_datetime = new Date().toISOString();
       if (poll.end_date > current_datetime) {
         try {
@@ -120,6 +115,11 @@ const PublicPolls = () => {
           if (res.ok) {
             console.log("Voted successfully");
             setVoteSubmitted(true);
+            Cookies.set('pollSubmitted', 'true', {
+              expires: new Date(poll.end_date),
+                        SameSite: 'None',
+                        Secure: true,
+            });
           }
         } catch (error) {
           console.error('Error submitting vote:', error);
@@ -128,7 +128,7 @@ const PublicPolls = () => {
         console.log('Poll has already ended');
       }
     } else {
-      alert('You have already submitted your vote.');
+      console.log('You have already submitted your vote.');
     }
   };
 
