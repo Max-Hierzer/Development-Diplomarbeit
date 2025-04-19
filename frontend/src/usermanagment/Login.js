@@ -9,6 +9,7 @@ const Login = ({ loginChange }) => {
 
     const checkLogin = async (event) => {
         event.preventDefault();
+
         try {
             const res = await fetch(`${process.env.REACT_APP_API_URL}/api/login`, {
                 method: 'POST',

@@ -2,9 +2,11 @@ const { Polls: Poll } = require('../models');
 const { Questions: Question } = require('../models');
 const { QuestionTypes: QuestionType } = require('../models');
 const { Answers: Answer } = require('../models');
+const { sequelize } = require('../models');
 const { PollGroups, Groups, UserGroups, Users, PublicQuestions, PublicAnswers, PublicPollQuestions } = require('../models');
 
 async function createPoll(poll, questions, imageUrl, publicQuestions, groups) {
+    const transaction = await sequelize.transaction();
     try {
         console.log('Poll in createPoll:', poll);
         console.log('Questions in createPoll:', questions);
@@ -21,7 +23,7 @@ async function createPoll(poll, questions, imageUrl, publicQuestions, groups) {
             publish_date: pollPublishDate, 
             end_date: pollEndDate,
             imageUrl: imageUrl
-        });
+        }, { transaction });
         const createdQuestions = [];
         for (const question of questions) {
             const questionType = await QuestionType.findOne({
@@ -31,17 +33,18 @@ async function createPoll(poll, questions, imageUrl, publicQuestions, groups) {
                 name: question.name,
                 pollId: createdPoll.id,
                 typeId: questionType.id,
-            });
+            }, { transaction });
 
             const createdAnswers = [];
             for (const answer of question.answers) {
                 const [createdAnswer] = await Answer.findOrCreate({
                     where: { name: answer.name },
+                    transaction
                 });
                 createdAnswers.push(createdAnswer);
             }
 
-            await createdQuestion.addAnswers(createdAnswers);
+            await createdQuestion.addAnswers(createdAnswers, { transaction });
 
             createdQuestions.push(createdQuestion);
         }
@@ -57,13 +60,14 @@ async function createPoll(poll, questions, imageUrl, publicQuestions, groups) {
                 where: {
                     name: question.name,
                     typeId: questionType.id,
-                }
+                },
+                transaction
             });
 
             if (!created) {
                 createdQuestion.name = question.name;
                 createdQuestion.typeId = questionType.id;
-                await createdQuestion.save();
+                await createdQuestion.save({ transaction });
             }
 
             const createdAnswers = [];
@@ -75,25 +79,25 @@ async function createPoll(poll, questions, imageUrl, publicQuestions, groups) {
                 if (existingAnswer) {
                     if (existingAnswer.name !== answer.name) {
                         existingAnswer.name = answer.name;
-                        await existingAnswer.save();
+                        await existingAnswer.save({ transaction });
                     }
                     createdAnswers.push(existingAnswer);
                 } else {
                     const createdAnswer = await PublicAnswers.create({
                         name: answer.name,
-                    });
+                    }, { transaction });
                     createdAnswers.push(createdAnswer);
                 }
             }
 
-            await createdQuestion.addPublicAnswers(createdAnswers);
+            await createdQuestion.addPublicAnswers(createdAnswers, { transaction });
 
             createdPublicQuestions.push(createdQuestion);
 
             await PublicPollQuestions.create({
                 pollId: createdPoll.id,
                 publicQuestionId: createdQuestion.id
-            });
+            }, { transaction });
         }
 
 
@@ -107,12 +111,14 @@ async function createPoll(poll, questions, imageUrl, publicQuestions, groups) {
                 where: { groupId: group.value, pollId: createdPoll.id }
             });
             if (!existingPollGroup) {
-                await PollGroups.create({ groupId: group.value, pollId: createdPoll.id });
+                await PollGroups.create({ groupId: group.value, pollId: createdPoll.id }, { transaction });
             }
         });
 
         // Wait for all promises to complete
-        pollgroups = await Promise.all(promises);
+        const pollgroups = await Promise.all(promises);
+        
+        await transaction.commit();
 
         return {
             poll: createdPoll,
@@ -121,6 +127,7 @@ async function createPoll(poll, questions, imageUrl, publicQuestions, groups) {
             groups: pollgroups
         };
     } catch (error) {
+        await transaction.rollback();
         console.error('Error creating poll in service:', error);
         throw error;
     }
