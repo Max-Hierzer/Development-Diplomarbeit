@@ -146,4 +146,21 @@ h2 span {
     color: black;
 }
 
+@media (max-width: 768px) {
+    .question {
+        max-width: 80%;
+    }
+}
+
+@media (max-width: 600px) {
+    .question {
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 450px) {
+    .question {
+        max-width: 100%;
+    }
+}
 

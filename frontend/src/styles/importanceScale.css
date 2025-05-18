@@ -1,0 +1,37 @@
+
+.scale-container {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+    font-size: 12px;
+}
+
+.scale-button,
+.scale-button-selected {
+    width: 10%;
+    height: 40px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+    padding: 5px;
+}
+
+.scale-button {
+    background-color: #EAEAEA;
+    color: #333;
+}
+
+.scale-button-selected {
+    background-color: #D55C27;
+    color: #fff;
+}

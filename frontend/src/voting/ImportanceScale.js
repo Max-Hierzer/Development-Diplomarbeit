@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import '../styles/importanceScale.css';
 
 const ImportanceScale = ({ questionId, onImportanceChange }) => {
     const [importance, setImportance] = useState(null);
@@ -7,42 +8,21 @@ const ImportanceScale = ({ questionId, onImportanceChange }) => {
     const handleSelectImportance = (value) => {
         setImportance(value);
         onImportanceChange(questionId, value);
+        console.log(value);
     };
 
     return (
-        <div style={{ textAlign: "center", marginTop: "10px", marginBottom: "5px" }}>
-            <div style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "3px",
-                fontSize: "12px"
-            }}>
-                {/*<span style={{ fontSize: "12px", fontWeight: "bold", color: "#888" }}>Not <br />Important</span>*/}
-
+        <div className="scale-container">
+            <div className="button-container">
                 {scaleValues.map((value) => (
                     <button
                         key={value}
                         onClick={() => handleSelectImportance(value)}
-                        style={{
-                            width: "10%",
-                            height: "40px",
-                            borderRadius: "4px",
-                            border: "1px solid #ccc",
-                            backgroundColor: importance === value ? "#D55C27" : "#EAEAEA",
-                            color: importance === value ? "#fff" : "#333",
-                            fontSize: "12px",
-                            fontWeight: "bold",
-                            cursor: "pointer",
-                            outline: "none",
-                            padding: "5px"
-                        }}
+                        className={importance === value ? 'scale-button-selected' : 'scale-button'}
                     >
                         {value}
                     </button>
                 ))}
-
-                {/*<span style={{ fontSize: "12px", fontWeight: "bold", color: "#888" }}>Important</span>*/}
             </div>
         </div>
     );
