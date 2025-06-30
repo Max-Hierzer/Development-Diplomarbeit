@@ -216,7 +216,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
 
     const handleCheckUserVote = useCallback(async (pollId, userId) => {
         try {
-            const response = await fetch(`http://localhost:3001/api/hasVoted/${userId}/${pollId}`);
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/hasVoted/${userId}/${pollId}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch vote status');
             }

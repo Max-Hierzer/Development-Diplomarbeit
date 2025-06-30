@@ -247,7 +247,7 @@ function CreatePoll() {
     useEffect(() => {
         const fetchAllPublicQuestions = async () => {
             try {
-                const response = await fetch('http://localhost:3001/public/all');
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/public/all`);
                 if (response.ok) {
                     const data = await response.json();
                     setExistingPublicQuestions(data);
