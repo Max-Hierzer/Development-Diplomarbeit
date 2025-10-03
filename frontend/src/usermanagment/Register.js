@@ -2,13 +2,10 @@ import React, { useState, useEffect } from 'react';
 import '../styles/register.css';
 
 function Register() {
-    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [roleId, setRoleId] = useState('');
     const [roles, setRoles] = useState([]);
     const [selectedRoleDescription, setSelectedRoleDescription] = useState('');
-    const [oldRegister, setOldRegister] = useState(false);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [errorMessage, setErrorMessage] = useState(null);

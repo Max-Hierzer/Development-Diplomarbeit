@@ -42,7 +42,7 @@ function MyPoll({ poll, refreshPolls, setSelectedPoll }) {
             }
         };
         fetchResults();
-    }, [poll.id]);
+    }, [poll.id, poll.Questions]);
 
     const voteHash = encodeURIComponent(btoa(`public=${poll.public}&mode=vote&poll=${poll.id}&anonymous=${poll.anonymous}`));
     const resultsHash = encodeURIComponent(btoa(`public=${poll.public}&mode=results&poll=${poll.id}&anonymous=${poll.anonymous}`));

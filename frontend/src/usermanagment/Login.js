@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../styles/register.css';
 
 const Login = ({ loginChange }) => {
-    const [users, setUsers] = useState([]);
     const [inputUser, setInputUser] = useState('');
     const [inputPassword, setInputPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -22,7 +21,6 @@ const Login = ({ loginChange }) => {
                 }),
             });
             const data = await res.json();
-            setUsers(data);
 
             if (res.ok && data.success) {
                 loginChange(true, data.userId, data.username, data.roleId);

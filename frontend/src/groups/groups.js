@@ -65,14 +65,6 @@ const Groups = () => {
         }
     };
 
-    // Handle group selection from dropdown
-    const handleSelectGroup = (event) => {
-        const groupId = event.target.value;
-        const group = allGroups.find(g => g.id === parseInt(groupId));
-        if (group) {
-            setSelectedGroup(group);
-        }
-    };
 
     // Handle changes to group properties (name, description)
     const handleGroupChange = (field, value) => {

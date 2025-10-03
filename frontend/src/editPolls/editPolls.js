@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Datetime from 'react-datetime';
 import "react-datetime/css/react-datetime.css";
-import moment from 'moment';
 import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -29,7 +28,7 @@ function EditPolls({ selectedPoll, publicQ }) {
 
     useEffect(()=> {
         setPublicQuestions(publicQ);
-    }, publicQ)
+    }, [publicQ])
 
     // Initialize state with `selectedPoll`
     useEffect(() => {
@@ -167,7 +166,7 @@ function EditPolls({ selectedPoll, publicQ }) {
         };
 
         handlePublicQuestionChange();
-    }, [selectedPublicQuestions]);
+    }, [selectedPublicQuestions, publicQuestions]);
 
     useEffect(() => {
         const handleSelectableQuestions = () => {
@@ -343,7 +342,7 @@ function EditPolls({ selectedPoll, publicQ }) {
             }
         }
         fetchAllPublicQuestions();
-    }, [])
+    }, [publicQuestions])
 
     return (
         <div className="edit-content">

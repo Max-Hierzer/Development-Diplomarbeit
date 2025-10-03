@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import Cookies from 'js-cookie';
 import ReCAPTCHA from 'react-google-recaptcha';
 import './publicPolls.css';
-import Voting from '../voting/Voting';
 import ImportanceScale from '../voting/ImportanceScale';
 
 const PublicPolls = () => {

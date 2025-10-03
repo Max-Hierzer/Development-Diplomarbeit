@@ -1,8 +1,6 @@
 // App.js
 import React, { useState, useEffect } from 'react';
 import './styles/App.css';
-import WriteMessages from './messages/WriteMessage';
-import InputMessage from './messages/InputMessage';
 import Login from './usermanagment/Login';
 import NewUser from './usermanagment/NewUser';
 import PollDashboard from './selectPolls/PollDashboard';
@@ -11,7 +9,6 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 
 function App() {
-  const [isInputMode, setIsInputMode] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
     return storedLoginStatus ? JSON.parse(storedLoginStatus) : false;

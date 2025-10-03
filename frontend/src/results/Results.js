@@ -27,7 +27,7 @@ const Results = ({ poll, showVotersMode }) => {
         };
 
         fetchResults();
-    }, [poll.id]);
+    }, [poll.id, poll.Questions]);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -49,13 +49,13 @@ const Results = ({ poll, showVotersMode }) => {
             }
         };
         fetchUsers();
-    }, [poll.id]);
+    }, [poll.id, poll.Questions]);
 
 
     return (
         <div className="results-container">
             <h2 className="poll-header">{poll.name}</h2>
-            <h3>In dieser Umfrage {results.totalVotes == 1 ? "hat" : "haben"} {results.totalVotes || 0} {results.totalVotes == 1 ? "Person" : "Personen"} abgestimmt!</h3>
+            <h3>In dieser Umfrage {results.totalVotes === 1 ? "hat" : "haben"} {results.totalVotes || 0} {results.totalVotes === 1 ? "Person" : "Personen"} abgestimmt!</h3>
             <br />
             {poll.imageUrl && (<img
                 src={`${process.env.REACT_APP_API_URL}${poll.imageUrl}`}

@@ -3,15 +3,11 @@ import '../styles/dashboard.css';
 import SelectPolls from './SelectPolls';
 import Results from '../results/Results';
 import Voting from '../voting/Voting';
-import ImportanceScale from '../voting/ImportanceScale';
-import DeletePoll from '../DeletePolls/DeletePoll';
 import EditPolls from '../editPolls/editPolls';
 import Register from '../usermanagment/Register';
 import CreatePoll from '../createPolls/CreatePolls';
 import Groups from '../groups/groups';
-import MyPoll from '../myPolls/MyPolls'
-import SHA256 from 'crypto-js/sha256';
-import Cookies from 'js-cookie';
+import MyPoll from '../myPolls/MyPolls';
 
 const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMode, setSelectedPoll, selectedPoll }) => {
     const [polls, setPolls] = useState([]);
@@ -24,8 +20,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
     const [userPolls, setUserPolls] = useState([]);
     const [isPublic, setIsPublic] = useState(null);
     const [isAnonymous, setIsAnonymous] = useState(selectedPoll?.anonymous || null);
-    const [maxIdValue, setMaxId] = useState(null)
-    const roleId = parseInt(userRoleId);
+    const [maxIdValue, setMaxId] = useState(null);
     const [voteSubmitted, setVoteSubmitted] = useState(false);
 
     const resetAnswers = () => {
@@ -275,7 +270,6 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
             const params = new URLSearchParams(unhashed);
             const mode = params.get('mode');
             const pollId = params.get('poll');
-            const anonymous = params.get('anonymous');
             if (pollId && mode && displayMode === 0) {
                 let selected = null;
                 if (mode === 'vote') {
