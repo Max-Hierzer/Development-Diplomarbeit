@@ -1,11 +1,10 @@
 import React from "react";
 
-function NavigationContent({ mobile, setDisplayMode, handleLogout, setSelectedPoll, roleId, setIsMenuOpen }) {
+function NavigationContent({ mobile, setDisplayMode, handleLogout, setSelectedPoll, roleId }) {
 
     const handleModeChange = (mode) => {
         setDisplayMode(mode);
         setSelectedPoll(null);
-        setIsMenuOpen(false);
     };
 
     switch (roleId) {
@@ -14,29 +13,29 @@ function NavigationContent({ mobile, setDisplayMode, handleLogout, setSelectedPo
                 <nav className="navlinks">
                     <ul>
                         <li>
-                            <a onClick={() => handleModeChange(5)}>Registrierung</a>
+                            <a href='/#' onClick={() => handleModeChange(5)}>Registrierung</a>
                         </li>
                         <li>
-                            <a onClick={() => handleModeChange(6)}>Erstellen</a>
+                            <a href='/#' onClick={() => handleModeChange(6)}>Erstellen</a>
                         </li>
                         <li>
-                            <a onClick={() => handleModeChange(1)}>Bearbeiten</a>
+                            <a href='/#' onClick={() => handleModeChange(1)}>Bearbeiten</a>
                         </li>
                         <li>
-                            <a onClick={() => handleModeChange(2)}>Abstimmen</a>
+                            <a href='/#' onClick={() => handleModeChange(2)}>Abstimmen</a>
                         </li>
                         <li>
-                            <a onClick={() => handleModeChange(3)}>Ergebnisse</a>
+                            <a href='/#' onClick={() => handleModeChange(3)}>Ergebnisse</a>
                         </li>
                         <li>
-                            <a onClick={() => handleModeChange(4)}>Meine Umfragen</a>
+                            <a href='/#' onClick={() => handleModeChange(4)}>Meine Umfragen</a>
                         </li>
                         <li>
-                            <a onClick={() => handleModeChange(7)}>Gruppen</a>
+                            <a href='/#' onClick={() => handleModeChange(7)}>Gruppen</a>
                         </li>
                         {mobile &&
                             <li>
-                                <a onClick={handleLogout}>Logout</a>
+                                <a href='/#' onClick={handleLogout}>Logout</a>
                             </li>
                         }
                     </ul>
@@ -47,25 +46,25 @@ function NavigationContent({ mobile, setDisplayMode, handleLogout, setSelectedPo
                 <nav className="navlinks">
                     <ul>
                         <li>
-                            <a onClick={() => handleModeChange(6)}>Erstellen</a>
+                            <a href='/#' onClick={() => handleModeChange(6)}>Erstellen</a>
                         </li>
                         <li>
-                            <a onClick={() => handleModeChange(1)}>Bearbeiten</a>
+                            <a href='/#' onClick={() => handleModeChange(1)}>Bearbeiten</a>
                         </li>
                         <li>
-                            <a onClick={() => handleModeChange(2)}>Abstimmen</a>
+                            <a href='/#' onClick={() => handleModeChange(2)}>Abstimmen</a>
                         </li>
                         <li>
-                            <a onClick={() => handleModeChange(3)}>Ergebnisse</a>
+                            <a href='/#' onClick={() => handleModeChange(3)}>Ergebnisse</a>
                         </li>
                         <li>
-                            <a onClick={() => handleModeChange(4)}>Meine Umfragen</a>
+                            <a href='/#' onClick={() => handleModeChange(4)}>Meine Umfragen</a>
                         </li>
                         <li>
-                        <a onClick={() => handleModeChange(7)}>Gruppen</a>
+                        <a href='/#' onClick={() => handleModeChange(7)}>Gruppen</a>
                         </li>
                         {mobile && <li>
-                                <a onClick={handleLogout}>Logout</a>
+                                <a href='/#' onClick={handleLogout}>Logout</a>
                             </li>
                         }
                     </ul>
@@ -77,13 +76,13 @@ function NavigationContent({ mobile, setDisplayMode, handleLogout, setSelectedPo
                 <nav className="navlinks">
                     <ul>
                         <li>
-                            <a onClick={() => handleModeChange(2)}>Abstimmen</a>
+                            <a href='/#' onClick={() => handleModeChange(2)}>Abstimmen</a>
                         </li>
                         <li>
-                            <a onClick={() => handleModeChange(3)}>Ergebnisse</a>
+                            <a href='/#' onClick={() => handleModeChange(3)}>Ergebnisse</a>
                         </li>
                         {mobile && <li>
-                                <a onClick={handleLogout}>Logout</a>
+                                <a href='/#' onClick={handleLogout}>Logout</a>
                             </li>
                         }
                     </ul>

@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import NavigationContent from './NavigationContent';
 import './DesktopNavigation.css';
 
 function Navigation({ setDisplayMode, handleLogout, setSelectedPoll, userRoleId }) {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-
     const roleId = parseInt(userRoleId);
 
 
@@ -15,8 +13,7 @@ function Navigation({ setDisplayMode, handleLogout, setSelectedPoll, userRoleId 
                 setDisplayMode={setDisplayMode}
                 handleLogout={handleLogout}
                 setSelectedPoll={setSelectedPoll}
-                roleId={roleId}
-                setIsMenuOpen={setIsMenuOpen} />}
+                roleId={roleId} />}
         </nav>
     );
 }

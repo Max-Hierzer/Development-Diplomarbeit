@@ -1,5 +1,3 @@
-import React from 'react';
-
 const PollValidators = {
 
     validatePollData(poll, publishDate, endDate, questions) {

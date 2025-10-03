@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Datetime from 'react-datetime';
 import "react-datetime/css/react-datetime.css";
-import moment from 'moment';
 import PollValidators from './ValidatePoll';
 import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,8 +12,6 @@ import CustomTooltips from "./Tooltips";
 function CreatePoll() {
     const [poll, setPoll] = useState('');
     const [description, setDescription] = useState('');
-    const [voteLink, setVoteLink] = useState('');
-    const [resultsLink, setResultsLink] = useState('');
     const [publishDate, setPublishDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [resetKey, setResetKey] = useState(0);
@@ -271,7 +268,7 @@ function CreatePoll() {
         };
 
         handlePublicQuestionChange();
-    }, [selectedPublicQuestions]);
+    }, [selectedPublicQuestions, publicQuestions]);
 
     return (
         <div className="create-content">

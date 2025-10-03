@@ -5,7 +5,6 @@ import DesktopNavigation from './navigation/DesktopNavigation';
 import MobileNavigation from './navigation/MobileNavigation';
 
 function Header({ isLoggedIn, handleLogout, setDisplayMode, setSelectedPoll, userRoleId }) {
-    const userName = sessionStorage.getItem('userName');
 
     return (
         <header className="header">

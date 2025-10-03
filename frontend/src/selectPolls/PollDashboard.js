@@ -18,8 +18,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
     const [votePolls, setVotePolls] = useState([]);
     const [resultsPolls, setResultsPolls] = useState([]);
     const [userPolls, setUserPolls] = useState([]);
-    const [isPublic, setIsPublic] = useState(null);
-    const [isAnonymous, setIsAnonymous] = useState(selectedPoll?.anonymous || null);
+        const [isAnonymous, setIsAnonymous] = useState(selectedPoll?.anonymous || null);
     const [maxIdValue, setMaxId] = useState(null);
     const [voteSubmitted, setVoteSubmitted] = useState(false);
 
@@ -192,7 +191,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
         } catch (error) {
             console.error('Error fetching polls:', error);
         }
-    }, [isPublic])
+    }, [maxIdValue, selectedPoll.id, setSelectedPoll])
 
     useEffect(() => {
         fetchPolls();
@@ -278,7 +277,6 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                         setSelectedPoll(selected);
                         setDisplayMode(2);
                         setIsAnonymous(selected?.anonymous);
-                        setIsPublic(selected?.public);
                     }
                 } else if (mode === 'results') {
                     selected = resultsPolls.find((poll) => poll.id.toString() === pollId);
@@ -286,12 +284,11 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                         setSelectedPoll(selected);
                         setDisplayMode(3);
                         setIsAnonymous(selected?.anonymous);
-                        setIsPublic(selected?.public);
                     }
                 }
             }
         }
-    }, [votePolls, resultsPolls, displayMode]);
+    }, [votePolls, resultsPolls, displayMode, setDisplayMode, setSelectedPoll]);
 
 
     const showVoters = () => setShowVoters(!showVotersMode);
@@ -496,6 +493,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                     <p>Bitte wählen sie eine Umfrage</p>
                 )}
             </div>
+            {response}
         </div>
 
     );
