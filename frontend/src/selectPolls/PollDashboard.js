@@ -41,7 +41,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                 a.click();
                 a.remove();
             } else {
-                console.log(response)
+                console.log(response);
                 alert('Error exporting poll');
             }
         } catch (error) {
@@ -80,8 +80,6 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                 setResponse('Please select all questions');
                 return;
             }
-            console.log('HandleVote');
-            console.log("Submitting vote:", JSON.stringify({ answers: selectedAnswers }, null, 2));
 
             try {
                 const res = await fetch(`${process.env.REACT_APP_API_URL}/api/vote`, {
@@ -119,9 +117,6 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
             alert('Please select all questions');
             return;
         }
-        console.log("Submitting Anonymous Vote", JSON.stringify({ answers: selectedAnswers }, null, 2));
-
-        console.log('AnonymousVote');
 
         const current_datetime = new Date().toISOString();
         if (selectedPoll.end_date > current_datetime) {
@@ -161,7 +156,6 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
             const userId = parseInt(sessionStorage.getItem('userId'));
             const response = await fetch(`${process.env.REACT_APP_API_URL}/api/poll/user/${userId}`);
             const data = await response.json();
-            console.log(data)
             setPolls(data);
             setMaxId(maxIdValue);
             if (selectedPoll?.id && !data.find((poll) => poll.id === selectedPoll.id)) {
@@ -182,7 +176,6 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
                 else results.push(poll);
             })
 
-            console.log("User POll: ", user);
             setEditPolls(edit);
             setVotePolls(vote);
             setResultsPolls(results);
@@ -191,7 +184,7 @@ const PollDashboard = ({ userId, userName, userRoleId, setDisplayMode, displayMo
         } catch (error) {
             console.error('Error fetching polls:', error);
         }
-    }, [maxIdValue, selectedPoll.id, setSelectedPoll])
+    }, [maxIdValue, selectedPoll?.id, setSelectedPoll])
 
     useEffect(() => {
         fetchPolls();

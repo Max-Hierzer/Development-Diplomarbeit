@@ -2,7 +2,6 @@ import ImportanceScale from '../voting/ImportanceScale';
 import '../styles/voting.css';
 
 const Voting = ({ selectedPoll, selectedAnswers, handleAnswerChange, handleImportanceChange }) => {
-    console.log("Pollname: ", selectedPoll.name, "Pollimage: ", selectedPoll.imageUrl)
     return (
         <div className="vote-container">
             <h2 className="poll-header">{selectedPoll.name}</h2>

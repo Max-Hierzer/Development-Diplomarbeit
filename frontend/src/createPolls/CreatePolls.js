@@ -82,8 +82,6 @@ function CreatePoll() {
             selectedGroups
         };
 
-        console.log(JSON.stringify(payload, null, 2));
-
         const error = PollValidators.validatePollData(poll, publishDate, endDate, questions);
         if (error) {
             setResponse(error);
@@ -268,7 +266,7 @@ function CreatePoll() {
         };
 
         handlePublicQuestionChange();
-    }, [selectedPublicQuestions, publicQuestions]);
+    }, [selectedPublicQuestions]);
 
     return (
         <div className="create-content">
